@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Security.Principal;
 using System.Text;
 
 namespace CommonLibrary
@@ -45,6 +46,35 @@ namespace CommonLibrary
                 message = String.Format("[{0}] TRACE - {1}", header, message);
                 Trace.WriteLine(message);
             }
+        }
+
+        internal static bool IsAdministrator()
+        {
+            bool flag;
+
+            WindowsIdentity identity = null;
+            try
+            {
+                identity = WindowsIdentity.GetCurrent();
+                WindowsPrincipal principal = new WindowsPrincipal(identity);
+                flag = principal.IsInRole(WindowsBuiltInRole.Administrator);
+            }
+            catch (Exception ex)
+            {
+                TraceWriteLine(ex.Message);
+                TraceWriteLine(ex.StackTrace);
+
+                flag = false;
+            }
+            finally
+            {
+                if (identity != null)
+                {
+                    identity.Dispose();
+                }
+            }
+
+            return flag;
         }
     }
 }
