@@ -1,7 +1,7 @@
 ﻿
 namespace CommonLibrary.UI
 {
-    partial class ScreenPositionDlg
+    partial class ScreenIndexDialog
     {
         /// <summary>
         /// Required designer variable.
@@ -37,7 +37,7 @@ namespace CommonLibrary.UI
             // 
             // _LabelScreenIndex
             // 
-            this._LabelScreenIndex.BackColor = System.Drawing.Color.Black;
+            this._LabelScreenIndex.BackColor = System.Drawing.Color.LightSkyBlue;
             this._LabelScreenIndex.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this._LabelScreenIndex.Dock = System.Windows.Forms.DockStyle.Top;
             this._LabelScreenIndex.Font = new System.Drawing.Font("맑은 고딕", 54.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
@@ -57,7 +57,7 @@ namespace CommonLibrary.UI
             // 
             // _LabelBounds
             // 
-            this._LabelBounds.BackColor = System.Drawing.Color.Black;
+            this._LabelBounds.BackColor = System.Drawing.Color.LightSkyBlue;
             this._LabelBounds.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this._LabelBounds.Dock = System.Windows.Forms.DockStyle.Bottom;
             this._LabelBounds.Font = new System.Drawing.Font("맑은 고딕", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));

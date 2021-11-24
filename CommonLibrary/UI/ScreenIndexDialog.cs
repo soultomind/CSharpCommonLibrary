@@ -5,14 +5,14 @@ using System.Windows.Forms;
 
 namespace CommonLibrary.UI
 {
-    public partial class ScreenPositionDlg : Form
+    public partial class ScreenIndexDialog : Form
     {
         public int ShowPositionSecond
         {
             get { return _showPositionSecond; }
             set
             {
-                if (5 < value && value > 0)
+                if (6 > value && value > 0)
                 {
                     _showPositionSecond = value;
                 }
@@ -25,7 +25,7 @@ namespace CommonLibrary.UI
         private int _showPositionSecond = 3;
         private int _currentShowPositionSecond = 0;
 
-        public ScreenPositionDlg(int index, Rectangle rectangle)
+        public ScreenIndexDialog(int index, Rectangle rectangle)
         {
             InitializeComponent();
 
@@ -33,11 +33,6 @@ namespace CommonLibrary.UI
 
             _LabelScreenIndex.Text = "" + index;
             _LabelBounds.Text = rectangle.ToString();
-            if (IsPrimaryScreen(index))
-            {
-                _LabelScreenIndex.BackColor = Color.Red;
-                _LabelBounds.BackColor = Color.Red;
-            }
 
             _TimerShowPosition.Start();
         }

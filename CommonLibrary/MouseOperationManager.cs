@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
 
-namespace CommonLibrary.Win32
+namespace CommonLibrary
 {
     public class MouseOperationManager
     {
@@ -55,6 +55,7 @@ namespace CommonLibrary.Win32
 
         public MouseOperationManager()
         {
+            MouseMovePreventInterval = 2000;
             // 기본값은 주 모니터를 제외한 첫 번째 스크린 인덱스
             MouseMovePreventScreenIndex = ScreenUtility.GetFirstScreenIndexAndExceptPrimaryScreen();
         }
