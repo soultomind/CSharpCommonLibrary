@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.31424.327
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommonLibrary", "CommonLibrary\CommonLibrary.csproj", "{A2902C7D-7EB2-4006-89BE-A98FB431CE09}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestNet35", "TestNet35\TestNet35.csproj", "{D3909768-DCB0-482B-952B-956B4C0CE68F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestClientNet35", "TestClientNet35\TestClientNet35.csproj", "{D3909768-DCB0-482B-952B-956B4C0CE68F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{06A73FEB-12A5-4F0A-933B-D57815391AE3}"
 	ProjectSection(SolutionItems) = preProject
