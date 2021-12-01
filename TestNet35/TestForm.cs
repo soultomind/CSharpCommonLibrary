@@ -48,7 +48,5 @@ namespace TestNet32
                 dlg.Show();
             }
         }
-
-        
     }
 }

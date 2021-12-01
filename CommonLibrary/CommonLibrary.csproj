@@ -45,6 +45,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CertFile.cs" />
+    <Compile Include="Explorer.cs" />
+    <Compile Include="OperatinSystem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Toolkit.cs" />
     <Compile Include="UI\ScreenIndexDialog.cs">
@@ -62,6 +64,7 @@
     <Compile Include="Utilities\DateTimeUtility.cs" />
     <Compile Include="Utilities\EnvironmentUtility.cs" />
     <Compile Include="Utilities\ScreenUtility.cs" />
+    <Compile Include="Win32\ButtonEvent.cs" />
     <Compile Include="Win32\MouseEvent.cs" />
     <Compile Include="Win32\MouseOperation.cs" />
     <Compile Include="MouseOperationManager.cs" />
@@ -69,6 +72,7 @@
     <Compile Include="Win32\POINT.cs" />
     <Compile Include="Win32\RECT.cs" />
     <Compile Include="Win32\ShowWindowCommand.cs" />
+    <Compile Include="Taskbar.cs" />
     <Compile Include="Win32\User32.cs" />
     <Compile Include="Win32\WINDOWPLACEMENT.cs" />
     <Compile Include="Win32\WinMessage.cs" />
