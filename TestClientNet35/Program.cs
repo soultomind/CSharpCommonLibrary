@@ -1,4 +1,5 @@
 ﻿using CommonLibrary;
+using CommonLibrary.Utilities;
 using System;
 using System.Windows.Forms;
 using TestNet32;
@@ -20,6 +21,7 @@ namespace TestNet35
             Application.Run(new TestForm());
 
             Toolkit.TraceWriteLine("End");
+            Console.ReadLine();
         }
     }
 }
