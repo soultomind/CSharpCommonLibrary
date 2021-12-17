@@ -20,6 +20,11 @@ namespace CommonLibrary
             HeightRatio = heightRatio;
         }
 
+        public static RectangleRatio ToRectangleRatio(Size size)
+        {
+            return ToRectangleRatio(size.Width, size.Height);
+        }
+
         public static RectangleRatio ToRectangleRatio(int width, int height)
         {
             if (!(width >= 0 && height >= 0))
