@@ -76,11 +76,5 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\CommonLibrary\CommonLibrary.csproj">
-      <Project>{a2902c7d-7eb2-4006-89be-a98fb431ce09}</Project>
-      <Name>CommonLibrary</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

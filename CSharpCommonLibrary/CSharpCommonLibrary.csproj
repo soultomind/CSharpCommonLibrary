@@ -7,8 +7,8 @@
     <ProjectGuid>{A2902C7D-7EB2-4006-89BE-A98FB431CE09}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>CommonLibrary</RootNamespace>
-    <AssemblyName>CommonLibrary</AssemblyName>
+    <RootNamespace>CSharpCommonLibrary</RootNamespace>
+    <AssemblyName>CSharpCommonLibrary</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
