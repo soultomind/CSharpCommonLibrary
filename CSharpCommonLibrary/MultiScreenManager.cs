@@ -18,7 +18,7 @@ namespace CSharpCommonLibrary
         /// <summary>
         /// 타겟이 될 <see cref="System.Windows.Forms.Screen"/> 스크린 Bounds 사이즈
         /// </summary>
-        public Size TargetResolutionDisplayBoundsSize { get; set; }
+        public Size TargetScreenBoundsSize { get; set; }
 
         /// <summary>
         /// 
@@ -38,22 +38,22 @@ namespace CSharpCommonLibrary
             }
 
             TargetScreenIndex = targetScreenIndex;
-            TargetResolutionDisplayBoundsSize = Size.Empty;
+            TargetScreenBoundsSize = Size.Empty;
         }
 
-        public MultiScreenManager(Size targetResolutionDisplayBoundsSize)
+        public MultiScreenManager(Size targetScreenBoundsSize)
         {
             if (ScreenUtility.ScreenLength == 1)
             {
                 throw new InvalidOperationException("Screen.AllScreens.Length==1");
             }
 
-            if (!ScreenUtility.EqualsScreenBoundsSize(targetResolutionDisplayBoundsSize))
+            if (!ScreenUtility.EqualsScreenBoundsSize(targetScreenBoundsSize))
             {
-                throw new ArgumentException(nameof(targetResolutionDisplayBoundsSize));
+                throw new ArgumentException(nameof(targetScreenBoundsSize));
             }
 
-            TargetResolutionDisplayBoundsSize = targetResolutionDisplayBoundsSize;
+            TargetScreenBoundsSize = targetScreenBoundsSize;
             TargetScreenIndex = InvalidScreenIndex;
         }
 
@@ -65,7 +65,7 @@ namespace CSharpCommonLibrary
                 Screen screen = null;
                 if (TargetScreenIndex == InvalidScreenIndex)
                 {
-                    screen = ScreenUtility.GetTargetScreen(TargetResolutionDisplayBoundsSize);
+                    screen = ScreenUtility.GetTargetScreen(TargetScreenBoundsSize);
                 }
                 else
                 {

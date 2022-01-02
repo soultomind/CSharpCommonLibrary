@@ -32,17 +32,17 @@ namespace CSharpCommonLibrary
         /// <summary>
         /// <see cref="System.Windows.Forms.Screen"/> 인덱스
         /// </summary>
-        public int ScreenIndex { get; set; }
-        public Size ResolutionDisplaySize { get; set; }
-
+        public int TargetScreenIndex { get; set; }
+        public Size TargetScreenBoundsSize { get; set; }
+        public Screen TargetScreen { get; private set; }
         public int Interval { get; set; }
         public bool IsStart { get; private set; }
         private Timer _Timer;
-        public ScreenImageCapture(int screenIndex, int interval = 500)
+        public ScreenImageCapture(int targetScreenIndex, int interval = 500)
         {
-            if (!ScreenUtility.IsValidIndex(screenIndex))
+            if (!ScreenUtility.IsValidIndex(targetScreenIndex))
             {
-                throw new ArgumentException("Usage " + nameof(screenIndex) + "=0-" + (Screen.AllScreens.Length - 1));
+                throw new ArgumentException("Usage " + nameof(targetScreenIndex) + "=0-" + (Screen.AllScreens.Length - 1));
             }
 
             if (!(interval >= 500 && interval <= 3000))
@@ -50,15 +50,22 @@ namespace CSharpCommonLibrary
                 throw new ArgumentException("Usage " + nameof(interval) + "=500-3000");
             }
 
-            ScreenIndex = screenIndex;
+            TargetScreenIndex = targetScreenIndex;
+            TargetScreen = new MultiScreenManager(TargetScreenIndex).TargetScreen;
+            if (TargetScreen == null)
+            {
+                throw new InvalidOperationException("TargetScreen is null");
+            }
+
+            TargetScreenBoundsSize = Size.Empty;
             Interval = interval;
         }
 
-        public ScreenImageCapture(Size resolutionDisplaySize, int interval = 500)
+        public ScreenImageCapture(Size targetScreenBoundsSize, int interval = 500)
         {
-            if (!ScreenUtility.EqualsScreenBoundsSize(resolutionDisplaySize))
+            if (!ScreenUtility.EqualsScreenBoundsSize(targetScreenBoundsSize))
             {
-                throw new ArgumentException(nameof(resolutionDisplaySize));
+                throw new ArgumentException(nameof(targetScreenBoundsSize));
             }
 
             if (!(interval >= 500 && interval <= 3000))
@@ -66,26 +73,22 @@ namespace CSharpCommonLibrary
                 throw new ArgumentException("Usage " + nameof(interval) + "=500-3000");
             }
 
-            ResolutionDisplaySize = resolutionDisplaySize;
+            TargetScreenBoundsSize = targetScreenBoundsSize;
+            TargetScreen = new MultiScreenManager(TargetScreenBoundsSize).TargetScreen;
+            if (TargetScreen == null)
+            {
+                throw new InvalidOperationException("TargetScreen is null");
+            }
+
+            TargetScreenIndex = InvalidScreenIndex;
             Interval = interval;
         }
         private void Timer_Tick(object sender, EventArgs e)
         {
             try
             {
-                Bitmap bitmap = null;
-
-                Rectangle bounds = Rectangle.Empty;
-                if (ScreenIndex == InvalidScreenIndex)
-                {
-                    bounds = new MultiScreenManager(ResolutionDisplaySize).TargetScreen.Bounds;
-                }
-                else
-                {
-                    bounds = new MultiScreenManager(ScreenIndex).TargetScreen.Bounds;
-                }
-
-                bitmap = new Bitmap(bounds.Width, bounds.Height);
+                Rectangle bounds = TargetScreen.Bounds;
+                Bitmap bitmap = new Bitmap(bounds.Width, bounds.Height);
                 using (Graphics g = Graphics.FromImage(bitmap))
                 {
                     g.CopyFromScreen(bounds.X, bounds.Y, 0, 0, bounds.Size);

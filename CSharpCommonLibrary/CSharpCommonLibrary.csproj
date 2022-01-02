@@ -69,6 +69,7 @@
     <Compile Include="Utilities\ScreenUtility.cs" />
     <Compile Include="Utilities\StringUtility.cs" />
     <Compile Include="Win32\ButtonEvent.cs" />
+    <Compile Include="Win32\Gdi32.cs" />
     <Compile Include="Win32\MouseEvent.cs" />
     <Compile Include="Win32\MouseOperation.cs" />
     <Compile Include="MouseOperationManager.cs" />

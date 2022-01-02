@@ -11,7 +11,7 @@ namespace CommonLibrary.Win32
     /// </summary>
     [Serializable]
     [StructLayout(LayoutKind.Sequential)]
-    internal struct WINDOWPLACEMENT
+    public struct WINDOWPLACEMENT
     {
         /// <summary>
         /// The length of the structure, in bytes. Before calling the GetWindowPlacement or SetWindowPlacement functions, set this member to sizeof(WINDOWPLACEMENT).

@@ -61,10 +61,12 @@ namespace TestNet32
             if (_screenImage)
             {
                 _screenImageCapture.Start();
+                _ButtonStartAndStopScreenCapture.Text = "스크린 캡쳐 정지";
             }
             else
             {
                 _screenImageCapture.Stop();
+                _ButtonStartAndStopScreenCapture.Text = "스크린 캡쳐 시작";
             }
         }
 
