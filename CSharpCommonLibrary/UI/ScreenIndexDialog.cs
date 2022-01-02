@@ -5,8 +5,14 @@ using System.Windows.Forms;
 
 namespace CommonLibrary.UI
 {
+    /// <summary>
+    /// <see cref="System.Windows.Forms.Screen"/> 인덱스 출력 다이얼로그
+    /// </summary>
     public partial class ScreenIndexDialog : Form
     {
+        /// <summary>
+        /// 다이얼로그가 보여지는 시간(초)
+        /// </summary>
         public int ShowPositionSecond
         {
             get { return _showPositionSecond; }

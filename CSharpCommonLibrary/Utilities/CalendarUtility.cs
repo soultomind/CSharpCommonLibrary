@@ -4,7 +4,14 @@ namespace CommonLibrary.Utilities
 {
     public class CalendarUtility
     {
-        public static readonly string[] MonthKoreans = new string[] { "일", "월", "화", "수", "목", "금", "토" };
+        /// <summary>
+        /// 요일 한글
+        /// </summary>
+        public static readonly string[] DayOfWeekKoreans = new string[] { "일", "월", "화", "수", "목", "금", "토" };
+
+        /// <summary>
+        /// 각 월에 대한 총 일
+        /// </summary>
         public static readonly int[] MonthTotalDays = new int[] { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
 
         /// <summary>
@@ -32,7 +39,7 @@ namespace CommonLibrary.Utilities
         public static string GetMonthKorean(int year, int month, int day)
         {
             DayOfWeek dayOfWeek = NewDayOfWeek(year, month, day);
-            return MonthKoreans[(int)dayOfWeek];
+            return DayOfWeekKoreans[(int)dayOfWeek];
         }
 
         /// <summary>

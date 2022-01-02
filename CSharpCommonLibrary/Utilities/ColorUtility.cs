@@ -9,6 +9,11 @@ namespace CommonLibrary.Utilities
 {
     public class ColorUtility
     {
+        /// <summary>
+        /// 정수로부터 <see cref="System.Drawing.Color"/> 가져온다.
+        /// </summary>
+        /// <param name="argb"></param>
+        /// <returns></returns>
         public static Color FromArgb(int argb)
         {
             int alapha = (argb >> 24) & 0xFF;
@@ -16,13 +21,6 @@ namespace CommonLibrary.Utilities
             int green = (argb >> 8) & 0xFF;
             int blue = argb & 0xFF;
             return Color.FromArgb(alapha, red, green, blue); ;
-        }
-
-        public static bool IsValidCssSharpRgba(string styleSharpRgba)
-        {
-            // #[[:xdigit:]{8}] 테스트해보기
-            Regex regex = new Regex("#[0-9A-Fa-f]{8}");
-            return regex.IsMatch(styleSharpRgba);
         }
     }
 }

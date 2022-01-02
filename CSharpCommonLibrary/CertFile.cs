@@ -16,20 +16,13 @@ namespace CommonLibrary
 
     public class CertFile
     {
-        public static CertFileStore AddCrtFile(bool isAdministrator, StoreName storeName, string fileName, string password, out Exception outException)
+        public static CertFileStore AddCrtFile(StoreName storeName, string fileName, string password, out Exception outException)
         {
             CertFileStore fileStore = CertFileStore.None;
 
             try
             {
-                if (isAdministrator)
-                {
-                    if (!Toolkit.IsAdministrator())
-                    {
-                        throw new InvalidOperationException("It is not currently running in administrator mode.");
-                    }
-                }
-                StoreLocation storeLocation = (isAdministrator) ? StoreLocation.LocalMachine : StoreLocation.CurrentUser;
+                StoreLocation storeLocation = (Toolkit.IsAdministrator()) ? StoreLocation.LocalMachine : StoreLocation.CurrentUser;
                 X509Store store = new X509Store(storeName, storeLocation);
                 store.Open(OpenFlags.ReadWrite);
 
