@@ -7,7 +7,7 @@
     <ProjectGuid>{A2902C7D-7EB2-4006-89BE-A98FB431CE09}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>CSharpCommonLibrary</RootNamespace>
+    <RootNamespace>CommonLibrary</RootNamespace>
     <AssemblyName>CSharpCommonLibrary</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -37,6 +37,7 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -66,8 +67,12 @@
     <Compile Include="Utilities\ConvertUtility.cs" />
     <Compile Include="Utilities\DateTimeUtility.cs" />
     <Compile Include="Utilities\EnvironmentUtility.cs" />
+    <Compile Include="Utilities\FileUtility.cs" />
+    <Compile Include="Utilities\ProcessUtility.cs" />
     <Compile Include="Utilities\ScreenUtility.cs" />
     <Compile Include="Utilities\StringUtility.cs" />
+    <Compile Include="Web\HttpParameter.cs" />
+    <Compile Include="Web\HttpToolkit.cs" />
     <Compile Include="Win32\ButtonEvent.cs" />
     <Compile Include="Win32\Gdi32.cs" />
     <Compile Include="Win32\MouseEvent.cs" />

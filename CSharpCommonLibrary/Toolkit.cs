@@ -48,7 +48,7 @@ namespace CommonLibrary
             _sIncludeFilterName = CreateNamespace();
             IsDebugEnabled = true;
 #else
-            _sIncludeFilterName = "ApplicationName";
+            _sIncludeFilterName = "CommonLibrary";
             IsDebugEnabled = false;
 #endif
             IsTraceEnabled = true;

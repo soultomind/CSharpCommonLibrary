@@ -72,6 +72,7 @@ namespace CommonLibrary
             if (MouseMovePreventScreenIndex >= 0)
             {
                 _thread = new Thread(MouseMovePreventStartWorker);
+                _thread.IsBackground = true;
                 _thread.Start();
             }
         }

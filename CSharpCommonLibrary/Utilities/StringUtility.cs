@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace CSharpCommonLibrary.Utilities
+namespace CommonLibrary.Utilities
 {
     public class StringUtility
     {
@@ -18,16 +18,40 @@ namespace CSharpCommonLibrary.Utilities
             return newGuid;
         }
 
-        /// <summary>
-        /// 유효한 #[00FF0000] 형태의 CSS 
-        /// </summary>
-        /// <param name="styleSharpRgba"></param>
-        /// <returns></returns>
-        public static bool IsValidCssSharpRgba(string styleSharpRgba)
+        public static bool IsAlphabet(string input)
         {
-            // #[[:xdigit:]{8}] 테스트해보기
-            Regex regex = new Regex("#[0-9A-Fa-f]{8}");
-            return regex.IsMatch(styleSharpRgba);
+            return Regex.IsMatch(input, "[A-Z]", RegexOptions.IgnoreCase);
+        }
+
+        public static bool IsAlphabet(char ch)
+        {
+            return IsAlphabet(new String(new char[] { ch }));
+        }
+
+        public static bool IsLowerChar(char ch)
+        {
+            if (IsAlphabet(ch))
+            {
+                if ('a' <= ch && 'z' >= ch) // Lower
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public static bool IsUpperChar(char ch)
+        {
+            if (IsAlphabet(ch))
+            {
+                if ('A' <= ch && 'Z' >= ch) // Upper
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 }
