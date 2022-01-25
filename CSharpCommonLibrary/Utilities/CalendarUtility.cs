@@ -2,6 +2,9 @@
 
 namespace CommonLibrary.Utilities
 {
+    /// <summary>
+    /// 달력/요일 관련 유틸리티
+    /// </summary>
     public class CalendarUtility
     {
         /// <summary>

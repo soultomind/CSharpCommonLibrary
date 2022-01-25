@@ -6,6 +6,9 @@ using System.Windows.Forms;
 
 namespace CommonLibrary.UI
 {
+    /// <summary>
+    /// <see cref="System.Windows.Forms.TabPage.Text"/> 가 보이지 않는 <see cref="System.Windows.Forms.TabControl"/>
+    /// </summary>
     public class TablessControl : TabControl
     {
         public const int TCM_ADJUSTRECT = 0x1328;

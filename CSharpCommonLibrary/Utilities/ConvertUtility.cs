@@ -5,23 +5,32 @@ using System.Text;
 
 namespace CommonLibrary.Utilities
 {
+    /// <summary>
+    /// 변환 유틸리티
+    /// </summary>
     public class ConvertUtility
     { 
+        /// <summary>
+        /// <paramref name="text"/> 값을 Base64 문자열로 변환합니다.
+        /// </summary>
+        /// <param name="text">Base64로 변환할 Text</param>
+        /// <param name="encodingName">인코딩</param>
+        /// <returns></returns>
         public static string Base64Encode(string text, string encodingName = "UTF-8")
         {
             byte[] bytes = GetBytes(text, encodingName);
             return ToBase64String(bytes);
         }
 
+        /// <summary>
+        /// <paramref name="text"/> Base64 값을 디코딩 하여 반환합니다.
+        /// </summary>
+        /// <param name="text"></param>
+        /// <returns></returns>
         public static string Base64Decode(string text)
         {
             byte[] bytes = FromBase64String(text);
             return GetString(bytes);
-        }
-
-        public static string ToBase64StringFromFile(string path)
-        {
-            return ToBase64String(System.IO.File.ReadAllBytes(path));
         }
 
         private static string ToBase64String(byte[] bytes)
