@@ -14,36 +14,51 @@ namespace CommonLibrary.Web
 {
     public class HttpToolkit
     {
-        public static bool IsRevalidateCache = false;
+        public static string ContentType = "application/x-www-form-urlencoded; charset=";
+        public string UserAgent { get; set; }
+        public bool IsSetCachePolicy { get; set; }
+        public HttpRequestCacheLevel CacheLevel { get; set; }
 
-        public static byte[] CreatePostData(Dictionary<string, HttpParameter> parameter, Encoding encoding)
+        public bool IsExpect100Continue { get; set; }
+
+        public HttpToolkit()
+        {
+            UserAgent = "Mozilla/4.0";
+            IsSetCachePolicy = false;
+            CacheLevel = HttpRequestCacheLevel.Revalidate;
+
+            IsExpect100Continue = false;
+        }
+
+        public byte[] CreatePostData(Dictionary<string, string[]> parameter, Encoding encoding)
         {
             StringBuilder builder = new StringBuilder();
 
             int itemCount = parameter.Count;
-            bool isLast = false;
+            bool isItemLast = false;
 
             foreach (var item in parameter)
             {
                 itemCount--;
-                isLast = itemCount == 0;
+                isItemLast = itemCount == 0;
                 
-                if (item.Value.Values.Count > 1)
+                if (item.Value.Length > 1)
                 {
-                    int innerItemCount = item.Value.Values.Count;
-                    bool isInnerLast = false;
+                    string[] values = item.Value;
+                    int inneValueCount = values.Length;
+                    bool isInnerValueLast = false;
 
-                    foreach (string value in item.Value.Values)
+                    foreach (string value in values)
                     {
-                        innerItemCount--;
-                        isInnerLast = innerItemCount == 0;
+                        inneValueCount--;
+                        isInnerValueLast = inneValueCount == 0;
 
                         builder.Append(
-                        String.Format("{0}={1}",
-                        item.Key,
+                            String.Format("{0}={1}",
+                            item.Key,
                         HttpUtility.UrlEncode(value, encoding)));
 
-                        if (!isInnerLast)
+                        if (!isInnerValueLast)
                         {
                             builder.Append("&");
                         }
@@ -52,13 +67,13 @@ namespace CommonLibrary.Web
                 else
                 {
                     builder.Append(
-                    String.Format("{0}={1}",
-                    item.Key,
-                    HttpUtility.UrlEncode(item.Value.Values[0], encoding)));
+                        String.Format("{0}={1}",
+                        item.Key,
+                    HttpUtility.UrlEncode(item.Value[0], encoding)));
                 }
                 
 
-                if (!isLast)
+                if (!isItemLast)
                 {
                     builder.Append("&");
                 }
@@ -69,7 +84,7 @@ namespace CommonLibrary.Web
             return buffer;
         }
 
-        public static string GetResponseByPost(string uriString, Dictionary<string, HttpParameter> parameter, string requestEnc, string responseEnc, int requestTimeout, out HttpStatusCode outHttpStatusCode)
+        public string GetResponseByPost(string uriString, Dictionary<string, string[]> parameter, string requestEnc, string responseEnc, int requestTimeout, out HttpStatusCode outHttpStatusCode)
         {
             if (uriString.Substring(0, 5).ToLower().Equals("https"))
             {
@@ -79,35 +94,39 @@ namespace CommonLibrary.Web
                 };
             }
 
-            Uri address = new Uri(uriString);
+            Uri requestUri = new Uri(uriString);
 
             //
             // Create the web request   
             //
-            HttpWebRequest request = WebRequest.Create(address) as HttpWebRequest;
+            HttpWebRequest request = WebRequest.Create(requestUri) as HttpWebRequest;
 
-            request.UserAgent = "Mozilla/4.0";
+            request.UserAgent = UserAgent;
 
-            if (IsRevalidateCache)
+            if (IsSetCachePolicy)
             {
-                HttpRequestCachePolicy cachePolicy = new HttpRequestCachePolicy(HttpRequestCacheLevel.Revalidate);
-                request.CachePolicy = cachePolicy;
+                HttpRequestCachePolicy httpRequestCachePolicy = new HttpRequestCachePolicy(CacheLevel);
+                request.CachePolicy = httpRequestCachePolicy;
             }
 
             //
             //TimeOut 설정
             //
-            request.Timeout = requestTimeout;
+            if (requestTimeout > 0)
+            {
+                request.Timeout = requestTimeout;
+            }
 
             ///
             /// Expect100Continue 무시
             ///
-            request.ServicePoint.Expect100Continue = false;
-            request.Method = "POST";
-            request.ContentType = "application/x-www-form-urlencoded";
+            request.ServicePoint.Expect100Continue = IsExpect100Continue;
 
             if (parameter != null && parameter.Count > 0)
             {
+                request.Method = "POST";
+                request.ContentType = ContentType + requestEnc;
+
                 byte[] data = CreatePostData(parameter, Encoding.GetEncoding(requestEnc));
 
                 ////
@@ -118,9 +137,9 @@ namespace CommonLibrary.Web
                 ////
                 //// Write data   
                 ////
-                using (Stream stream = request.GetRequestStream())
+                using (Stream requestStream = request.GetRequestStream())
                 {
-                    stream.Write(data, 0, data.Length);
+                    requestStream.Write(data, 0, data.Length);
                 }
             }
             else
@@ -143,6 +162,8 @@ namespace CommonLibrary.Web
                     responseData = reader.ReadToEnd();
 
                     Toolkit.DebugWriteLine("ResponseData=" + responseData);
+
+                    reader.Close();
                 }
             }
             catch (WebException ex)
@@ -155,19 +176,6 @@ namespace CommonLibrary.Web
                 {
                     httpStatusCode = HttpStatusCode.BadRequest;
                 }
-
-                if (ex.InnerException != null)
-                {
-                    responseData = ex.InnerException.Message;
-                }
-                else
-                {
-                    responseData = ex.Message;
-                }
-            }
-            catch (Exception ex)
-            {
-                httpStatusCode = HttpStatusCode.InternalServerError;
 
                 if (ex.InnerException != null)
                 {
