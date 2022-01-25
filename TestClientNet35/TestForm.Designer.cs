@@ -33,6 +33,8 @@ namespace TestNet32
             this._ButtonShowScreenIndex = new System.Windows.Forms.Button();
             this._PictureBoxScreenCapture = new System.Windows.Forms.PictureBox();
             this._ButtonStartAndStopScreenCapture = new System.Windows.Forms.Button();
+            this._ButtonHttpToolkitTest = new System.Windows.Forms.Button();
+            this._RichTextBoxHttpToolkitTest = new System.Windows.Forms.RichTextBox();
             ((System.ComponentModel.ISupportInitialize)(this._PictureBoxScreenCapture)).BeginInit();
             this.SuspendLayout();
             // 
@@ -58,7 +60,7 @@ namespace TestNet32
             // 
             // _PictureBoxScreenCapture
             // 
-            this._PictureBoxScreenCapture.Location = new System.Drawing.Point(415, 270);
+            this._PictureBoxScreenCapture.Location = new System.Drawing.Point(415, 282);
             this._PictureBoxScreenCapture.Name = "_PictureBoxScreenCapture";
             this._PictureBoxScreenCapture.Size = new System.Drawing.Size(373, 243);
             this._PictureBoxScreenCapture.TabIndex = 2;
@@ -66,7 +68,7 @@ namespace TestNet32
             // 
             // _ButtonStartAndStopScreenCapture
             // 
-            this._ButtonStartAndStopScreenCapture.Location = new System.Drawing.Point(24, 94);
+            this._ButtonStartAndStopScreenCapture.Location = new System.Drawing.Point(415, 249);
             this._ButtonStartAndStopScreenCapture.Name = "_ButtonStartAndStopScreenCapture";
             this._ButtonStartAndStopScreenCapture.Size = new System.Drawing.Size(128, 27);
             this._ButtonStartAndStopScreenCapture.TabIndex = 3;
@@ -74,11 +76,31 @@ namespace TestNet32
             this._ButtonStartAndStopScreenCapture.UseVisualStyleBackColor = true;
             this._ButtonStartAndStopScreenCapture.Click += new System.EventHandler(this.ButtonStartAndStopScreenCapture_Click);
             // 
+            // _ButtonHttpToolkitTest
+            // 
+            this._ButtonHttpToolkitTest.Location = new System.Drawing.Point(415, 12);
+            this._ButtonHttpToolkitTest.Name = "_ButtonHttpToolkitTest";
+            this._ButtonHttpToolkitTest.Size = new System.Drawing.Size(128, 27);
+            this._ButtonHttpToolkitTest.TabIndex = 4;
+            this._ButtonHttpToolkitTest.Text = "HttpToolkit 테스트";
+            this._ButtonHttpToolkitTest.UseVisualStyleBackColor = true;
+            this._ButtonHttpToolkitTest.Click += new System.EventHandler(this._ButtonHttpToolkitTest_Click);
+            // 
+            // _RichTextBoxHttpToolkitTest
+            // 
+            this._RichTextBoxHttpToolkitTest.Location = new System.Drawing.Point(415, 45);
+            this._RichTextBoxHttpToolkitTest.Name = "_RichTextBoxHttpToolkitTest";
+            this._RichTextBoxHttpToolkitTest.Size = new System.Drawing.Size(373, 165);
+            this._RichTextBoxHttpToolkitTest.TabIndex = 5;
+            this._RichTextBoxHttpToolkitTest.Text = "";
+            // 
             // TestForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 525);
+            this.Controls.Add(this._RichTextBoxHttpToolkitTest);
+            this.Controls.Add(this._ButtonHttpToolkitTest);
             this.Controls.Add(this._ButtonStartAndStopScreenCapture);
             this.Controls.Add(this._PictureBoxScreenCapture);
             this.Controls.Add(this._ButtonShowScreenIndex);
@@ -98,5 +120,7 @@ namespace TestNet32
         private System.Windows.Forms.Button _ButtonShowScreenIndex;
         private System.Windows.Forms.PictureBox _PictureBoxScreenCapture;
         private System.Windows.Forms.Button _ButtonStartAndStopScreenCapture;
+        private System.Windows.Forms.Button _ButtonHttpToolkitTest;
+        private System.Windows.Forms.RichTextBox _RichTextBoxHttpToolkitTest;
     }
 }

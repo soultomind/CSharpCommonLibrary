@@ -1,6 +1,7 @@
 ﻿# CommonLibrary .NET Framework 3.5
 
-
+## Net
+- SecurityProtocolExtension : .NET35 전용 SecurityProtocol 확장 클래스 
 ## UI 
 - TablessControl : 탭이 없는 TabControl
 - ScreenIndexDialog : 스크린 인덱스 출력
@@ -12,6 +13,9 @@
 - DateTimeUtility : 날짜시간 관련 유틸
 - EnvironmentUtility : 환경 유틸
 - ScreenUtility : 스크린(모니터 디스플레이) 유틸   
+
+## Web
+- HttpToolkit : Http 통신관련 툴킷
 
 ## 기능   
 - CertFile : 인증서   

@@ -1,8 +1,11 @@
 ﻿using CommonLibrary;
 using CommonLibrary.UI;
 using CommonLibrary.Utilities;
+using CommonLibrary.Web;
 using CSharpCommonLibrary;
 using System;
+using System.Collections.Generic;
+using System.Net;
 using System.Windows.Forms;
 
 namespace TestNet32
@@ -82,6 +85,21 @@ namespace TestNet32
                 _PictureBoxScreenCapture.SizeMode = PictureBoxSizeMode.StretchImage;
                 _PictureBoxScreenCapture.Image = e.Bitmap;
             }
+        }
+
+        private void _ButtonHttpToolkitTest_Click(object sender, EventArgs e)
+        {
+            Dictionary<string, string[]> parameter = new Dictionary<string, string[]>();
+            parameter.Add("Test", new string[] { "Test1", "Test2" });
+            HttpStatusCode statusCode = HttpStatusCode.OK;
+            string response = new HttpToolkit().GetResponseByPost(
+                "http://localhost:8080/CSharpCommonLibrary/index.jsp", 
+                parameter, 
+                "UTF-8", 
+                "UTF-8", 
+                10000, 
+                out statusCode
+            );
         }
     }
 }
