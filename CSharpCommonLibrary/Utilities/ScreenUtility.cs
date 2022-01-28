@@ -4,10 +4,16 @@ using System.Windows.Forms;
 
 namespace CommonLibrary.Utilities
 {
+    /// <summary>
+    /// 스크린(디스플레이) 관련 유틸
+    /// </summary>
     public class ScreenUtility
     {
-        public static int ScreenLength = Screen.AllScreens.Length;
         private static Screen[] _AsscendingScreens;
+
+        /// <summary>
+        /// X 좌표순으로 오름차순 정렬된 스크린 배열
+        /// </summary>
         public static Screen[] AsscendingScreens
         {
             get
@@ -38,6 +44,11 @@ namespace CommonLibrary.Utilities
             }
         }
 
+        /// <summary>
+        /// <paramref name="screenIndex"/> 값이 유효한 인덱스 값인지 여부를 반환합니다.
+        /// </summary>
+        /// <param name="screenIndex"></param>
+        /// <returns></returns>
         public static bool IsValidIndex(int screenIndex)
         {
             if ((screenIndex >= 0) &&
@@ -49,6 +60,10 @@ namespace CommonLibrary.Utilities
             return false;
         }
 
+        /// <summary>
+        /// 주 모니터 디스플레이 인덱스 값을 반환합니다.
+        /// </summary>
+        /// <returns></returns>
         public static int GetPrimaryScreenIndex()
         {
             int primaryScreenIndex = 0;
@@ -63,6 +78,10 @@ namespace CommonLibrary.Utilities
             return primaryScreenIndex;
         }
 
+        /// <summary>
+        /// 주 모니터를 제외한 첫번째 디스플레이 인덱스 값을 반환합니다.
+        /// </summary>
+        /// <returns></returns>
         public static int GetFirstScreenIndexAndExceptPrimaryScreen()
         {
             int targetScreenIndex = 0;
@@ -113,6 +132,12 @@ namespace CommonLibrary.Utilities
             return false;
         }
 
+        /// <summary>
+        /// <paramref name="point"/>가 위치해 있는 스크린(디스플레이) 값을 반환합니다.
+        /// <para>못 찾을 경우 Null 반환합니다.</para>
+        /// </summary>
+        /// <param name="point"></param>
+        /// <returns></returns>
         public static Screen ContainsPointScreenBounds(Point point)
         {
             foreach (Screen screen in Screen.AllScreens)
@@ -125,18 +150,12 @@ namespace CommonLibrary.Utilities
             return null;
         }
 
-        public static Screen ContainsPointScreenWorkingArea(Point point)
-        {
-            foreach (Screen screen in Screen.AllScreens)
-            {
-                if (screen.WorkingArea.Contains(point))
-                {
-                    return screen;
-                }
-            }
-            return null;
-        }
-
+        /// <summary>
+        /// <paramref name="targetScreenIndex"/> 값에 해당하는 스크린(디스플레이) 값을 반환합니다.
+        /// <para>못 찾을 경우 Null 반환합니다.</para>
+        /// </summary>
+        /// <param name="targetScreenIndex"></param>
+        /// <returns></returns>
         public static Screen GetTargetScreen(int targetScreenIndex)
         {
             for (int screenIndex = 0; screenIndex < Screen.AllScreens.Length; screenIndex++)
@@ -149,6 +168,12 @@ namespace CommonLibrary.Utilities
             return null;
         }
 
+        /// <summary>
+        /// <paramref name="targetResolutionDisplayBoundsSize"/> 값과 같은 스크린(디스플레이) 값을 반환합니다.
+        /// <para>못 찾을 경우 Null 반환합니다.</para>
+        /// </summary>
+        /// <param name="targetResolutionDisplayBoundsSize"></param>
+        /// <returns></returns>
         public static Screen GetTargetScreen(Size targetResolutionDisplayBoundsSize)
         {
             for (int screenIndex = 0; screenIndex < Screen.AllScreens.Length; screenIndex++)

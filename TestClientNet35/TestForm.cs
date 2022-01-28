@@ -92,13 +92,15 @@ namespace TestNet32
             Dictionary<string, string[]> parameter = new Dictionary<string, string[]>();
             parameter.Add("Test", new string[] { "Test1", "Test2" });
             HttpStatusCode statusCode = HttpStatusCode.OK;
+            Exception exception = null;
             string response = new HttpToolkit().GetResponseByPost(
                 "http://localhost:8080/CSharpCommonLibrary/index.jsp", 
                 parameter, 
                 "UTF-8", 
                 "UTF-8", 
                 10000, 
-                out statusCode
+                out statusCode,
+                out exception
             );
         }
     }

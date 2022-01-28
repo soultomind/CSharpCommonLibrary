@@ -65,9 +65,8 @@
     <Compile Include="Utilities\CalendarUtility.cs" />
     <Compile Include="Utilities\ColorUtility.cs" />
     <Compile Include="Utilities\ConvertUtility.cs" />
-    <Compile Include="Utilities\DateTimeUtility.cs" />
     <Compile Include="Utilities\EnvironmentUtility.cs" />
-    <Compile Include="Utilities\FileUtility.cs" />
+    <Compile Include="Utilities\IOUtility.cs" />
     <Compile Include="Utilities\ProcessUtility.cs" />
     <Compile Include="Utilities\ScreenUtility.cs" />
     <Compile Include="Utilities\StringUtility.cs" />

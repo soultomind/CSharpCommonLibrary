@@ -13,9 +13,17 @@ namespace CommonLibrary.UI
     {
         public const int TCM_ADJUSTRECT = 0x1328;
 
+        /// <summary>
+        /// 탭 보이기 여부
+        /// </summary>
         public bool IsTabless
         {
             get; set;
+        }
+
+        public TablessControl()
+        {
+            IsTabless = false;
         }
 
         protected override void WndProc(ref Message m)

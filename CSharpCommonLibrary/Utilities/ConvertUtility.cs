@@ -59,18 +59,35 @@ namespace CommonLibrary.Utilities
             return encoding;
         }
 
+        /// <summary>
+        /// <paramref name="text"/> 값을 byte[] 배열로 반환합니다.
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="encodingName"></param>
+        /// <returns></returns>
         public static byte[] GetBytes(string text, string encodingName = "UTF-8")
         {
             Encoding encoding = GetEncoding(encodingName);
             return encoding.GetBytes(text);
         }
 
+        /// <summary>
+        /// <paramref name="bytes"/>[] 배열 값을 문자열로 반환합니다.
+        /// </summary>
+        /// <param name="bytes"></param>
+        /// <param name="encodingName"></param>
+        /// <returns></returns>
         public static string GetString(byte[] bytes, string encodingName = "UTF-8")
         {
             Encoding encoding = GetEncoding(encodingName);
             return encoding.GetString(bytes);
         }
 
+        /// <summary>
+        /// <paramref name="value"/> 값을 byte[] 배열로 변환합니다.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
         public static byte[] IntToByteArray(int value)
         {
             return BitConverter.GetBytes(value);
@@ -105,6 +122,12 @@ namespace CommonLibrary.Utilities
             */
         }
 
+        /// <summary>
+        /// <paramref name="value"/> 값을 int 형으로 변환하여 반환합니다.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="startIndex"></param>
+        /// <returns></returns>
         public static int ByteArrayToInt(byte[] value, int startIndex = 0)
         {
             if (value == null)

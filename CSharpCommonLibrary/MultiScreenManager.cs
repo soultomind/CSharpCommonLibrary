@@ -27,7 +27,7 @@ namespace CSharpCommonLibrary
         /// <exception cref="System.InvalidOperationException"></exception>
         public MultiScreenManager(int targetScreenIndex)
         {
-            if (ScreenUtility.ScreenLength == 1)
+            if (Screen.AllScreens.Length == 1)
             {
                 throw new InvalidOperationException("Screen.AllScreens.Length==1");
             }
@@ -43,7 +43,7 @@ namespace CSharpCommonLibrary
 
         public MultiScreenManager(Size targetScreenBoundsSize)
         {
-            if (ScreenUtility.ScreenLength == 1)
+            if (Screen.AllScreens.Length == 1)
             {
                 throw new InvalidOperationException("Screen.AllScreens.Length==1");
             }

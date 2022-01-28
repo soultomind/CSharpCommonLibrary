@@ -31,8 +31,21 @@ namespace CommonLibrary.UI
         private int _showPositionSecond = 3;
         private int _currentShowPositionSecond = 0;
 
+        /// <summary>
+        /// 생성자 
+        /// </summary>
+        /// <param name="index"></param>
+        /// <param name="rectangle"></param>
+        /// <exception cref="System.ArgumentException">
+        /// <paramref name="index"/>값이 0보다 작거나 <see cref="System.Windows.Forms.Screen.AllScreens"/>.Length 값과 같거나 클때
+        /// </exception>
         public ScreenIndexDialog(int index, Rectangle rectangle)
         {
+            if (index < 0 || index >= Screen.AllScreens.Length)
+            {
+                throw new ArgumentException(nameof(index));
+            }
+
             InitializeComponent();
 
             Location = rectangle.Location;
@@ -43,21 +56,6 @@ namespace CommonLibrary.UI
             _TimerShowPosition.Start();
         }
 
-        private bool IsPrimaryScreen(int index)
-        {
-            return index == (ScreenUtility.GetPrimaryScreenIndex() + 1);
-        }
-
-        public Label LabelScreenIndex
-        {
-            get { return _LabelScreenIndex; }
-        }
-
-        public Label LabelBounds
-        {
-            get { return _LabelBounds; }
-        }
-
         private void ShowPositionTimer_Tick(object sender, EventArgs e)
         {
             _currentShowPositionSecond++;
@@ -66,6 +64,29 @@ namespace CommonLibrary.UI
                 _TimerShowPosition.Stop();
                 this.Dispose();
             }
+        }
+
+        private bool IsPrimaryScreen(int index)
+        {
+            return index == (ScreenUtility.GetPrimaryScreenIndex() + 1);
+        }
+
+
+
+        /// <summary>
+        /// 디스플레이 번호 표현 라벨
+        /// </summary>
+        public Label LabelScreenIndex
+        {
+            get { return _LabelScreenIndex; }
+        }
+
+        /// <summary>
+        /// 디스플레이 위치 및 크기 표현 라벨
+        /// </summary>
+        public Label LabelBounds
+        {
+            get { return _LabelBounds; }
         }
     }
 }

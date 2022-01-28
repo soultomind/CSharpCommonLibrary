@@ -84,75 +84,77 @@ namespace CommonLibrary.Web
             return buffer;
         }
 
-        public string GetResponseByPost(string uriString, Dictionary<string, string[]> parameter, string requestEnc, string responseEnc, int requestTimeout, out HttpStatusCode outHttpStatusCode)
+        public string GetResponseByPost(string uriString, Dictionary<string, string[]> parameter, string requestEnc, string responseEnc, int requestTimeout, out HttpStatusCode outHttpStatusCode, out Exception outException)
         {
+            HttpStatusCode httpStatusCode = HttpStatusCode.OK;
+
             if (uriString.Substring(0, 5).ToLower().Equals("https"))
             {
                 ServicePointManager.ServerCertificateValidationCallback += delegate (object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
                 {
-                    return true; 
+                    return true;
                 };
             }
 
-            Uri requestUri = new Uri(uriString);
-
-            //
-            // Create the web request   
-            //
-            HttpWebRequest request = WebRequest.Create(requestUri) as HttpWebRequest;
-
-            request.UserAgent = UserAgent;
-
-            if (IsSetCachePolicy)
-            {
-                HttpRequestCachePolicy httpRequestCachePolicy = new HttpRequestCachePolicy(CacheLevel);
-                request.CachePolicy = httpRequestCachePolicy;
-            }
-
-            //
-            //TimeOut 설정
-            //
-            if (requestTimeout > 0)
-            {
-                request.Timeout = requestTimeout;
-            }
-
-            ///
-            /// Expect100Continue 무시
-            ///
-            request.ServicePoint.Expect100Continue = IsExpect100Continue;
-
-            if (parameter != null && parameter.Count > 0)
-            {
-                request.Method = "POST";
-                request.ContentType = ContentType + requestEnc;
-
-                byte[] data = CreatePostData(parameter, Encoding.GetEncoding(requestEnc));
-
-                ////
-                //// Set the content length in the request headers   
-                ////
-                request.ContentLength = data.Length;
-
-                ////
-                //// Write data   
-                ////
-                using (Stream requestStream = request.GetRequestStream())
-                {
-                    requestStream.Write(data, 0, data.Length);
-                }
-            }
-            else
-            {
-                request.ContentLength = 0;
-            }
-
             string responseData = "";
-
-            HttpStatusCode httpStatusCode = HttpStatusCode.OK;
-
             try
             {
+                
+                Uri requestUri = new Uri(uriString);
+
+                //
+                // Create the web request   
+                //
+                HttpWebRequest request = WebRequest.Create(requestUri) as HttpWebRequest;
+
+                request.UserAgent = UserAgent;
+
+                if (IsSetCachePolicy)
+                {
+                    HttpRequestCachePolicy httpRequestCachePolicy = new HttpRequestCachePolicy(CacheLevel);
+                    request.CachePolicy = httpRequestCachePolicy;
+                }
+
+                //
+                //TimeOut 설정
+                //
+                if (requestTimeout > 0)
+                {
+                    request.Timeout = requestTimeout;
+                }
+
+                ///
+                /// Expect100Continue 무시
+                ///
+                request.ServicePoint.Expect100Continue = IsExpect100Continue;
+
+                if (parameter != null && parameter.Count > 0)
+                {
+                    request.Method = "POST";
+                    request.ContentType = ContentType + requestEnc;
+
+                    byte[] data = CreatePostData(parameter, Encoding.GetEncoding(requestEnc));
+
+                    ////
+                    //// Set the content length in the request headers   
+                    ////
+                    request.ContentLength = data.Length;
+
+                    ////
+                    //// Write data   
+                    ////
+                    using (Stream requestStream = request.GetRequestStream())
+                    {
+                        requestStream.Write(data, 0, data.Length);
+                    }
+                }
+                else
+                {
+                    request.ContentLength = 0;
+                }
+
+                
+
                 using (HttpWebResponse response = request.GetResponse() as HttpWebResponse)
                 {
                     httpStatusCode = response.StatusCode;
@@ -165,6 +167,8 @@ namespace CommonLibrary.Web
 
                     reader.Close();
                 }
+
+                outException = null;
             }
             catch (WebException ex)
             {
@@ -177,14 +181,12 @@ namespace CommonLibrary.Web
                     httpStatusCode = HttpStatusCode.BadRequest;
                 }
 
-                if (ex.InnerException != null)
-                {
-                    responseData = ex.InnerException.Message;
-                }
-                else
-                {
-                    responseData = ex.Message;
-                }
+                outException = ex;
+            }
+            catch (Exception ex)
+            {
+                outException = ex;
+                httpStatusCode = HttpStatusCode.BadRequest;
             }
 
             outHttpStatusCode = httpStatusCode;

@@ -6,7 +6,7 @@ using System.Text;
 
 namespace CommonLibrary.Utilities
 {
-    public class FileUtility
+    public class IOUtility
     {
         /// <summary>
         /// Path 경로가 디렉토리인지 여부값을 반환합니다.
