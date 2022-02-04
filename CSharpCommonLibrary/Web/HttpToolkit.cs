@@ -178,7 +178,7 @@ namespace CommonLibrary.Web
                 }
                 else
                 {
-                    httpStatusCode = HttpStatusCode.BadRequest;
+                    httpStatusCode = HttpStatusCode.InternalServerError;
                 }
 
                 outException = ex;
