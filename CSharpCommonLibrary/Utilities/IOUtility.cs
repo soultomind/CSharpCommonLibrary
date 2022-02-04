@@ -11,7 +11,7 @@ namespace CommonLibrary.Utilities
         /// <summary>
         /// Path 경로가 디렉토리인지 여부값을 반환합니다.
         /// </summary>
-        /// <param name="path"></param>
+        /// <param name="path">경로</param>
         /// <returns></returns>
         public static bool IsDirectory(string path)
         {
@@ -31,8 +31,7 @@ namespace CommonLibrary.Utilities
         /// <summary>
         /// Path 디렉토리에 있는 파일들을 삭제합니다.
         /// </summary>
-        /// <param name="path"></param>
-        /// <param name="value"></param>
+        /// <param name="path">경로</param>
         public static void DeleteFiles(string path)
         {
             if (IsDirectory(path))

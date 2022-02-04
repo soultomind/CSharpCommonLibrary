@@ -8,6 +8,11 @@ namespace CommonLibrary.Utilities
 {
     public class ProcessUtility
     {
+        /// <summary>
+        /// <para><paramref name="processName"/>에 해당하는 프로세스 실행 여부를 반환합니다.</para>
+        /// </summary>
+        /// <param name="processName"></param>
+        /// <returns></returns>
         public static bool Running(string processName)
         {
             Process[] processList = Process.GetProcessesByName(processName);
@@ -18,6 +23,13 @@ namespace CommonLibrary.Utilities
             return false;
         }
 
+        /// <summary>
+        /// <para><paramref name="processName"/>에 해당하는 프로세스 실행 여부를 반환합니다.</para>
+        /// <para><paramref name="outProcessCount"/> 값으로 현재 실행중인 프로세스 값을 설정합니다.</para>
+        /// </summary>
+        /// <param name="processName"></param>
+        /// <param name="outProcessCount"></param>
+        /// <returns></returns>
         public static bool Running(string processName, out int outProcessCount)
         {
             Process[] processList = Process.GetProcessesByName(processName);

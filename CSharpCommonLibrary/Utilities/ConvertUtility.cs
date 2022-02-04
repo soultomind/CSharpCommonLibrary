@@ -9,30 +9,7 @@ namespace CommonLibrary.Utilities
     /// 변환 유틸리티
     /// </summary>
     public class ConvertUtility
-    { 
-        /// <summary>
-        /// <paramref name="text"/> 값을 Base64 문자열로 변환합니다.
-        /// </summary>
-        /// <param name="text">Base64로 변환할 Text</param>
-        /// <param name="encodingName">인코딩</param>
-        /// <returns></returns>
-        public static string Base64Encode(string text, string encodingName = "UTF-8")
-        {
-            byte[] bytes = GetBytes(text, encodingName);
-            return ToBase64String(bytes);
-        }
-
-        /// <summary>
-        /// <paramref name="text"/> Base64 값을 디코딩 하여 반환합니다.
-        /// </summary>
-        /// <param name="text"></param>
-        /// <returns></returns>
-        public static string Base64Decode(string text)
-        {
-            byte[] bytes = FromBase64String(text);
-            return GetString(bytes);
-        }
-
+    {
         private static string ToBase64String(byte[] bytes)
         {
             return Convert.ToBase64String(bytes);
@@ -43,6 +20,38 @@ namespace CommonLibrary.Utilities
             return Convert.FromBase64String(text);
         }
 
+        /// <summary>
+        /// <paramref name="text"/> 값을 Base64 문자열로 변환합니다.
+        /// </summary>
+        /// <param name="text">Base64로 변환할 Text</param>
+        /// <param name="encodingName">인코딩 명</param>
+        /// <returns></returns>
+        public static string Base64Encode(string text, string encodingName = "UTF-8")
+        {
+            byte[] bytes = GetBytes(text, encodingName);
+            return ToBase64String(bytes);
+        }
+
+        /// <summary>
+        /// <paramref name="text"/> Base64 값을 디코딩 하여 반환합니다.
+        /// </summary>
+        /// <param name="text">Base64 디코딩 할 텍스트</param>
+        /// <returns></returns>
+        public static string Base64Decode(string text)
+        {
+            byte[] bytes = FromBase64String(text);
+            return GetString(bytes);
+        }
+
+        /// <summary>
+        /// <paramref name="encodingName"/>에 해당하는 객체를 반환합니다.
+        /// </summary>
+        /// <param name="encodingName"></param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentNullException">
+        /// <paramref name="encodingName"/> 값이 null 이거나 <paramref name="encodingName"/>에 해당하는 
+        /// <see cref="System.Text.Encoding"/> 을 찾을 수 없을경우
+        /// </exception>
         public static Encoding GetEncoding(string encodingName = "UTF-8")
         {
             if (encodingName == null)

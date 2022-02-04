@@ -32,6 +32,10 @@ namespace CommonLibrary.Net
         /// <summary>
         /// Tls12 설정을 합니다.
         /// </summary>
+        /// <exception cref="System.NotSupportedException">
+        /// Tls12 속성을 설정하기 위해 지정된 값이 유효한 SecurityProtocolType 열거형 값이 아닌 경우
+        /// <para>윈도우 업데이트가 제대로 되어 있지 않을경우 발생 할 수 있다.</para>
+        /// </exception>
         public static void SetTls12()
         {
             SecurityProtocolType type =
