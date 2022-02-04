@@ -178,6 +178,7 @@ namespace CommonLibrary.Web
                 }
                 else
                 {
+                    // 500 번대 Server 에러
                     httpStatusCode = HttpStatusCode.InternalServerError;
                 }
 
@@ -186,6 +187,7 @@ namespace CommonLibrary.Web
             catch (Exception ex)
             {
                 outException = ex;
+                // 400 번대 Client 에러
                 httpStatusCode = HttpStatusCode.BadRequest;
             }
 

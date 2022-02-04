@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace CSharpCommonLibrary
+namespace CommonLibrary
 {
     public delegate void CreateScreenImageCaptureEventHandler(object sender, ScreenImageCaptureEventArgs e);
     public class ScreenImageCaptureEventArgs : EventArgs
