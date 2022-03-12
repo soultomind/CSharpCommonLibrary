@@ -86,6 +86,28 @@ namespace CommonLibrary
                 Debug.WriteLine(message);
             }
         }
+
+        public static void DebugWrite(string message)
+        {
+            if (IsDebugEnabled)
+            {
+                string className = new StackFrame(1).GetMethod().ReflectedType.Name;
+                string methodName = new StackFrame(1, true).GetMethod().Name;
+                if (UseNowToString)
+                {
+                    message = String.Format("[{0}] [{1}.{2}] {3} DEBUG - {4}",
+                        _sIncludeFilterName, className, methodName, NowToString(), message);
+                }
+                else
+                {
+                    message = String.Format("[{0}] [{1}.{2}] DEBUG - {3}",
+                        _sIncludeFilterName, className, methodName, message);
+                }
+
+                Debug.Write(message);
+            }
+        }
+
         public static void TraceWriteLine(string message)
         {
             if (IsTraceEnabled)
@@ -103,6 +125,26 @@ namespace CommonLibrary
                         _sIncludeFilterName, className, methodName, message);
                 }
                 Trace.WriteLine(message);
+            }
+        }
+
+        public static void TraceWrite(string message)
+        {
+            if (IsTraceEnabled)
+            {
+                string className = new StackFrame(1).GetMethod().ReflectedType.Name;
+                string methodName = new StackFrame(1, true).GetMethod().Name;
+                if (UseNowToString)
+                {
+                    message = String.Format("[{0}] [{1}.{2}] {3} TRACE - {4}",
+                        _sIncludeFilterName, className, methodName, NowToString(), message);
+                }
+                else
+                {
+                    message = String.Format("[{0}] [{1}.{2}] TRACE - {3}",
+                        _sIncludeFilterName, className, methodName, message);
+                }
+                Trace.Write(message);
             }
         }
 
