@@ -11,6 +11,7 @@
 - ColorUtility : 컬러 관련 유틸
 - ConvertUtility : 변환 유틸(String, ...)
 - EnvironmentUtility : 환경 유틸
+- MathUtility : 수학 관련 유틸
 - IOUtility : Sytem.IO 사용되는 클래스 관련 유틸
 - ProcessUtility : Process 관련 유틸
 - ScreenUtility : 스크린(모니터 디스플레이) 유틸   
