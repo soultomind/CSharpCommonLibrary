@@ -1,7 +1,8 @@
 ﻿namespace CommonLibrary.Win32
 {
     /// <summary>
-    /// http://www.pinvoke.net/default.aspx/Constants/WM.html
+    /// 윈도우 메시지
+    /// <para>http://www.pinvoke.net/default.aspx/Constants/WM.html</para>
     /// </summary>
     public static class WinMessage
     {

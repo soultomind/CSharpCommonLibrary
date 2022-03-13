@@ -8,6 +8,10 @@ using System.Windows.Forms;
 
 namespace CommonLibrary
 {
+    /// <summary>
+    /// <see cref="System.Windows.Forms.Screen"/> 관련 모듈 클래스
+    /// <para>듀얼 모니터 이상일 때 사용합니다.</para>
+    /// </summary>
     public class MultiScreenManager
     {
         public const int InvalidScreenIndex = -1;
@@ -23,7 +27,7 @@ namespace CommonLibrary
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="targetScreenIndex"></param>
+        /// <param name="targetScreenIndex">타겟이 되는 스크린 인덱스</param>
         /// <exception cref="System.InvalidOperationException"></exception>
         public MultiScreenManager(int targetScreenIndex)
         {
@@ -41,6 +45,10 @@ namespace CommonLibrary
             TargetScreenBoundsSize = Size.Empty;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="targetScreenBoundsSize">타겟이 되는 스크린 사이즈(Bounds)</param>
         public MultiScreenManager(Size targetScreenBoundsSize)
         {
             if (Screen.AllScreens.Length == 1)
@@ -57,7 +65,9 @@ namespace CommonLibrary
             TargetScreenIndex = InvalidScreenIndex;
         }
 
-        
+        /// <summary>
+        /// 타겟 스크린
+        /// </summary>
         public Screen TargetScreen
         {
             get
@@ -77,7 +87,7 @@ namespace CommonLibrary
 
         public Screen GetContainsPointScreenBounds(Point point)
         {
-            return ScreenUtility.ContainsPointScreenBounds(point);
+            return ScreenUtility.ContainsScreenBoundsPoint(point);
         }
 
         public Point CalcScreenBoundsInCenterPoint(Screen screen, Size size)

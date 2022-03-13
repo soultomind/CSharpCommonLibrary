@@ -8,7 +8,7 @@ using System.Text.RegularExpressions;
 namespace CommonLibrary.Utilities
 {
     /// <summary>
-    /// 컬러 유틸리티
+    /// <see cref="System.Drawing.Color"/> 관련 유틸리티 클래스
     /// </summary>
     public class ColorUtility
     {

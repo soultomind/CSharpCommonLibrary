@@ -2,9 +2,9 @@
 using CommonLibrary.UI;
 using CommonLibrary.Utilities;
 using CommonLibrary.Web;
-using CSharpCommonLibrary;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Net;
 using System.Windows.Forms;
 
@@ -12,8 +12,8 @@ namespace TestNet32
 {
     public partial class TestForm : Form
     {
-        private bool _mouseOperation;
-        private MouseOperationManager _mouseOperationManager;
+        private bool _mouseMovePrevent;
+        private MouseManager _mouseManager;
 
         private bool _screenImage;
         private ScreenImageCapture _screenImageCapture;
@@ -21,8 +21,8 @@ namespace TestNet32
         {
             InitializeComponent();
 
-            _mouseOperationManager = new MouseOperationManager() { MouseMovePreventInterval = 2000 };
-            _mouseOperationManager.MouseMovePreventScreenIndex = ScreenUtility.GetFirstScreenIndexAndExceptPrimaryScreen();
+            _mouseManager = new MouseManager() { MouseMovePreventInterval = 2000 };
+            _mouseManager.MouseMovePreventScreenIndex = ScreenUtility.GetFirstScreenIndexAndExceptPrimaryScreen();
 
             _screenImageCapture = new ScreenImageCapture(ScreenUtility.GetFirstScreenIndexAndExceptPrimaryScreen());
             _screenImageCapture.CreateScreenImageCapture += ScreenImageCapture_CreateScreenImageCapture;
@@ -30,21 +30,21 @@ namespace TestNet32
 
         private void TestForm_FormClosed(object sender, FormClosedEventArgs e)
         {
-            _mouseOperationManager.MouseMovePreventStop();
+            _mouseManager.StopMouseMovePrevent();
         }
 
-        private void ButtonMouseOperation_Click(object sender, EventArgs e)
+        private void ButtonMouseMovePrevent_Click(object sender, EventArgs e)
         {
-            _mouseOperation = !_mouseOperation;
-            if (_mouseOperation)
+            _mouseMovePrevent = !_mouseMovePrevent;
+            if (_mouseMovePrevent)
             {
-                _mouseOperationManager.MouseMovePreventStart();
-                _ButtonMouseOperation.Text = "마우스 제어 정지";
+                _mouseManager.StartMouseMovePrevent();
+                _ButtonMouseMovePrevent.Text = "마우스 이동 제어 정지";
             }
             else
             {
-                _mouseOperationManager.MouseMovePreventStop();
-                _ButtonMouseOperation.Text = "마우스 제어 시작";
+                _mouseManager.StopMouseMovePrevent();
+                _ButtonMouseMovePrevent.Text = "마우스 이동 제어 시작";
             }
         }
 
@@ -53,7 +53,12 @@ namespace TestNet32
             for (int index = 0; index < Screen.AllScreens.Length; index++)
             {
                 Screen screen = Screen.AllScreens[index];
-                ScreenIndexDialog dlg = new ScreenIndexDialog((index + 1), screen.Bounds);
+                ScreenIndexDialog dlg = new ScreenIndexDialog((index + 1), screen.Bounds, new ScreenColorInfo()
+                {
+                    MainBackColor = Color.Green, MainForeColor = Color.White,
+                    SubBackColor = Color.Black, SubForeColor = Color.White
+                });
+
                 dlg.Show();
             }
         }

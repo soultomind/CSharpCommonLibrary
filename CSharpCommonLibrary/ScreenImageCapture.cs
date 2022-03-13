@@ -24,8 +24,14 @@ namespace CommonLibrary
             Exception = exception;
         }
     }
+    /// <summary>
+    /// <see cref="System.Windows.Forms.Screen"/> 이미지 캡쳐 클래스
+    /// </summary>
     public class ScreenImageCapture
     {
+        /// <summary>
+        /// 유효하지 않는 스크린 인덱스
+        /// </summary>
         public const int InvalidScreenIndex = -1;
 
         public event CreateScreenImageCaptureEventHandler CreateScreenImageCapture;
@@ -42,19 +48,19 @@ namespace CommonLibrary
         {
             if (!ScreenUtility.IsValidIndex(targetScreenIndex))
             {
-                throw new ArgumentException("Usage " + nameof(targetScreenIndex) + "=0-" + (Screen.AllScreens.Length - 1));
+                throw new ArgumentException(nameof(targetScreenIndex) + " 값 범위는 0-" + (Screen.AllScreens.Length - 1) + " 입니다.");
             }
 
             if (!(interval >= 500 && interval <= 3000))
             {
-                throw new ArgumentException("Usage " + nameof(interval) + "=500-3000");
+                throw new ArgumentException(nameof(interval) + " 값 범위는 500-3000 입니다.");
             }
 
             TargetScreenIndex = targetScreenIndex;
             TargetScreen = new MultiScreenManager(TargetScreenIndex).TargetScreen;
             if (TargetScreen == null)
             {
-                throw new InvalidOperationException("TargetScreen is null");
+                throw new InvalidOperationException("TargetScreen 이 null 입니다.");
             }
 
             TargetScreenBoundsSize = Size.Empty;
@@ -70,14 +76,14 @@ namespace CommonLibrary
 
             if (!(interval >= 500 && interval <= 3000))
             {
-                throw new ArgumentException("Usage " + nameof(interval) + "=500-3000");
+                throw new ArgumentException(nameof(interval) + " 값 범위는 500-3000 입니다.");
             }
 
             TargetScreenBoundsSize = targetScreenBoundsSize;
             TargetScreen = new MultiScreenManager(TargetScreenBoundsSize).TargetScreen;
             if (TargetScreen == null)
             {
-                throw new InvalidOperationException("TargetScreen is null");
+                throw new InvalidOperationException("TargetScreen 이 null 입니다.");
             }
 
             TargetScreenIndex = InvalidScreenIndex;
@@ -102,12 +108,19 @@ namespace CommonLibrary
             }
         }
 
+        /// <summary>
+        /// 리소스를 닫습니다.
+        /// <para>타이머를 다시 시작하려면 <see cref="CommonLibrary.ScreenImageCapture.Start"/> 메서드를 호출합니다.</para>
+        /// </summary>
         public void Close()
         {
             Stop();
             _Timer = null;
         }
 
+        /// <summary>
+        /// 타이머를 시작합니다.
+        /// </summary>
         public void Start()
         {
             if (_Timer == null)
@@ -120,6 +133,9 @@ namespace CommonLibrary
             _Timer.Start();
         }
 
+        /// <summary>
+        /// 타이머를 정지합니다.
+        /// </summary>
         public void Stop()
         {
             if (_Timer != null)

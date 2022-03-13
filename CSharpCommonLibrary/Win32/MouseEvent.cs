@@ -3,6 +3,9 @@ using System.Runtime.InteropServices;
 
 namespace CommonLibrary.Win32
 {
+    /// <summary>
+    /// 윈도우즈 마우스 이벤트
+    /// </summary>
     public class MouseEvent
     {
         [Flags]

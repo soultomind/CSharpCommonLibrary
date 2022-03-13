@@ -3,7 +3,7 @@
 namespace CommonLibrary.Utilities
 {
     /// <summary>
-    /// 달력/요일 관련 유틸리티
+    /// 달력/요일 관련 유틸리티 클래스
     /// </summary>
     public class CalendarUtility
     {

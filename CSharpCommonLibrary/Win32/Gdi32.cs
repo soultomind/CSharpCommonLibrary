@@ -4,8 +4,11 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace CSharpCommonLibrary.Win32
+namespace CommonLibrary.Win32
 {
+    /// <summary>
+    /// Gdi32.dll Native 메소드
+    /// </summary>
     public class Gdi32
     {
         public const string FileName = "gdi32.dll";

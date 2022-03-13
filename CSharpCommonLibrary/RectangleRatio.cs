@@ -11,51 +11,13 @@ namespace CommonLibrary
     /// </summary>
     public class RectangleRatio
     {
-        public int WidthRatio { get; set; }
-        public int HeightRatio { get; set; }
+        public int WidthRatio { get; internal set; }
+        public int HeightRatio { get; internal set; }
         private RectangleRatio() { WidthRatio = HeightRatio = 0; }
-        private RectangleRatio(int widthRatio, int heightRatio)
+        internal RectangleRatio(int widthRatio, int heightRatio)
         {
             WidthRatio = widthRatio;
             HeightRatio = heightRatio;
-        }
-
-        public static RectangleRatio ToRectangleRatio(Size size)
-        {
-            return ToRectangleRatio(size.Width, size.Height);
-        }
-
-        public static RectangleRatio ToRectangleRatio(int width, int height)
-        {
-            if (!(width >= 0 && height >= 0))
-            {
-                throw new ArgumentException("");
-            }
-
-            int max = 0, min = 0, temp = 0, gcd = 0;
-            if (width < height)
-            {
-                max = height;
-                min = width;
-            }
-            else
-            {
-                max = width;
-                min = height;
-            }
-
-            while ((max % min) != 0)
-            {
-                temp = max % min;
-                max = min;
-                min = temp;
-            }
-
-            gcd = min;
-
-            int widthRatio = width / gcd;
-            int heightRatio = height / gcd;
-            return new RectangleRatio(widthRatio, heightRatio);
         }
     }
 }

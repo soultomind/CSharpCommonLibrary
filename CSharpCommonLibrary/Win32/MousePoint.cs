@@ -2,6 +2,9 @@
 
 namespace CommonLibrary.Win32
 {
+    /// <summary>
+    /// 마우스 관련 좌표
+    /// </summary>
     [StructLayout(LayoutKind.Sequential)]
     public struct MousePoint
     {

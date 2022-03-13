@@ -6,6 +6,9 @@ using System.Text;
 
 namespace CommonLibrary.Utilities
 {
+    /// <summary>
+    /// <see cref="System.Diagnostics.Process"/> 관련 유틸 클래스
+    /// </summary>
     public class ProcessUtility
     {
         /// <summary>

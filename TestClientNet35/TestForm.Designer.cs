@@ -29,7 +29,7 @@ namespace TestNet32
         /// </summary>
         private void InitializeComponent()
         {
-            this._ButtonMouseOperation = new System.Windows.Forms.Button();
+            this._ButtonMouseMovePrevent = new System.Windows.Forms.Button();
             this._ButtonShowScreenIndex = new System.Windows.Forms.Button();
             this._PictureBoxScreenCapture = new System.Windows.Forms.PictureBox();
             this._ButtonStartAndStopScreenCapture = new System.Windows.Forms.Button();
@@ -38,15 +38,15 @@ namespace TestNet32
             ((System.ComponentModel.ISupportInitialize)(this._PictureBoxScreenCapture)).BeginInit();
             this.SuspendLayout();
             // 
-            // _ButtonMouseOperation
+            // _ButtonMouseMovePrevent
             // 
-            this._ButtonMouseOperation.Location = new System.Drawing.Point(24, 28);
-            this._ButtonMouseOperation.Name = "_ButtonMouseOperation";
-            this._ButtonMouseOperation.Size = new System.Drawing.Size(128, 27);
-            this._ButtonMouseOperation.TabIndex = 0;
-            this._ButtonMouseOperation.Text = "마우스 제어 시작";
-            this._ButtonMouseOperation.UseVisualStyleBackColor = true;
-            this._ButtonMouseOperation.Click += new System.EventHandler(this.ButtonMouseOperation_Click);
+            this._ButtonMouseMovePrevent.Location = new System.Drawing.Point(24, 28);
+            this._ButtonMouseMovePrevent.Name = "_ButtonMouseMovePrevent";
+            this._ButtonMouseMovePrevent.Size = new System.Drawing.Size(128, 27);
+            this._ButtonMouseMovePrevent.TabIndex = 0;
+            this._ButtonMouseMovePrevent.Text = "마우스 이동 제어 시작";
+            this._ButtonMouseMovePrevent.UseVisualStyleBackColor = true;
+            this._ButtonMouseMovePrevent.Click += new System.EventHandler(this.ButtonMouseMovePrevent_Click);
             // 
             // _ButtonShowScreenIndex
             // 
@@ -62,7 +62,7 @@ namespace TestNet32
             // 
             this._PictureBoxScreenCapture.Location = new System.Drawing.Point(415, 282);
             this._PictureBoxScreenCapture.Name = "_PictureBoxScreenCapture";
-            this._PictureBoxScreenCapture.Size = new System.Drawing.Size(373, 243);
+            this._PictureBoxScreenCapture.Size = new System.Drawing.Size(373, 231);
             this._PictureBoxScreenCapture.TabIndex = 2;
             this._PictureBoxScreenCapture.TabStop = false;
             // 
@@ -104,7 +104,7 @@ namespace TestNet32
             this.Controls.Add(this._ButtonStartAndStopScreenCapture);
             this.Controls.Add(this._PictureBoxScreenCapture);
             this.Controls.Add(this._ButtonShowScreenIndex);
-            this.Controls.Add(this._ButtonMouseOperation);
+            this.Controls.Add(this._ButtonMouseMovePrevent);
             this.Font = new System.Drawing.Font("나눔고딕", 8.999999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.Name = "TestForm";
             this.Text = "TestForm";
@@ -116,7 +116,7 @@ namespace TestNet32
 
         #endregion
 
-        private System.Windows.Forms.Button _ButtonMouseOperation;
+        private System.Windows.Forms.Button _ButtonMouseMovePrevent;
         private System.Windows.Forms.Button _ButtonShowScreenIndex;
         private System.Windows.Forms.PictureBox _PictureBoxScreenCapture;
         private System.Windows.Forms.Button _ButtonStartAndStopScreenCapture;

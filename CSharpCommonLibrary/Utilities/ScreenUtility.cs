@@ -5,12 +5,10 @@ using System.Windows.Forms;
 namespace CommonLibrary.Utilities
 {
     /// <summary>
-    /// 스크린(디스플레이) 관련 유틸
+    /// <see cref="System.Windows.Forms.Screen"/> 관련 유틸리티 클래스
     /// </summary>
     public class ScreenUtility
     {
-        private static Screen[] _AsscendingScreens;
-
         /// <summary>
         /// X 좌표순으로 오름차순 정렬된 스크린 배열
         /// </summary>
@@ -18,29 +16,23 @@ namespace CommonLibrary.Utilities
         {
             get
             {
-                if (_AsscendingScreens == null)
-                {
-                    List<Screen> list = new List<Screen>();
-                    list.AddRange(Screen.AllScreens);
+                List<Screen> list = new List<Screen>();
+                list.AddRange(Screen.AllScreens);
 
-                    Screen temp = null;
-                    for (int i = 0; i < list.Count - 1; i++)
+                Screen temp = null;
+                for (int i = 0; i < list.Count - 1; i++)
+                {
+                    for (int j = i + 1; j < list.Count; j++)
                     {
-                        for (int j = i + 1; j < list.Count; j++)
+                        if (list[i].WorkingArea.X > list[j].WorkingArea.X)
                         {
-                            if (list[i].WorkingArea.X > list[j].WorkingArea.X)
-                            {
-                                temp = list[i];
-                                list[i] = list[j];
-                                list[j] = temp;
-                            }
+                            temp = list[i];
+                            list[i] = list[j];
+                            list[j] = temp;
                         }
                     }
-
-                    _AsscendingScreens = list.ToArray();
                 }
-
-                return _AsscendingScreens;
+                return list.ToArray();
             }
         }
 
@@ -134,11 +126,11 @@ namespace CommonLibrary.Utilities
 
         /// <summary>
         /// <paramref name="point"/>가 위치해 있는 스크린(디스플레이) 값을 반환합니다.
-        /// <para>못 찾을 경우 Null 반환합니다.</para>
+        /// <para>못 찾을 경우 Null을 반환합니다.</para>
         /// </summary>
         /// <param name="point"></param>
         /// <returns></returns>
-        public static Screen ContainsPointScreenBounds(Point point)
+        public static Screen ContainsScreenBoundsPoint(Point point)
         {
             foreach (Screen screen in Screen.AllScreens)
             {
@@ -152,7 +144,7 @@ namespace CommonLibrary.Utilities
 
         /// <summary>
         /// <paramref name="targetScreenIndex"/> 값에 해당하는 스크린(디스플레이) 값을 반환합니다.
-        /// <para>못 찾을 경우 Null 반환합니다.</para>
+        /// <para>못 찾을 경우 Null을 반환합니다.</para>
         /// </summary>
         /// <param name="targetScreenIndex"></param>
         /// <returns></returns>
@@ -170,7 +162,7 @@ namespace CommonLibrary.Utilities
 
         /// <summary>
         /// <paramref name="targetResolutionDisplayBoundsSize"/> 값과 같은 스크린(디스플레이) 값을 반환합니다.
-        /// <para>못 찾을 경우 Null 반환합니다.</para>
+        /// <para>못 찾을 경우 Null을 반환합니다.</para>
         /// </summary>
         /// <param name="targetResolutionDisplayBoundsSize"></param>
         /// <returns></returns>

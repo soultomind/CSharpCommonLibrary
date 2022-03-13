@@ -7,17 +7,38 @@ namespace CommonLibrary
     {
         None,
 
+        /// <summary>
+        /// 인증서 추가
+        /// </summary>
         AddCert,
 
+        /// <summary>
+        /// 인증서가 존재 할때
+        /// </summary>
         ExistsCert,
 
+        /// <summary>
+        /// 인증서 추가중 오류 발생
+        /// </summary>
         ErrorCert,
     }
 
+    /// <summary>
+    /// 인증서 파일
+    /// </summary>
     public class CertFile
     {
+        /// <summary>
+        /// 인증서 파일을 추가합니다.
+        /// </summary>
+        /// <param name="storeName"></param>
+        /// <param name="fileName"></param>
+        /// <param name="password"></param>
+        /// <param name="outException"></param>
+        /// <returns></returns>
         public static CertFileStore AddCrtFile(StoreName storeName, string fileName, string password, out Exception outException)
         {
+            // TODO: 브라우저 실행 중일 때 추가 안되는 현상 개선 필요
             CertFileStore fileStore = CertFileStore.None;
 
             try

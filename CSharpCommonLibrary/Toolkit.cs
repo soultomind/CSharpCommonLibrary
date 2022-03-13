@@ -8,6 +8,9 @@ using System.Text;
 
 namespace CommonLibrary
 {
+    /// <summary>
+    /// 툴킷 클래스
+    /// </summary>
     public static class Toolkit
     {
         /// <summary>

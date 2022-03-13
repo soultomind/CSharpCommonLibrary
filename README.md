@@ -23,7 +23,7 @@
 ## 기능   
 - CertFile : 인증서   
   1.인증서 추가
-- MouseOperationManager : 마우스 제어   
+- MouseManager : 마우스 제어   
   1.특정 디스플레이로 마우스 이동 방지 기능
 - Taskbar : 작업표시줄   
   1.트레이 영역 아이콘 리플레쉬 기능

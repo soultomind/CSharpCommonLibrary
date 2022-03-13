@@ -70,7 +70,7 @@ namespace CommonLibrary.UI
             this._LabelBounds.Text = "Bounds";
             this._LabelBounds.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // ScreenPositionDlg
+            // ScreenIndexDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -81,7 +81,7 @@ namespace CommonLibrary.UI
             this.Margin = new System.Windows.Forms.Padding(2);
             this.MaximumSize = new System.Drawing.Size(280, 150);
             this.MinimumSize = new System.Drawing.Size(280, 150);
-            this.Name = "ScreenPositionDlg";
+            this.Name = "ScreenIndexDialog";
             this.Opacity = 0.7D;
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;

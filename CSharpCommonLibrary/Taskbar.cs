@@ -4,8 +4,14 @@ using System.Globalization;
 
 namespace CommonLibrary
 {
+    /// <summary>
+    /// 작업표시줄 관련 클래스
+    /// </summary>
     public class Taskbar
     {
+        /// <summary>
+        /// 트레이 영역을 새로고침 합니다.
+        /// </summary>
         public static void RefreshTrayArea()
         {
             string notificationAreaHandleName = String.Empty;

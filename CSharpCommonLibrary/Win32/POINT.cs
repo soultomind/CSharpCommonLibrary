@@ -3,6 +3,9 @@ using System.Runtime.InteropServices;
 
 namespace CommonLibrary.Win32
 {
+    /// <summary>
+    /// 윈도우즈 Native 포인터 좌표
+    /// </summary>
     [StructLayout(LayoutKind.Sequential)]
     public struct POINT
     {

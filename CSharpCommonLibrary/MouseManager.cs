@@ -7,7 +7,10 @@ using System.Windows.Forms;
 
 namespace CommonLibrary
 {
-    public class MouseOperationManager
+    /// <summary>
+    /// 마우스 관련 매니저 클래스
+    /// </summary>
+    public class MouseManager
     {
         /// <summary>
         /// 마우스 이동 방지 스크린 인덱스
@@ -19,7 +22,15 @@ namespace CommonLibrary
             {
                 if (value >= 0 && value <= Screen.AllScreens.Length - 1)
                 {
+                    if (value == ScreenUtility.GetPrimaryScreenIndex())
+                    {
+                        throw new System.ArgumentException(nameof(value) + " 값이 주모니터 값입니다.");
+                    }
                     _mouseMovePreventScreenIndex = value;
+                }
+                else
+                {
+                    throw new System.ArgumentException(nameof(value));
                 }
             }
         }
@@ -34,7 +45,7 @@ namespace CommonLibrary
             get { return _startmouseMovePrevent; }
             private set { _startmouseMovePrevent = value; }
         }
-        private bool _startmouseMovePrevent;
+        private volatile bool _startmouseMovePrevent;
 
         /// <summary>
         /// 마우스 이동 방지 주기
@@ -52,16 +63,16 @@ namespace CommonLibrary
         }
         private int _mouseMovePreventInterval;
 
-        private Thread _thread;
+        private Thread _mouseMovePreventThread;
 
-        public MouseOperationManager()
+        public MouseManager()
         {
             MouseMovePreventInterval = 2000;
             // 기본값은 주 모니터를 제외한 첫 번째 스크린 인덱스
             MouseMovePreventScreenIndex = ScreenUtility.GetFirstScreenIndexAndExceptPrimaryScreen();
         }
 
-        public void MouseMovePreventStart()
+        public void StartMouseMovePrevent()
         {
             if (MouseMovePreventScreenIndex == ScreenUtility.GetPrimaryScreenIndex())
             {
@@ -71,18 +82,18 @@ namespace CommonLibrary
 
             if (MouseMovePreventScreenIndex >= 0)
             {
-                _thread = new Thread(MouseMovePreventStartWorker);
-                _thread.IsBackground = true;
-                _thread.Start();
+                _mouseMovePreventThread = new Thread(StartMouseMovePreventWorker);
+                _mouseMovePreventThread.IsBackground = true;
+                _mouseMovePreventThread.Start();
             }
         }
 
-        public void MouseMovePreventStop()
+        public void StopMouseMovePrevent()
         {
-            MouseMovePreventStopWorker();
+            StopMouseMovePreventWorker();
         }
 
-        private void MouseMovePreventStartWorker()
+        private void StartMouseMovePreventWorker()
         {
             _startmouseMovePrevent = true;
 
@@ -114,14 +125,14 @@ namespace CommonLibrary
             }
         }
 
-        private void MouseMovePreventStopWorker()
+        private void StopMouseMovePreventWorker()
         {
             _startmouseMovePrevent = false;
 
-            if (_thread != null)
+            if (_mouseMovePreventThread != null)
             {
-                _thread.Join();
-                _thread = null;
+                _mouseMovePreventThread.Join();
+                _mouseMovePreventThread = null;
             }
         }
     }

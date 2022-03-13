@@ -5,6 +5,9 @@ using System.Text;
 
 namespace CommonLibrary.Utilities
 {
+    /// <summary>
+    /// 환경 유틸리티 클래스
+    /// </summary>
     public class EnvironmentUtility
     {
         /// <summary>

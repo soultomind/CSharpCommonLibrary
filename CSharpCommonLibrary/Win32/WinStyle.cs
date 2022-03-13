@@ -1,7 +1,8 @@
 ﻿namespace CommonLibrary.Win32
 {
     /// <summary>
-    /// http://www.pinvoke.net/default.aspx/Constants/Window%20styles.html
+    /// 윈도우 스타일
+    /// <para>http://www.pinvoke.net/default.aspx/Constants/Window%20styles.html</para>
     /// </summary>
     public static class WinStyle
     {

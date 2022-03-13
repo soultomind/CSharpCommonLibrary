@@ -5,6 +5,9 @@ using System.Runtime.InteropServices;
 
 namespace CommonLibrary.Win32
 {
+    /// <summary>
+    /// 윈도우즈 Native 프로그램 창 크기
+    /// </summary>
     [StructLayout(LayoutKind.Sequential)]
     public struct RECT
     {

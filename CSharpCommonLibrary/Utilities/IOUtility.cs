@@ -6,6 +6,10 @@ using System.Text;
 
 namespace CommonLibrary.Utilities
 {
+    /// <summary>
+    /// IO 관련 유틸리티 클래스
+    /// <para><see cref="System.IO"/> 관련</para>
+    /// </summary>
     public class IOUtility
     {
         /// <summary>

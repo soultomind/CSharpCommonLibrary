@@ -8,7 +8,7 @@ using System.Text.RegularExpressions;
 namespace CommonLibrary.Utilities
 {
     /// <summary>
-    /// 문자열 관련 유틸
+    /// <see cref="System.String"/> 관련 유틸리티 클래스
     /// </summary>
     public class StringUtility
     {

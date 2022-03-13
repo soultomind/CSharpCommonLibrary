@@ -53,9 +53,7 @@
     <Compile Include="MultiScreenManager.cs" />
     <Compile Include="ScreenImageCapture.cs" />
     <Compile Include="Toolkit.cs" />
-    <Compile Include="UI\ScreenIndexDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="UI\ScreenIndexDialog.cs" />
     <Compile Include="UI\ScreenIndexDialog.Designer.cs">
       <DependentUpon>ScreenIndexDialog.cs</DependentUpon>
     </Compile>
@@ -76,7 +74,7 @@
     <Compile Include="Win32\Gdi32.cs" />
     <Compile Include="Win32\MouseEvent.cs" />
     <Compile Include="Win32\MouseOperation.cs" />
-    <Compile Include="MouseOperationManager.cs" />
+    <Compile Include="MouseManager.cs" />
     <Compile Include="Win32\MousePoint.cs" />
     <Compile Include="Win32\POINT.cs" />
     <Compile Include="Win32\RECT.cs" />
@@ -86,6 +84,7 @@
     <Compile Include="Win32\WINDOWPLACEMENT.cs" />
     <Compile Include="Win32\WinMessage.cs" />
     <Compile Include="Win32\WinStyle.cs" />
+    <Compile Include="WindowManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="UI\ScreenIndexDialog.resx">

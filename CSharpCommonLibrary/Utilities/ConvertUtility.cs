@@ -6,7 +6,7 @@ using System.Text;
 namespace CommonLibrary.Utilities
 {
     /// <summary>
-    /// 변환 유틸리티
+    /// 변환 유틸리티 클래스
     /// </summary>
     public class ConvertUtility
     {

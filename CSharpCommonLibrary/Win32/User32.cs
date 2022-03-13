@@ -7,6 +7,9 @@ using System.Text;
 
 namespace CommonLibrary.Win32
 {
+    /// <summary>
+    /// User32.dll Native 메소드
+    /// </summary>
     public class User32
     {
         public const string FileName = "User32.dll";

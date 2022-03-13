@@ -12,6 +12,9 @@ using System.Web;
 
 namespace CommonLibrary.Web
 {
+    /// <summary>
+    /// Http 통신 관련 툴킷 클래스
+    /// </summary>
     public class HttpToolkit
     {
         public static string ContentType = "application/x-www-form-urlencoded; charset=";
@@ -52,6 +55,12 @@ namespace CommonLibrary.Web
                     {
                         inneValueCount--;
                         isInnerValueLast = inneValueCount == 0;
+
+                        /*
+                        string paramValue = value;
+                        paramValue = Uri.EscapeDataString(value);
+                        paramValue = Uri.EscapeUriString(value);
+                        */
 
                         builder.Append(
                             String.Format("{0}={1}",
@@ -131,7 +140,7 @@ namespace CommonLibrary.Web
                 if (parameter != null && parameter.Count > 0)
                 {
                     request.Method = "POST";
-                    request.ContentType = ContentType + requestEnc;
+                    request.ContentType = ContentType;
 
                     byte[] data = CreatePostData(parameter, Encoding.GetEncoding(requestEnc));
 
@@ -152,8 +161,6 @@ namespace CommonLibrary.Web
                 {
                     request.ContentLength = 0;
                 }
-
-                
 
                 using (HttpWebResponse response = request.GetResponse() as HttpWebResponse)
                 {
