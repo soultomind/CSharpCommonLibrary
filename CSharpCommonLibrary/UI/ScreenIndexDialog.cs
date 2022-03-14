@@ -8,7 +8,7 @@ namespace CommonLibrary.UI
     /// <summary>
     /// 스크린 컬러 정보
     /// </summary>
-    public class ScreenColorInfo
+    public class DialogColor
     {
         /// <summary>
         /// 메인 스크린(주모니터) 배경 색
@@ -56,7 +56,7 @@ namespace CommonLibrary.UI
 
         private int _currentShowPositionSecond = 0;
 
-        public ScreenColorInfo ColorInfo { get; set; } = new ScreenColorInfo();
+        public DialogColor ColorInfo { get; set; } = new DialogColor();
 
         /// <summary>
         /// 생성자 
@@ -95,7 +95,7 @@ namespace CommonLibrary.UI
         /// <exception cref="System.ArgumentException">
         /// <paramref name="index"/>값이 0보다 작거나 <see cref="System.Windows.Forms.Screen.AllScreens"/>.Length 값과 같거나 클때
         /// </exception>
-        public ScreenIndexDialog(int index, Rectangle rectangle, ScreenColorInfo colorInfo)
+        public ScreenIndexDialog(int index, Rectangle rectangle, DialogColor colorInfo)
         {
             if (index < 0 || index > Screen.AllScreens.Length)
             {
@@ -114,7 +114,7 @@ namespace CommonLibrary.UI
             _TimerShowPosition.Start();
         }
 
-        private void SetColorInfo(ScreenColorInfo colorInfo, int index)
+        private void SetColorInfo(DialogColor colorInfo, int index)
         {
             ColorInfo = colorInfo;
             if (IsMainScreen(index))
