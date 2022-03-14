@@ -107,11 +107,8 @@ namespace CommonLibrary.Utilities
         /// <returns></returns>
         public static double CalcAngle(Point pt1, Point pt2)
         {
-            // 두점 사이 거리 구하기
-            // https://dojang.io/mod/page/view.php?id=427
-
             // Atan2 각도 구하기
-            // http://zzoyu.tistory.com/73
+            // 참고 = http://zzoyu.tistory.com/73
             Point p1 = (pt1.Y > pt2.Y) ? pt1 : pt2;
             Point p2 = (pt1.Y > pt2.Y) ? pt2 : pt1;
 
@@ -120,10 +117,30 @@ namespace CommonLibrary.Utilities
             a = Math.Abs(a);
             b = Math.Abs(b);
 
-            double c = Math.Sqrt((a * a) + (b * b));
-
             double angle = Math.Atan2((double)a, (double)b) * 180 / Math.PI;
             return angle;
+        }
+
+        /// <summary>
+        /// 두점 사이의 거리를 구하여 반환합니다.
+        /// </summary>
+        /// <param name="pt1"></param>
+        /// <param name="pt2"></param>
+        /// <returns></returns>
+        public static double CalcDistance(Point pt1, Point pt2)
+        {
+            // 두점 사이 거리 구하기
+            // 참고 = https://dojang.io/mod/page/view.php?id=427
+            Point p1 = (pt1.Y > pt2.Y) ? pt1 : pt2;
+            Point p2 = (pt1.Y > pt2.Y) ? pt2 : pt1;
+
+            int a = p1.X - p2.X;
+            int b = p1.Y - p2.Y;
+            a = Math.Abs(a);
+            b = Math.Abs(b);
+
+            double distance = Math.Sqrt((a * a) + (b * b));
+            return distance;
         }
 
         /// <summary>
