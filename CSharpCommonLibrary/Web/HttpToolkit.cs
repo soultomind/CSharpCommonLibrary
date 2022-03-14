@@ -33,6 +33,140 @@ namespace CommonLibrary.Web
             IsExpect100Continue = false;
         }
 
+        public byte[] CreatePostData(Dictionary<string, string> parameter, Encoding encoding)
+        {
+            StringBuilder builder = new StringBuilder();
+
+            foreach (var key in parameter.Keys)
+            {
+                if (builder.Length != 0)
+                {
+                    builder.Append("&");
+                }
+
+                string paramValue = parameter[key];
+                /*
+                    string paramValue = value;
+                    paramValue = Uri.EscapeDataString(value);
+                    paramValue = Uri.EscapeUriString(value);
+                */
+                builder.Append(String.Format("{0}={1}", key, HttpUtility.UrlEncode(paramValue, encoding)));
+            }
+
+            string postData = builder.ToString();
+            byte[] buffer = encoding.GetBytes(postData);
+            return buffer;
+        }
+
+        public string GetResponseByPost(string uriString, Dictionary<string, string> parameter, string requestEnc, string responseEnc, int requestTimeout, out HttpStatusCode outHttpStatusCode, out Exception outException)
+        {
+            HttpStatusCode httpStatusCode = HttpStatusCode.OK;
+
+            if (uriString.Substring(0, 5).ToLower().Equals("https"))
+            {
+                ServicePointManager.ServerCertificateValidationCallback += delegate (object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
+                {
+                    return true;
+                };
+            }
+
+            string responseData = "";
+            try
+            {
+
+                Uri requestUri = new Uri(uriString);
+
+                //
+                // Create the web request   
+                //
+                HttpWebRequest request = WebRequest.Create(requestUri) as HttpWebRequest;
+
+                request.UserAgent = UserAgent;
+
+                if (IsSetCachePolicy)
+                {
+                    HttpRequestCachePolicy httpRequestCachePolicy = new HttpRequestCachePolicy(CacheLevel);
+                    request.CachePolicy = httpRequestCachePolicy;
+                }
+
+                //
+                //TimeOut 설정
+                //
+                if (requestTimeout > 0)
+                {
+                    request.Timeout = requestTimeout;
+                }
+
+                ///
+                /// Expect100Continue 무시
+                ///
+                request.ServicePoint.Expect100Continue = IsExpect100Continue;
+
+                if (parameter != null && parameter.Count > 0)
+                {
+                    request.Method = "POST";
+                    request.ContentType = ContentType;
+
+                    byte[] data = CreatePostData(parameter, Encoding.GetEncoding(requestEnc));
+
+                    ////
+                    //// Set the content length in the request headers   
+                    ////
+                    request.ContentLength = data.Length;
+
+                    ////
+                    //// Write data   
+                    ////
+                    using (Stream requestStream = request.GetRequestStream())
+                    {
+                        requestStream.Write(data, 0, data.Length);
+                    }
+                }
+                else
+                {
+                    request.ContentLength = 0;
+                }
+
+                using (HttpWebResponse response = request.GetResponse() as HttpWebResponse)
+                {
+                    httpStatusCode = response.StatusCode;
+                    Toolkit.DebugWriteLine("Response.IsFromCache=" + response.IsFromCache);
+
+                    StreamReader reader = new StreamReader(response.GetResponseStream(), Encoding.GetEncoding(responseEnc));
+                    responseData = reader.ReadToEnd();
+
+                    Toolkit.DebugWriteLine("ResponseData=" + responseData);
+
+                    reader.Close();
+                }
+
+                outException = null;
+            }
+            catch (WebException ex)
+            {
+                if (ex.Response is HttpWebResponse)
+                {
+                    httpStatusCode = ((HttpWebResponse)ex.Response).StatusCode;
+                }
+                else
+                {
+                    // 500 번대 Server 에러
+                    httpStatusCode = HttpStatusCode.InternalServerError;
+                }
+
+                outException = ex;
+            }
+            catch (Exception ex)
+            {
+                outException = ex;
+                // 400 번대 Client 에러
+                httpStatusCode = HttpStatusCode.BadRequest;
+            }
+
+            outHttpStatusCode = httpStatusCode;
+            return responseData;
+        }
+
         public byte[] CreatePostData(Dictionary<string, string[]> parameter, Encoding encoding)
         {
             StringBuilder builder = new StringBuilder();
