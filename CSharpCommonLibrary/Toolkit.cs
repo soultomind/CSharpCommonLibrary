@@ -69,7 +69,7 @@ namespace CommonLibrary
             return DateTime.Now.ToString(format);
         }
 
-        public static void DebugWriteLine(string message)
+        public static void DebugWriteLine(string message, bool writeLine = true)
         {
             if (IsDebugEnabled)
             {
@@ -86,32 +86,18 @@ namespace CommonLibrary
                         _sIncludeFilterName, className, methodName, message);
                 }
 
-                Debug.WriteLine(message);
-            }
-        }
-
-        public static void DebugWrite(string message)
-        {
-            if (IsDebugEnabled)
-            {
-                string className = new StackFrame(1).GetMethod().ReflectedType.Name;
-                string methodName = new StackFrame(1, true).GetMethod().Name;
-                if (UseNowToString)
+                if (writeLine)
                 {
-                    message = String.Format("[{0}] [{1}.{2}] {3} DEBUG - {4}",
-                        _sIncludeFilterName, className, methodName, NowToString(), message);
+                    Debug.WriteLine(message);
                 }
                 else
                 {
-                    message = String.Format("[{0}] [{1}.{2}] DEBUG - {3}",
-                        _sIncludeFilterName, className, methodName, message);
+                    Debug.Write(message);
                 }
-
-                Debug.Write(message);
             }
         }
 
-        public static void TraceWriteLine(string message)
+        public static void TraceWriteLine(string message, bool writeLine = true)
         {
             if (IsTraceEnabled)
             {
@@ -127,27 +113,15 @@ namespace CommonLibrary
                     message = String.Format("[{0}] [{1}.{2}] TRACE - {3}",
                         _sIncludeFilterName, className, methodName, message);
                 }
-                Trace.WriteLine(message);
-            }
-        }
 
-        public static void TraceWrite(string message)
-        {
-            if (IsTraceEnabled)
-            {
-                string className = new StackFrame(1).GetMethod().ReflectedType.Name;
-                string methodName = new StackFrame(1, true).GetMethod().Name;
-                if (UseNowToString)
+                if (writeLine)
                 {
-                    message = String.Format("[{0}] [{1}.{2}] {3} TRACE - {4}",
-                        _sIncludeFilterName, className, methodName, NowToString(), message);
+                    Trace.WriteLine(message);
                 }
                 else
                 {
-                    message = String.Format("[{0}] [{1}.{2}] TRACE - {3}",
-                        _sIncludeFilterName, className, methodName, message);
+                    Trace.Write(message);
                 }
-                Trace.Write(message);
             }
         }
 
