@@ -179,5 +179,29 @@ namespace CommonLibrary.Utilities
             }
             return null;
         }
+
+        /// <summary>
+        /// 주 모니터에서(작업표시줄 포함) 정가운데 좌표를 반환한다.
+        /// </summary>
+        /// <returns></returns>
+        public static Point GetPrimaryScreenBoundsCenter()
+        {
+            Screen primaryScreen = Screen.PrimaryScreen;
+            int x = (primaryScreen.Bounds.X + primaryScreen.Bounds.Width) / 2;
+            int y = (primaryScreen.Bounds.Y + primaryScreen.Bounds.Height) / 2;
+            return new Point(x, y);
+        }
+
+        /// <summary>
+        /// 주 모니터에서(작업표시줄 제외) 정가운데 좌표를 반환한다.
+        /// </summary>
+        /// <returns></returns>
+        public static Point GetPrimaryScreenWorkingAreaCenter()
+        {
+            Screen primaryScreen = Screen.PrimaryScreen;
+            int x = (primaryScreen.WorkingArea.X + primaryScreen.WorkingArea.Width) / 2;
+            int y = (primaryScreen.WorkingArea.Y + primaryScreen.WorkingArea.Height) / 2;
+            return new Point(x, y);
+        }
     }
 }
