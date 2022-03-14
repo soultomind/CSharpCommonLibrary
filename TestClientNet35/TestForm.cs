@@ -2,6 +2,7 @@
 using CommonLibrary.UI;
 using CommonLibrary.Utilities;
 using CommonLibrary.Web;
+using CommonLibrary.Win32;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -21,7 +22,7 @@ namespace TestNet32
         {
             InitializeComponent();
 
-            _mouseManager = new MouseManager() { MouseMovePreventInterval = 2000 };
+            _mouseManager = new MouseManager() { MouseMovePreventInterval = 1000, IsMouseMoveLastPreventPoint = true };
             _mouseManager.MouseMovePreventScreenIndex = ScreenUtility.GetFirstScreenIndexAndExceptPrimaryScreen();
 
             _screenImageCapture = new ScreenImageCapture(ScreenUtility.GetFirstScreenIndexAndExceptPrimaryScreen());
@@ -96,6 +97,14 @@ namespace TestNet32
         {
             Dictionary<string, string[]> parameter = new Dictionary<string, string[]>();
             parameter.Add("Test", new string[] { "Test1", "Test2" });
+            parameter.Add("Hangeul", new string[] { Uri.EscapeUriString("한글") });
+
+            /*
+            Dictionary<string, string> parameter = new Dictionary<string, string>();
+            parameter.Add("Test1", "Test1");
+            parameter.Add("Test2", "Test2");
+            parameter.Add("Hangeul", Uri.EscapeUriString("한글"));
+            */
             HttpStatusCode statusCode = HttpStatusCode.OK;
             Exception exception = null;
             string response = new HttpToolkit().GetResponseByPost(
@@ -107,6 +116,16 @@ namespace TestNet32
                 out statusCode,
                 out exception
             );
+        }
+
+        private void TestForm_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void TestForm_Shown(object sender, EventArgs e)
+        {
+
         }
     }
 }

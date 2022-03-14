@@ -109,6 +109,8 @@ namespace TestNet32
             this.Name = "TestForm";
             this.Text = "TestForm";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.TestForm_FormClosed);
+            this.Load += new System.EventHandler(this.TestForm_Load);
+            this.Shown += new System.EventHandler(this.TestForm_Shown);
             ((System.ComponentModel.ISupportInitialize)(this._PictureBoxScreenCapture)).EndInit();
             this.ResumeLayout(false);
 

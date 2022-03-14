@@ -71,7 +71,6 @@
     <Compile Include="Utilities\StringUtility.cs" />
     <Compile Include="Web\HttpToolkit.cs" />
     <Compile Include="Win32\ButtonEvent.cs" />
-    <Compile Include="Win32\DeviceInterface.cs" />
     <Compile Include="Win32\Gdi32.cs" />
     <Compile Include="Win32\MouseEvent.cs" />
     <Compile Include="Win32\MouseOperation.cs" />
