@@ -54,7 +54,7 @@ namespace TestNet32
             for (int index = 0; index < Screen.AllScreens.Length; index++)
             {
                 Screen screen = Screen.AllScreens[index];
-                ScreenIndexDialog dlg = new ScreenIndexDialog((index + 1), screen.Bounds, new ScreenColorInfo()
+                ScreenIndexDialog dlg = new ScreenIndexDialog((index + 1), screen.Bounds, new DialogColor()
                 {
                     MainBackColor = Color.Green, MainForeColor = Color.White,
                     SubBackColor = Color.Black, SubForeColor = Color.White
@@ -98,7 +98,7 @@ namespace TestNet32
             Dictionary<string, string[]> parameter = new Dictionary<string, string[]>();
             parameter.Add("Test", new string[] { "Test1", "Test2" });
             parameter.Add("Hangeul", new string[] { Uri.EscapeUriString("한글") });
-
+            
             /*
             Dictionary<string, string> parameter = new Dictionary<string, string>();
             parameter.Add("Test1", "Test1");
@@ -107,7 +107,11 @@ namespace TestNet32
             */
             HttpStatusCode statusCode = HttpStatusCode.OK;
             Exception exception = null;
-            string response = new HttpToolkit().GetResponseByPost(
+
+            HttpToolkit httpToolkit = new HttpToolkit();
+            httpToolkit.CreateHttpWebRequest += HttpToolkit_CreateHttpWebRequest;
+            httpToolkit.CreateHttpWebResponse += HttpToolkit_CreateHttpWebResponse;
+            string response = httpToolkit.GetResponseByPost(
                 "http://localhost:8080/CSharpCommonLibrary/index.jsp", 
                 parameter, 
                 "UTF-8", 
@@ -116,6 +120,16 @@ namespace TestNet32
                 out statusCode,
                 out exception
             );
+        }
+
+        private void HttpToolkit_CreateHttpWebRequest(object sender, CreateHttpWebRequestEventArgs e)
+        {
+            Toolkit.TraceWriteLine("HttpToolkit_CreateHttpWebRequest");
+        }
+
+        private void HttpToolkit_CreateHttpWebResponse(object sender, CreateHttpWebResponseEventArgs e)
+        {
+            Toolkit.TraceWriteLine("HttpToolkit_CreateHttpWebResponse");
         }
 
         private void TestForm_Load(object sender, EventArgs e)

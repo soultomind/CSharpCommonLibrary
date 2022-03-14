@@ -12,25 +12,52 @@ using System.Web;
 
 namespace CommonLibrary.Web
 {
+    public class CreateHttpWebRequestEventArgs : EventArgs
+    {
+        public HttpWebRequest Request { get; set; }
+        public byte[] Data { get; set; }
+        public CreateHttpWebRequestEventArgs(HttpWebRequest request, byte[] data)
+        {
+            Request = request;
+            Data = data;
+        }
+    }
+
+    public class CreateHttpWebResponseEventArgs : EventArgs
+    {
+        public HttpWebResponse Response { get; set; }
+        public string Data { get; set; }
+        public CreateHttpWebResponseEventArgs(HttpWebResponse response, string data)
+        {
+            Response = response;
+            Data = data;
+        }
+    }
     /// <summary>
     /// Http 통신 관련 툴킷 클래스
     /// </summary>
     public class HttpToolkit
     {
-        public static string ContentType = "application/x-www-form-urlencoded; charset=";
-        public string UserAgent { get; set; }
-        public bool IsSetCachePolicy { get; set; }
-        public HttpRequestCacheLevel CacheLevel { get; set; }
+        public delegate void CreateHttpWebRequestEventHandler(object sender, CreateHttpWebRequestEventArgs e);
+        public event CreateHttpWebRequestEventHandler CreateHttpWebRequest;
 
-        public bool IsExpect100Continue { get; set; }
+        public delegate void CreateHttpWebResponseEventHandler(object sender, CreateHttpWebResponseEventArgs e);
+        public event CreateHttpWebResponseEventHandler CreateHttpWebResponse;
+
+        public static string DefaultContentType = "application/x-www-form-urlencoded; charset=";
+        public string DefaultUserAgent { get; set; }
+        public bool DefaultIsSetCachePolicy { get; set; }
+        public HttpRequestCacheLevel DefaultCacheLevel { get; set; }
+
+        public bool DefaultIsExpect100Continue { get; set; }
 
         public HttpToolkit()
         {
-            UserAgent = "Mozilla/4.0";
-            IsSetCachePolicy = false;
-            CacheLevel = HttpRequestCacheLevel.Revalidate;
+            DefaultUserAgent = "Mozilla/4.0";
+            DefaultIsSetCachePolicy = false;
+            DefaultCacheLevel = HttpRequestCacheLevel.Revalidate;
 
-            IsExpect100Continue = false;
+            DefaultIsExpect100Continue = false;
         }
 
         public byte[] CreatePostData(Dictionary<string, string> parameter, Encoding encoding)
@@ -58,6 +85,33 @@ namespace CommonLibrary.Web
             return buffer;
         }
 
+        private void SetRequestDefaultProperties(HttpWebRequest request, int requestTimeout)
+        {
+            request.UserAgent = DefaultUserAgent;
+
+            //
+            //TimeOut 설정
+            //
+            if (requestTimeout > 0)
+            {
+                request.Timeout = requestTimeout;
+            }
+
+
+            if (DefaultIsSetCachePolicy)
+            {
+                HttpRequestCachePolicy httpRequestCachePolicy = new HttpRequestCachePolicy(DefaultCacheLevel);
+                request.CachePolicy = httpRequestCachePolicy;
+            }
+
+            ///
+            /// Expect100Continue 무시
+            ///
+            request.ServicePoint.Expect100Continue = DefaultIsExpect100Continue;
+
+            request.ContentType = DefaultContentType;
+        }
+
         public string GetResponseByPost(string uriString, Dictionary<string, string> parameter, string requestEnc, string responseEnc, int requestTimeout, out HttpStatusCode outHttpStatusCode, out Exception outException)
         {
             HttpStatusCode httpStatusCode = HttpStatusCode.OK;
@@ -75,45 +129,33 @@ namespace CommonLibrary.Web
             {
 
                 Uri requestUri = new Uri(uriString);
-
+                byte[] data = null;
                 //
                 // Create the web request   
                 //
                 HttpWebRequest request = WebRequest.Create(requestUri) as HttpWebRequest;
-
-                request.UserAgent = UserAgent;
-
-                if (IsSetCachePolicy)
+                if (parameter != null && parameter.Count > 0)
                 {
-                    HttpRequestCachePolicy httpRequestCachePolicy = new HttpRequestCachePolicy(CacheLevel);
-                    request.CachePolicy = httpRequestCachePolicy;
-                }
+                    SetRequestDefaultProperties(request, requestTimeout);
 
-                //
-                //TimeOut 설정
-                //
-                if (requestTimeout > 0)
+                    data = CreatePostData(parameter, Encoding.GetEncoding(requestEnc));
+                    request.Method = "POST";
+                    request.ContentLength = data.Length;
+
+                    CreateHttpWebRequest?.Invoke(this, new CreateHttpWebRequestEventArgs(request, data));
+                }
+                else
                 {
-                    request.Timeout = requestTimeout;
-                }
+                    SetRequestDefaultProperties(request, requestTimeout);
 
-                ///
-                /// Expect100Continue 무시
-                ///
-                request.ServicePoint.Expect100Continue = IsExpect100Continue;
+                    request.Method = "GET";
+                    request.ContentLength = 0;
+
+                    CreateHttpWebRequest?.Invoke(this, new CreateHttpWebRequestEventArgs(request, null));
+                }
 
                 if (parameter != null && parameter.Count > 0)
                 {
-                    request.Method = "POST";
-                    request.ContentType = ContentType;
-
-                    byte[] data = CreatePostData(parameter, Encoding.GetEncoding(requestEnc));
-
-                    ////
-                    //// Set the content length in the request headers   
-                    ////
-                    request.ContentLength = data.Length;
-
                     ////
                     //// Write data   
                     ////
@@ -121,10 +163,6 @@ namespace CommonLibrary.Web
                     {
                         requestStream.Write(data, 0, data.Length);
                     }
-                }
-                else
-                {
-                    request.ContentLength = 0;
                 }
 
                 using (HttpWebResponse response = request.GetResponse() as HttpWebResponse)
@@ -134,6 +172,8 @@ namespace CommonLibrary.Web
 
                     StreamReader reader = new StreamReader(response.GetResponseStream(), Encoding.GetEncoding(responseEnc));
                     responseData = reader.ReadToEnd();
+
+                    CreateHttpWebResponse?.Invoke(this, new CreateHttpWebResponseEventArgs(response, responseData));
 
                     Toolkit.DebugWriteLine("ResponseData=" + responseData);
 
@@ -242,47 +282,35 @@ namespace CommonLibrary.Web
             string responseData = "";
             try
             {
-                
-                Uri requestUri = new Uri(uriString);
 
+                Uri requestUri = new Uri(uriString);
+                byte[] data = null;
                 //
                 // Create the web request   
                 //
                 HttpWebRequest request = WebRequest.Create(requestUri) as HttpWebRequest;
-
-                request.UserAgent = UserAgent;
-
-                if (IsSetCachePolicy)
+                if (parameter != null && parameter.Count > 0)
                 {
-                    HttpRequestCachePolicy httpRequestCachePolicy = new HttpRequestCachePolicy(CacheLevel);
-                    request.CachePolicy = httpRequestCachePolicy;
-                }
+                    SetRequestDefaultProperties(request, requestTimeout);
 
-                //
-                //TimeOut 설정
-                //
-                if (requestTimeout > 0)
+                    data = CreatePostData(parameter, Encoding.GetEncoding(requestEnc));
+                    request.Method = "POST";
+                    request.ContentLength = data.Length;
+
+                    CreateHttpWebRequest?.Invoke(this, new CreateHttpWebRequestEventArgs(request, data));
+                }
+                else
                 {
-                    request.Timeout = requestTimeout;
-                }
+                    SetRequestDefaultProperties(request, requestTimeout);
 
-                ///
-                /// Expect100Continue 무시
-                ///
-                request.ServicePoint.Expect100Continue = IsExpect100Continue;
+                    request.Method = "GET";
+                    request.ContentLength = 0;
+
+                    CreateHttpWebRequest?.Invoke(this, new CreateHttpWebRequestEventArgs(request, null));
+                }
 
                 if (parameter != null && parameter.Count > 0)
                 {
-                    request.Method = "POST";
-                    request.ContentType = ContentType;
-
-                    byte[] data = CreatePostData(parameter, Encoding.GetEncoding(requestEnc));
-
-                    ////
-                    //// Set the content length in the request headers   
-                    ////
-                    request.ContentLength = data.Length;
-
                     ////
                     //// Write data   
                     ////
@@ -290,10 +318,6 @@ namespace CommonLibrary.Web
                     {
                         requestStream.Write(data, 0, data.Length);
                     }
-                }
-                else
-                {
-                    request.ContentLength = 0;
                 }
 
                 using (HttpWebResponse response = request.GetResponse() as HttpWebResponse)
@@ -303,6 +327,8 @@ namespace CommonLibrary.Web
                     
                     StreamReader reader = new StreamReader(response.GetResponseStream(), Encoding.GetEncoding(responseEnc));
                     responseData = reader.ReadToEnd();
+
+                    CreateHttpWebResponse?.Invoke(this, new CreateHttpWebResponseEventArgs(response, responseData));
 
                     Toolkit.DebugWriteLine("ResponseData=" + responseData);
 
