@@ -1,5 +1,7 @@
 ﻿using CommonLibrary.Utilities;
 using CommonLibrary.Win32;
+using System.Collections;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Threading;
@@ -48,6 +50,18 @@ namespace CommonLibrary
         private volatile bool _startmouseMovePrevent;
 
         /// <summary>
+        /// 마우스 이동 방지 스크린으로 이동전 마지막 좌표로 이동 여부
+        /// </summary>
+        public bool IsMouseMoveLastPreventPoint
+        {
+            get { return _mouseMoveLastPreventPoint; }
+            set { _mouseMoveLastPreventPoint = value; }
+        }
+        private bool _mouseMoveLastPreventPoint;
+
+        private Stack<Point> _mouseMovePoints;
+
+        /// <summary>
         /// 마우스 이동 방지 주기
         /// </summary>
         public int MouseMovePreventInterval
@@ -80,6 +94,18 @@ namespace CommonLibrary
                 return;
             }
 
+            if (IsMouseMoveLastPreventPoint)
+            {
+                if (_mouseMovePoints == null)
+                {
+                    _mouseMovePoints = new Stack<Point>();
+                }
+                else
+                {
+                    _mouseMovePoints.Clear();
+                }
+            }
+
             if (MouseMovePreventScreenIndex >= 0)
             {
                 _mouseMovePreventThread = new Thread(StartMouseMovePreventWorker);
@@ -98,6 +124,7 @@ namespace CommonLibrary
             _startmouseMovePrevent = true;
 
             Screen primaryScreen = Screen.PrimaryScreen;
+            Screen preventScreen = Screen.AllScreens[MouseMovePreventScreenIndex];
             Point pt = Point.Empty;
 
             while (_startmouseMovePrevent)
@@ -109,11 +136,62 @@ namespace CommonLibrary
                 {
                     pt.X = mousePoint.X;
                     pt.Y = mousePoint.Y;
-                    if (Screen.AllScreens[MouseMovePreventScreenIndex].Bounds.Contains(pt))
-                    {
-                        int x = (primaryScreen.Bounds.X + primaryScreen.Bounds.Width) / 2;
-                        int y = (primaryScreen.Bounds.Y + primaryScreen.Bounds.Height) / 2;
 
+                    int x = 0, y = 0;
+                    if (IsMouseMoveLastPreventPoint)
+                    {
+                        _mouseMovePoints.Push(pt);
+
+                        if (_mouseMovePoints.Count >= 50)
+                        {
+                            // 최근 좌표가 Top 위치에 있도록 
+                            Stack<Point> reversePoints = new Stack<Point>();
+
+                            int count = 0;
+                            foreach (Point item in _mouseMovePoints.Reverse())
+                            {
+                                if (count >= 20)
+                                {
+                                    break;
+                                }
+                                reversePoints.Push(item);
+                                count++;
+                            }
+
+                            _mouseMovePoints.Clear();
+                            _mouseMovePoints = reversePoints;
+                            Toolkit.TraceWriteLine("Clear Old Point 30 MouseMovePoints");
+                        }
+
+                        Point lastPreventPoint = Point.Empty;
+                        foreach (Point item in _mouseMovePoints)
+                        {
+                            if (!preventScreen.Bounds.Contains(item))
+                            {
+                                lastPreventPoint = item;
+                                break;
+                            }
+                        }
+
+                        x = lastPreventPoint.X;
+                        y = lastPreventPoint.Y;
+
+                        if (lastPreventPoint.IsEmpty)
+                        {
+                            Point centerPt = ScreenUtility.GetPrimaryScreenBoundsCenter();
+                            x = centerPt.X;
+                            y = centerPt.Y;
+                        }
+                    }
+                    else
+                    {
+                        Point centerPt = ScreenUtility.GetPrimaryScreenBoundsCenter();
+                        x = centerPt.X;
+                        y = centerPt.Y;
+                    }
+
+                    if (preventScreen.Bounds.Contains(pt))
+                    {
                         MouseEvent mouseOperation = new MouseEvent();
 
                         mouseOperation.SetCursorPosition(x + 1, y + 1);
