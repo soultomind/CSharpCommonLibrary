@@ -16,10 +16,28 @@ namespace CommonLibrary.Web
     {
         public HttpWebRequest Request { get; set; }
         public byte[] Data { get; set; }
+
+        public Dictionary<string, string> ParamValue { get; set; }
+        public Dictionary<string, string[]> ParamValueArray { get; set; }
+
         public CreateHttpWebRequestEventArgs(HttpWebRequest request, byte[] data)
         {
             Request = request;
             Data = data;
+        }
+
+        public CreateHttpWebRequestEventArgs(HttpWebRequest request, byte[] data, Dictionary<string, string> paramValue)
+        {
+            Request = request;
+            Data = data;
+            ParamValue = paramValue;
+        }
+
+        public CreateHttpWebRequestEventArgs(HttpWebRequest request, byte[] data, Dictionary<string, string[]> paramValueArray)
+        {
+            Request = request;
+            Data = data;
+            ParamValueArray = paramValueArray;
         }
     }
 
@@ -33,15 +51,23 @@ namespace CommonLibrary.Web
             Data = data;
         }
     }
+
+    public delegate void CreateHttpWebRequestEventHandler(object sender, CreateHttpWebRequestEventArgs e);
+    public delegate void CreateHttpWebResponseEventHandler(object sender, CreateHttpWebResponseEventArgs e);
+
     /// <summary>
     /// Http 통신 관련 툴킷 클래스
     /// </summary>
     public class HttpToolkit
     {
-        public delegate void CreateHttpWebRequestEventHandler(object sender, CreateHttpWebRequestEventArgs e);
+        /// <summary>
+        /// HttpWebRequest 생성후 파라미터 데이터를 생성후 호출되는 이벤트핸들러입니다.
+        /// </summary>
         public event CreateHttpWebRequestEventHandler CreateHttpWebRequest;
-
-        public delegate void CreateHttpWebResponseEventHandler(object sender, CreateHttpWebResponseEventArgs e);
+        
+        /// <summary>
+        /// HttpWebResponse 생성후 응답데이터를 생성후 호출되는 이벤트 핸들러입니다.
+        /// </summary>
         public event CreateHttpWebResponseEventHandler CreateHttpWebResponse;
 
         public static string DefaultContentType = "application/x-www-form-urlencoded; charset=";
@@ -142,7 +168,7 @@ namespace CommonLibrary.Web
                     request.Method = "POST";
                     request.ContentLength = data.Length;
 
-                    CreateHttpWebRequest?.Invoke(this, new CreateHttpWebRequestEventArgs(request, data));
+                    CreateHttpWebRequest?.Invoke(this, new CreateHttpWebRequestEventArgs(request, data, parameter));
                 }
                 else
                 {
@@ -297,7 +323,7 @@ namespace CommonLibrary.Web
                     request.Method = "POST";
                     request.ContentLength = data.Length;
 
-                    CreateHttpWebRequest?.Invoke(this, new CreateHttpWebRequestEventArgs(request, data));
+                    CreateHttpWebRequest?.Invoke(this, new CreateHttpWebRequestEventArgs(request, data, parameter));
                 }
                 else
                 {
