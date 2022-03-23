@@ -89,6 +89,13 @@ namespace CommonLibrary
 
         public void StartProcessHandleWindowMovePrevent()
         {
+            if (AllProcessWndHandlesCheckProcessNames.Count > 1)
+            {
+                if (SetWindowPos == null)
+                {
+                    throw new ArgumentException("AllProcessWndHandlesCheckProcessNames.Count is Zero");
+                }
+            }
             _processWndHandlesFixedLocationWorker = new Thread(StartProcessHandleWindowMovePreventWorker);
             _processWndHandlesFixedLocationWorker.IsBackground = true;
             _processWndHandlesFixedLocationWorker.Start();
@@ -120,54 +127,25 @@ namespace CommonLibrary
                             {
                                 RECT outRect = RECT.Empty;
                                 User32.GetWindowRect(windowHandle, out outRect);
-
-                                if (SetWindowPos != null)
+                                string text = String.Format("ProcessName={0}, Handle={1}, ShowWindowCommand={2}, Title={3}", process.ProcessName, windowHandle, wp.ShowCmd.ToString(), title); ;
+                                Toolkit.TraceWriteLine(text);
+                                if (SetWindowPos.Invoke(this, new ProcessWndHandleWindowStateEventHandler(process, windowHandle, wp, title)))
                                 {
-                                    string text = String.Format("ProcessName={0}, Handle={1}, ShowWindowCommand={2}, Title={3}", process.ProcessName, windowHandle, wp.ShowCmd.ToString(), title); ;
-                                    Toolkit.TraceWriteLine(text);
-                                    if (SetWindowPos.Invoke(this, new ProcessWndHandleWindowStateEventHandler(process, windowHandle, wp, title)))
+                                    if (preventScreen.BoundsContains(outRect.ToPoints()))
                                     {
-                                        if (preventScreen.BoundsContains(outRect.ToPoints()))
-                                        {
-                                            Rectangle rect = Screen.PrimaryScreen.WorkingArea;
-                                            int x = (rect.Width - outRect.Width) / 2;
-                                            int y = (rect.Height - outRect.Height) / 2;
+                                        Rectangle rect = Screen.PrimaryScreen.WorkingArea;
+                                        int x = (rect.Width - outRect.Width) / 2;
+                                        int y = (rect.Height - outRect.Height) / 2;
 
-                                            User32.SetWindowPos(
-                                                windowHandle,
-                                                User32.HWND_NOTOPMOST,
-                                                x,
-                                                y,
-                                                outRect.Width,
-                                                outRect.Height,
-                                                Win32.SetWindowPos.SWP_NOZORDER | Win32.SetWindowPos.SWP_SHOWWINDOW
-                                            );
-                                        }
-                                    }
-                                }
-                                else
-                                {
-                                    if (wp.ShowCmd == ShowWindowCommand.Normal)
-                                    {
-                                        // 1 = VISIBLE TRUE, 2 = VISIBLE FALSE
-                                        if (User32.IsWindowVisible(windowHandle) == 1)
-                                        {
-                                            Rectangle rect = Screen.PrimaryScreen.WorkingArea;
-                                            int x = (rect.Width - outRect.Width) / 2;
-                                            int y = (rect.Height - outRect.Height) / 2;
-
-                                            /*
-                                            User32.SetWindowPos(
-                                                windowHandle,
-                                                User32.HWND_NOTOPMOST,
-                                                x,
-                                                y,
-                                                outRect.Width,
-                                                outRect.Height,
-                                                Win32.SetWindowPos.SWP_NOZORDER | Win32.SetWindowPos.SWP_SHOWWINDOW
-                                            );
-                                            */
-                                        }
+                                        User32.SetWindowPos(
+                                            windowHandle,
+                                            User32.HWND_NOTOPMOST,
+                                            x,
+                                            y,
+                                            outRect.Width,
+                                            outRect.Height,
+                                            Win32.SetWindowPos.SWP_NOZORDER | Win32.SetWindowPos.SWP_SHOWWINDOW
+                                        );
                                     }
                                 }
                             }
