@@ -111,7 +111,7 @@ namespace CommonLibrary.Web
             return buffer;
         }
 
-        private void SetRequestDefaultProperties(HttpWebRequest request, int requestTimeout)
+        protected void SetRequestDefaultProperties(HttpWebRequest request, int requestTimeout)
         {
             request.UserAgent = DefaultUserAgent;
 
@@ -194,14 +194,11 @@ namespace CommonLibrary.Web
                 using (HttpWebResponse response = request.GetResponse() as HttpWebResponse)
                 {
                     httpStatusCode = response.StatusCode;
-                    Toolkit.DebugWriteLine("Response.IsFromCache=" + response.IsFromCache);
 
                     StreamReader reader = new StreamReader(response.GetResponseStream(), Encoding.GetEncoding(responseEnc));
                     responseData = reader.ReadToEnd();
 
                     CreateHttpWebResponse?.Invoke(this, new CreateHttpWebResponseEventArgs(response, responseData));
-
-                    Toolkit.DebugWriteLine("ResponseData=" + responseData);
 
                     reader.Close();
                 }
@@ -349,14 +346,11 @@ namespace CommonLibrary.Web
                 using (HttpWebResponse response = request.GetResponse() as HttpWebResponse)
                 {
                     httpStatusCode = response.StatusCode;
-                    Toolkit.DebugWriteLine("Response.IsFromCache=" + response.IsFromCache);
                     
                     StreamReader reader = new StreamReader(response.GetResponseStream(), Encoding.GetEncoding(responseEnc));
                     responseData = reader.ReadToEnd();
 
                     CreateHttpWebResponse?.Invoke(this, new CreateHttpWebResponseEventArgs(response, responseData));
-
-                    Toolkit.DebugWriteLine("ResponseData=" + responseData);
 
                     reader.Close();
                 }
