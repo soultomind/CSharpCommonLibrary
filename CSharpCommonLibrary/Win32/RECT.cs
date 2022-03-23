@@ -151,9 +151,20 @@ namespace CommonLibrary.Win32
             return new Rectangle(Left, Top, Right - Left, Bottom - Top);
         }
 
-        public POINT[] ToPoints()
+        public POINT[] ToNativePoints()
         {
             POINT[] points = new POINT[4];
+            points[0] = LeftTop;
+            points[1] = RightTop;
+            points[2] = LeftBottom;
+            points[3] = RightBottom;
+
+            return points;
+        }
+
+        public Point[] ToPoints()
+        {
+            Point[] points = new Point[4];
             points[0] = LeftTop;
             points[1] = RightTop;
             points[2] = LeftBottom;
