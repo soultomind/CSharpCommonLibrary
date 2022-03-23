@@ -18,6 +18,8 @@ namespace TestNet32
 
         private bool _screenImage;
         private ScreenImageCapture _screenImageCapture;
+
+        private WindowManager _windowManager;
         public TestForm()
         {
             InitializeComponent();
@@ -61,6 +63,42 @@ namespace TestNet32
                 });
 
                 dlg.Show();
+            }
+        }
+
+        private void ButtonProcessWindowHandleFixedLocation_Click(object sender, EventArgs e)
+        {
+            if (_windowManager == null)
+            {
+                _windowManager = new WindowManager();
+                _windowManager.SetWindowPos += WindowManager_SetWindowPos;
+                _windowManager.StartProcessHandleWindowMovePrevent();
+                _ButtonProcessWindowHandleFixedLocation.Text = "창 제어 정지";
+            }
+            else
+            {
+                _windowManager.StopProcessHandleWindowMovePrevent();
+                _windowManager = null;
+                _ButtonProcessWindowHandleFixedLocation.Text = "창 제어 시작";
+            }
+        }
+
+        private bool WindowManager_SetWindowPos(object sender, ProcessWndHandleWindowStateEventHandler e)
+        {
+            // 해당 이벤트핸들러에서 특정 프로세스 창에 대하여 윈도우 창 제어를 할지 여부를 처리한다.
+            if (e.Process.ProcessName.Equals(""))
+            {
+                // 특정 프로세스 일때 특정 핸들의 타이틀값일때 해당 핸들도 처리 할 수 있다.
+                return false;
+            }
+            else
+            {
+                // 일반적으로는 메인 윈도우 핸들만 창 제어를 처리한다.
+                if (e.Process.MainWindowHandle == e.Handle)
+                {
+                    return true;
+                }
+                return false;
             }
         }
 

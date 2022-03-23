@@ -35,6 +35,7 @@ namespace TestNet32
             this._ButtonStartAndStopScreenCapture = new System.Windows.Forms.Button();
             this._ButtonHttpToolkitTest = new System.Windows.Forms.Button();
             this._RichTextBoxHttpToolkitTest = new System.Windows.Forms.RichTextBox();
+            this._ButtonProcessWindowHandleFixedLocation = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this._PictureBoxScreenCapture)).BeginInit();
             this.SuspendLayout();
             // 
@@ -94,11 +95,22 @@ namespace TestNet32
             this._RichTextBoxHttpToolkitTest.TabIndex = 5;
             this._RichTextBoxHttpToolkitTest.Text = "";
             // 
+            // _ButtonProcessWindowHandleFixedLocation
+            // 
+            this._ButtonProcessWindowHandleFixedLocation.Location = new System.Drawing.Point(24, 94);
+            this._ButtonProcessWindowHandleFixedLocation.Name = "_ButtonProcessWindowHandleFixedLocation";
+            this._ButtonProcessWindowHandleFixedLocation.Size = new System.Drawing.Size(128, 27);
+            this._ButtonProcessWindowHandleFixedLocation.TabIndex = 6;
+            this._ButtonProcessWindowHandleFixedLocation.Text = "창 제어 시작";
+            this._ButtonProcessWindowHandleFixedLocation.UseVisualStyleBackColor = true;
+            this._ButtonProcessWindowHandleFixedLocation.Click += new System.EventHandler(this.ButtonProcessWindowHandleFixedLocation_Click);
+            // 
             // TestForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 525);
+            this.Controls.Add(this._ButtonProcessWindowHandleFixedLocation);
             this.Controls.Add(this._RichTextBoxHttpToolkitTest);
             this.Controls.Add(this._ButtonHttpToolkitTest);
             this.Controls.Add(this._ButtonStartAndStopScreenCapture);
@@ -124,5 +136,6 @@ namespace TestNet32
         private System.Windows.Forms.Button _ButtonStartAndStopScreenCapture;
         private System.Windows.Forms.Button _ButtonHttpToolkitTest;
         private System.Windows.Forms.RichTextBox _RichTextBoxHttpToolkitTest;
+        private System.Windows.Forms.Button _ButtonProcessWindowHandleFixedLocation;
     }
 }
