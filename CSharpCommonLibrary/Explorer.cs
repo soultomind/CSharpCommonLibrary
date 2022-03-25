@@ -7,5 +7,6 @@ namespace CommonLibrary
 {
     public class Explorer
     {
+        public const string ProcessName = "explorer";
     }
 }

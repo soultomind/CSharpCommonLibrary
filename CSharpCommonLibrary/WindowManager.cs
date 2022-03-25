@@ -12,13 +12,13 @@ using System.Drawing;
 
 namespace CommonLibrary
 {
-    public class ProcessWndHandleWindowStateEventHandler : EventArgs
+    public class ProcessAllWindowsHandleSetPosEventArgs : EventArgs
     {
         public Process Process { get; private set; }
         public IntPtr Handle { get; private set; }
         public WINDOWPLACEMENT WindowPlacement { get; private set; }
         public string Title { get; private set; }
-        public ProcessWndHandleWindowStateEventHandler(Process process, IntPtr handle, WINDOWPLACEMENT windowPlacement, string title)
+        public ProcessAllWindowsHandleSetPosEventArgs(Process process, IntPtr handle, WINDOWPLACEMENT windowPlacement, string title)
         {
             Process = process;
             Handle = handle;
@@ -26,13 +26,14 @@ namespace CommonLibrary
             Title = title;
         }
     }
-    public delegate bool SetWindowPosEventHandler(object sender, ProcessWndHandleWindowStateEventHandler e);
+    public delegate bool ProcessAllWindowsHandleSetPosEventHandler(object sender, ProcessAllWindowsHandleSetPosEventArgs e);
     /// <summary>
     /// 윈도우 매니저
     /// </summary>
     public class WindowManager
     {
-        public event SetWindowPosEventHandler SetWindowPos;
+        public event ProcessAllWindowsHandleSetPosEventHandler SetProcessAllWindowsHandlePos;
+
         /// <summary>
         /// 특정 프로세스에 관련된 핸들 창이 이동 방지될 스크린 인덱스
         /// </summary>
@@ -84,14 +85,17 @@ namespace CommonLibrary
         public WindowManager()
         {
             ProcessWndHandlesPreventScreenIndex = ScreenUtility.GetFirstScreenIndexAndExceptPrimaryScreen();
-            ExceptProcessNames.Add("explorer");
+
+            // explorer 프로세스에는 
+            // 윈도우탐색기, 작업표시줄 등 다수의 창이 존재하므로 해당 프로세스는 제외한다.
+            ExceptProcessNames.Add(Explorer.ProcessName);
         }
 
         public void StartProcessHandleWindowMovePrevent()
         {
             if (AllProcessWndHandlesCheckProcessNames.Count > 1)
             {
-                if (SetWindowPos == null)
+                if (SetProcessAllWindowsHandlePos == null)
                 {
                     throw new ArgumentException("AllProcessWndHandlesCheckProcessNames.Count is Zero");
                 }
@@ -127,9 +131,11 @@ namespace CommonLibrary
                             {
                                 RECT outRect = RECT.Empty;
                                 User32.GetWindowRect(windowHandle, out outRect);
-                                string text = String.Format("ProcessName={0}, Handle={1}, ShowWindowCommand={2}, Title={3}", process.ProcessName, windowHandle, wp.ShowCmd.ToString(), title); ;
+                                string text = String.Format("ProcessName={0}, Handle={1}, ShowWindowCommand={2}, Title={3}", 
+                                    process.ProcessName, windowHandle, wp.ShowCmd.ToString(), title);
+
                                 Toolkit.TraceWriteLine(text);
-                                if (SetWindowPos.Invoke(this, new ProcessWndHandleWindowStateEventHandler(process, windowHandle, wp, title)))
+                                if (SetProcessAllWindowsHandlePos.Invoke(this, new ProcessAllWindowsHandleSetPosEventArgs(process, windowHandle, wp, title)))
                                 {
                                     if (preventScreen.BoundsContains(outRect.ToPoints()))
                                     {
@@ -144,7 +150,7 @@ namespace CommonLibrary
                                             y,
                                             outRect.Width,
                                             outRect.Height,
-                                            Win32.SetWindowPos.SWP_NOZORDER | Win32.SetWindowPos.SWP_SHOWWINDOW
+                                            SetWindowPos.SWP_NOZORDER | SetWindowPos.SWP_SHOWWINDOW
                                         );
                                     }
                                 }
@@ -171,7 +177,7 @@ namespace CommonLibrary
                                     y,
                                     outRect.Width,
                                     outRect.Height,
-                                    Win32.SetWindowPos.SWP_NOZORDER | Win32.SetWindowPos.SWP_SHOWWINDOW
+                                    SetWindowPos.SWP_NOZORDER | SetWindowPos.SWP_SHOWWINDOW
                                 );
                             }
                         }
@@ -203,7 +209,7 @@ namespace CommonLibrary
         /// </summary>
         /// <param name="processId"></param>
         /// <returns></returns>
-        public IntPtr[] GetProcessWindowHandles(int processId)
+        public static IntPtr[] GetProcessWindowHandles(int processId)
         {
             IntPtr[] windowHandles = (new IntPtr[256]);
             int count = 0;
