@@ -57,7 +57,7 @@ namespace CommonLibrary
             }
 
             TargetScreenIndex = targetScreenIndex;
-            TargetScreen = new MultiScreenManager(TargetScreenIndex).TargetScreen;
+            TargetScreen = new MultiScreen(TargetScreenIndex).TargetScreen;
             if (TargetScreen == null)
             {
                 throw new InvalidOperationException("TargetScreen 이 null 입니다.");
@@ -80,7 +80,7 @@ namespace CommonLibrary
             }
 
             TargetScreenBoundsSize = targetScreenBoundsSize;
-            TargetScreen = new MultiScreenManager(TargetScreenBoundsSize).TargetScreen;
+            TargetScreen = new MultiScreen(TargetScreenBoundsSize).TargetScreen;
             if (TargetScreen == null)
             {
                 throw new InvalidOperationException("TargetScreen 이 null 입니다.");

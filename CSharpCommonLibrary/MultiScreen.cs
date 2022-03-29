@@ -12,7 +12,7 @@ namespace CommonLibrary
     /// <see cref="System.Windows.Forms.Screen"/> 관련 모듈 클래스
     /// <para>듀얼 모니터 이상일 때 사용합니다.</para>
     /// </summary>
-    public class MultiScreenManager
+    public class MultiScreen
     {
         public const int InvalidScreenIndex = -1;
         /// <summary>
@@ -29,7 +29,7 @@ namespace CommonLibrary
         /// </summary>
         /// <param name="targetScreenIndex">타겟이 되는 스크린 인덱스</param>
         /// <exception cref="System.InvalidOperationException"></exception>
-        public MultiScreenManager(int targetScreenIndex)
+        public MultiScreen(int targetScreenIndex)
         {
             if (Screen.AllScreens.Length == 1)
             {
@@ -49,7 +49,7 @@ namespace CommonLibrary
         /// 
         /// </summary>
         /// <param name="targetScreenBoundsSize">타겟이 되는 스크린 사이즈(Bounds)</param>
-        public MultiScreenManager(Size targetScreenBoundsSize)
+        public MultiScreen(Size targetScreenBoundsSize)
         {
             if (Screen.AllScreens.Length == 1)
             {

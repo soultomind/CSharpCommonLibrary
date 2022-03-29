@@ -10,7 +10,7 @@ using System.Threading;
 using System.Windows.Forms;
 using System.Drawing;
 
-namespace CommonLibrary
+namespace CommonLibrary.Tools
 {
     public class ProcessAllWindowsHandleSetPosEventArgs : EventArgs
     {

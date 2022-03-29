@@ -7,7 +7,7 @@ using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
 
-namespace CommonLibrary
+namespace CommonLibrary.Tools
 {
     /// <summary>
     /// 마우스 관련 매니저 클래스

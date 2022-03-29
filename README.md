@@ -2,6 +2,9 @@
 
 ## Net
 - SecurityProtocolExtension : .NET35 전용 SecurityProtocol 확장 클래스 
+## Tools    
+- MouseManager : 마우스 관련 기능 제공
+- WindowManager : 창에 관련 기능 제공
 ## UI 
 - TablessControl : 탭이 없는 TabControl
 - ScreenIndexDialog : 스크린 인덱스 출력
@@ -20,15 +23,10 @@
 ## Web
 - HttpToolkit : Http 통신관련 툴킷
 
-## 기능   
+## 기타   
 - CertFile : 인증서   
   1.인증서 추가
-- MouseManager : 마우스 제어   
-  1.특정 디스플레이로 마우스 이동 방지 기능
 - Taskbar : 작업표시줄   
   1.트레이 영역 아이콘 리플레쉬 기능
 - ScreenImageCapture : 스크린 이미지 캡쳐   
-  1.특정 스크린(디스플레이) 이미지 캡쳐기능
-- WindowManager : 창 제어   
-  1.특정 디스플레이로 프로세스 창 이동 제어 방지 기능
-  
+  1.특정 스크린(디스플레이) 이미지 캡쳐기능  
