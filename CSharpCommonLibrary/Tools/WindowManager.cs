@@ -88,7 +88,7 @@ namespace CommonLibrary.Tools
 
             // explorer 프로세스에는 
             // 윈도우탐색기, 작업표시줄 등 다수의 창이 존재하므로 해당 프로세스는 제외한다.
-            ExceptProcessNames.Add(Explorer.ProcessName);
+            // ExceptProcessNames.Add(Explorer.ProcessName);
         }
 
         public void StartProcessHandleWindowMovePrevent()
@@ -131,27 +131,17 @@ namespace CommonLibrary.Tools
                             {
                                 RECT outRect = RECT.Empty;
                                 User32.GetWindowRect(windowHandle, out outRect);
-                                string text = String.Format("ProcessName={0}, Handle={1}, ShowWindowCommand={2}, Title={3}", 
-                                    process.ProcessName, windowHandle, wp.ShowCmd.ToString(), title);
-
-                                Toolkit.TraceWriteLine(text);
+                                
                                 if (SetProcessAllWindowsHandlePos.Invoke(this, new ProcessAllWindowsHandleSetPosEventArgs(process, windowHandle, wp, title)))
                                 {
                                     if (preventScreen.BoundsContains(outRect.ToPoints()))
                                     {
-                                        Rectangle rect = Screen.PrimaryScreen.WorkingArea;
-                                        int x = (rect.Width - outRect.Width) / 2;
-                                        int y = (rect.Height - outRect.Height) / 2;
+                                        ProcessSetWindowPos(windowHandle, outRect);
 
-                                        User32.SetWindowPos(
-                                            windowHandle,
-                                            User32.HWND_NOTOPMOST,
-                                            x,
-                                            y,
-                                            outRect.Width,
-                                            outRect.Height,
-                                            SetWindowPos.SWP_NOZORDER | SetWindowPos.SWP_SHOWWINDOW
-                                        );
+                                        string text = String.Format("ProcessSetWindowPos ProcessName={0}, Handle={1}, ShowWindowCommand={2}, Title={3}",
+                                            process.ProcessName, windowHandle, wp.ShowCmd.ToString(), title);
+
+                                        Toolkit.TraceWriteLine(text);
                                     }
                                 }
                             }
@@ -166,24 +156,34 @@ namespace CommonLibrary.Tools
                             User32.GetWindowRect(process.MainWindowHandle, out outRect);
                             if (preventScreen.BoundsContains(outRect.ToPoints()))
                             {
-                                Rectangle rect = Screen.PrimaryScreen.WorkingArea;
-                                int x = (rect.Width - outRect.Width) / 2;
-                                int y = (rect.Height - outRect.Height) / 2;
+                                ProcessSetWindowPos(process.MainWindowHandle, outRect);
 
-                                User32.SetWindowPos(
-                                    process.MainWindowHandle,
-                                    User32.HWND_NOTOPMOST,
-                                    x,
-                                    y,
-                                    outRect.Width,
-                                    outRect.Height,
-                                    SetWindowPos.SWP_NOZORDER | SetWindowPos.SWP_SHOWWINDOW
-                                );
+                                string text = String.Format("ProcessSetWindowPos ProcessName={0}, Handle={1}, ShowWindowCommand={2}, Title={3}",
+                                            process.ProcessName, process.MainWindowHandle, wp.ShowCmd.ToString(), process.MainWindowTitle);
+
+                                Toolkit.TraceWriteLine(text);
                             }
                         }
                     }
                 }
             }
+        }
+
+        private void ProcessSetWindowPos(IntPtr handle, RECT outRect)
+        {
+            Rectangle primaryWorkingArea = Screen.PrimaryScreen.WorkingArea;
+            int x = (primaryWorkingArea.Width - outRect.Width) / 2;
+            int y = (primaryWorkingArea.Height - outRect.Height) / 2;
+
+            User32.SetWindowPos(
+                handle,
+                User32.HWND_NOTOPMOST,
+                x,
+                y,
+                outRect.Width,
+                outRect.Height,
+                SetWindowPos.SWP_NOZORDER | SetWindowPos.SWP_SHOWWINDOW
+            );
         }
 
         public void StopProcessHandleWindowMovePrevent()

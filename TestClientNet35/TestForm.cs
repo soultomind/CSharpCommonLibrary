@@ -71,6 +71,7 @@ namespace TestNet32
             if (_windowManager == null)
             {
                 _windowManager = new WindowManager();
+                _windowManager.AllProcessWndHandlesCheckProcessNames.Add(Explorer.ProcessName);
                 _windowManager.SetProcessAllWindowsHandlePos += WindowManager_SetProcessAllWindowsHandlePos;
                 _windowManager.StartProcessHandleWindowMovePrevent();
                 _ButtonProcessWindowHandleFixedLocation.Text = "창 제어 정지";
@@ -86,10 +87,10 @@ namespace TestNet32
         private bool WindowManager_SetProcessAllWindowsHandlePos(object sender, ProcessAllWindowsHandleSetPosEventArgs e)
         {
             // 해당 이벤트핸들러에서 특정 프로세스의 모든창에 대하여 윈도우 창 제어를 할지 여부를 처리한다.
-            if (e.Process.ProcessName.Equals(""))
+            if (e.Process.ProcessName.Equals(Explorer.ProcessName))
             {
                 // 특정 프로세스 일때 특정 타이틀값에 해당하는 부분 윈도우 핸들만 처리 가능하다.
-                if (e.Process.MainWindowHandle == e.Handle || e.Title.Equals(""))
+                if (e.Title.Equals("파일 탐색기"))
                 {
                     return true;
                 }
