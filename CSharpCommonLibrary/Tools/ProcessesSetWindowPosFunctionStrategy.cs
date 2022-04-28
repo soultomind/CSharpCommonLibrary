@@ -35,6 +35,13 @@ namespace CommonLibrary.Tools
         /// </summary>
         public string Text { get; private set; }
 
+        /// <summary>
+        /// 생성자
+        /// </summary>
+        /// <param name="process"></param>
+        /// <param name="handle"></param>
+        /// <param name="windowPlacement"></param>
+        /// <param name="text"></param>
         public ProcessAllSetWindowPosEventArgs(Process process, IntPtr handle, WindowPlacement windowPlacement, string text)
         {
             Process = process;

@@ -18,6 +18,10 @@ namespace CommonLibrary.Tools
     /// </summary>
     public class WindowManager
     {
+        /// <summary>
+        /// 윈도우 기능 전략 인터페이스입니다.
+        /// <para>설정시에 현재 전략에 워커 스레드가 실행중이면 정지 후 설정합니다.</para>
+        /// </summary>
         private IWindowFunctionStrategy FunctionStrategy
         {
             get { return _functionStrategy; }
@@ -38,6 +42,10 @@ namespace CommonLibrary.Tools
         }
         private IWindowFunctionStrategy _functionStrategy;
 
+        /// <summary>
+        /// 생성자
+        /// </summary>
+        /// <param name="functionStrategy"></param>
         public WindowManager(IWindowFunctionStrategy functionStrategy)
         {
             if (functionStrategy == null)
@@ -107,7 +115,7 @@ namespace CommonLibrary.Tools
         }
 
         /// <summary>
-        /// <paramref name="hWnd"/>의 Title 값을 반환합니다.
+        /// <paramref name="hWnd"/>의 Text 값을 반환합니다.
         /// </summary>
         /// <param name="hWnd"></param>
         /// <returns></returns>

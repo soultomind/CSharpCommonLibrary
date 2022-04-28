@@ -87,6 +87,7 @@ namespace CommonLibrary.Tools
         }
 
         #region Static
+
         /// <summary>
         /// 현재 마우스 좌표를 반환합니다.
         /// </summary>

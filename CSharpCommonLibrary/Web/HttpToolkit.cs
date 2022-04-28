@@ -85,6 +85,12 @@ namespace CommonLibrary.Web
             DefaultIsExpect100Continue = false;
         }
 
+        /// <summary>
+        /// <paramref name="parameter"/> 값을 <see cref="System.Byte"/> 배열로 변환하여 생성하비다.
+        /// </summary>
+        /// <param name="parameter">파라미터</param>
+        /// <param name="encoding"><see cref="HttpUtility.UrlEncode(byte[])"/>시에 사용되는 인코딩</param>
+        /// <returns></returns>
         public byte[] CreatePostData(Dictionary<string, string> parameter, Encoding encoding)
         {
             StringBuilder builder = new StringBuilder();
@@ -137,6 +143,17 @@ namespace CommonLibrary.Web
             request.ContentType = DefaultContentType;
         }
 
+        /// <summary>
+        /// <paramref name="uriString"/> 주소로 요청을하여 읍답데이터를 가져옵니다.
+        /// </summary>
+        /// <param name="uriString"></param>
+        /// <param name="parameter"></param>
+        /// <param name="requestEnc"></param>
+        /// <param name="responseEnc"></param>
+        /// <param name="requestTimeout"></param>
+        /// <param name="outHttpStatusCode"></param>
+        /// <param name="outException"></param>
+        /// <returns></returns>
         public string GetResponseByPost(string uriString, Dictionary<string, string> parameter, string requestEnc, string responseEnc, int requestTimeout, out HttpStatusCode outHttpStatusCode, out Exception outException)
         {
             HttpStatusCode httpStatusCode = HttpStatusCode.OK;
@@ -229,6 +246,12 @@ namespace CommonLibrary.Web
             return responseData;
         }
 
+        /// <summary>
+        /// <paramref name="parameter"/> 값을 <see cref="System.Byte"/> 배열로 변환하여 생성하비다.
+        /// </summary>
+        /// <param name="parameter">파라미터</param>
+        /// <param name="encoding"><see cref="HttpUtility.UrlEncode(byte[])"/>시에 사용되는 인코딩</param>
+        /// <returns></returns>
         public byte[] CreatePostData(Dictionary<string, string[]> parameter, Encoding encoding)
         {
             StringBuilder builder = new StringBuilder();
@@ -289,6 +312,17 @@ namespace CommonLibrary.Web
             return buffer;
         }
 
+        /// <summary>
+        /// <paramref name="uriString"/> 주소로 요청을하여 읍답데이터를 가져옵니다.
+        /// </summary>
+        /// <param name="uriString"></param>
+        /// <param name="parameter"></param>
+        /// <param name="requestEnc"></param>
+        /// <param name="responseEnc"></param>
+        /// <param name="requestTimeout"></param>
+        /// <param name="outHttpStatusCode"></param>
+        /// <param name="outException"></param>
+        /// <returns></returns>
         public string GetResponseByPost(string uriString, Dictionary<string, string[]> parameter, string requestEnc, string responseEnc, int requestTimeout, out HttpStatusCode outHttpStatusCode, out Exception outException)
         {
             HttpStatusCode httpStatusCode = HttpStatusCode.OK;

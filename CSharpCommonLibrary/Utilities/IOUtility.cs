@@ -36,11 +36,12 @@ namespace CommonLibrary.Utilities
         /// Path 디렉토리에 있는 파일들을 삭제합니다.
         /// </summary>
         /// <param name="path">경로</param>
-        public static void DeleteFiles(string path)
+        /// <param name="recursive"></param>
+        public static void DeleteFiles(string path, bool recursive = true)
         {
             if (IsDirectory(path))
             {
-                Directory.Delete(path, true);
+                Directory.Delete(path, recursive);
             }
         }
     }
