@@ -71,10 +71,10 @@ namespace CommonLibrary.Web
         public event CreateHttpWebResponseEventHandler CreateHttpWebResponse;
 
         public static string DefaultContentType = "application/x-www-form-urlencoded; charset=";
+
         public string DefaultUserAgent { get; set; }
         public bool DefaultIsSetCachePolicy { get; set; }
         public HttpRequestCacheLevel DefaultCacheLevel { get; set; }
-
         public bool DefaultIsExpect100Continue { get; set; }
 
         public HttpToolkit()
@@ -82,7 +82,6 @@ namespace CommonLibrary.Web
             DefaultUserAgent = "Mozilla/4.0";
             DefaultIsSetCachePolicy = false;
             DefaultCacheLevel = HttpRequestCacheLevel.Revalidate;
-
             DefaultIsExpect100Continue = false;
         }
 

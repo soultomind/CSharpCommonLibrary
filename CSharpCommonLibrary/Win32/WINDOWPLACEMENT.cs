@@ -11,7 +11,7 @@ namespace CommonLibrary.Win32
     /// </summary>
     [Serializable]
     [StructLayout(LayoutKind.Sequential)]
-    public struct WINDOWPLACEMENT
+    public struct WindowPlacement
     {
         /// <summary>
         /// The length of the structure, in bytes. Before calling the GetWindowPlacement or SetWindowPlacement functions, set this member to sizeof(WINDOWPLACEMENT).
@@ -49,11 +49,11 @@ namespace CommonLibrary.Win32
         /// <summary>
         /// Gets the default (empty) value.
         /// </summary>
-        public static WINDOWPLACEMENT Default
+        public static WindowPlacement Default
         {
             get
             {
-                WINDOWPLACEMENT result = new WINDOWPLACEMENT();
+                WindowPlacement result = new WindowPlacement();
                 result.Length = Marshal.SizeOf(result);
                 return result;
             }

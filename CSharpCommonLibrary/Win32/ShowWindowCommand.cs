@@ -1,6 +1,6 @@
 ﻿namespace CommonLibrary.Win32
 {
-    public enum ShowWindowCommand
+    public enum ShowWindowCommand : int
     {
         /// <summary>
         /// Hides the window and activates another window.

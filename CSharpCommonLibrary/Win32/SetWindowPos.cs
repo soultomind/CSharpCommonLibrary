@@ -80,5 +80,6 @@ namespace CommonLibrary.Win32
         /// <summary> 
         /// SWP_SHOWWINDOW 
         /// </summary> 
-        SWP_SHOWWINDOW = 0x0040    }
+        SWP_SHOWWINDOW = 0x0040
+    }
 }

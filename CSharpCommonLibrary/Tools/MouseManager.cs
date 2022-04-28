@@ -6,212 +6,108 @@ using System.Drawing;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
+using System;
+using System.Runtime.InteropServices;
 
 namespace CommonLibrary.Tools
 {
     /// <summary>
-    /// 마우스 관련 매니저 클래스
+    /// 마우스 관리자 클래스
+    /// <para>마우스 관련 기능 제공</para>
     /// </summary>
     public class MouseManager
     {
         /// <summary>
-        /// 마우스 이동 방지 스크린 인덱스
+        /// 마우스 기능 전략 인터페이스입니다.
+        /// <para>설정시에 현재 전략에 워커 스레드가 실행중이면 정지 후 설정합니다.</para>
         /// </summary>
-        public int MouseMovePreventScreenIndex
+        public IMouseFunctionStrategy FunctionStrategy
         {
-            get { return _mouseMovePreventScreenIndex; }
+            get { return _functionStrategy; }
             set
             {
-                if (value >= 0 && value <= Screen.AllScreens.Length - 1)
+                if (value == null)
                 {
-                    if (value == ScreenUtility.GetPrimaryScreenIndex())
-                    {
-                        throw new System.ArgumentException(nameof(value) + " 값이 주모니터 값입니다.");
-                    }
-                    _mouseMovePreventScreenIndex = value;
+                    throw new ArgumentNullException();
                 }
-                else
+
+                if (_functionStrategy != null && _functionStrategy.WorkerThread != null && !_functionStrategy.IsFinishedWorkThread)
                 {
-                    throw new System.ArgumentException(nameof(value));
+                    _functionStrategy.StopWorkerThread();
                 }
+
+                _functionStrategy = value;
             }
         }
-        private int _mouseMovePreventScreenIndex;
-
+        private IMouseFunctionStrategy _functionStrategy;
 
         /// <summary>
-        /// 마우스 이동 방지 시작 여부
+        /// 생성자
         /// </summary>
-        public bool IsStartMouseMovePrevent
+        /// <param name="functionStrategy"></param>
+        public MouseManager(IMouseFunctionStrategy functionStrategy)
         {
-            get { return _startmouseMovePrevent; }
-            private set { _startmouseMovePrevent = value; }
+            if (functionStrategy == null)
+            {
+                throw new ArgumentNullException(nameof(functionStrategy));
+            }
+            FunctionStrategy = functionStrategy;
         }
-        private volatile bool _startmouseMovePrevent;
 
         /// <summary>
-        /// 마우스 이동 방지 스크린으로 이동전 마지막 좌표로 이동 여부
+        /// 워커 스레드 작업 완료 여부
         /// </summary>
-        public bool IsMouseMoveLastPreventPoint
+        public bool IsFinishedWorkThread
         {
-            get { return _mouseMoveLastPreventPoint; }
-            set { _mouseMoveLastPreventPoint = value; }
+            get { return FunctionStrategy.IsFinishedWorkThread; }
         }
-        private bool _mouseMoveLastPreventPoint;
-
-        private Stack<Point> _mouseMovePoints;
 
         /// <summary>
-        /// 마우스 이동 방지 주기
+        /// 워커 스레드
         /// </summary>
-        public int MouseMovePreventInterval
+        public Thread WorkerThread
         {
-            get { return _mouseMovePreventInterval; }
-            set
-            {
-                if (value >= 100 && value <= 3000)
-                {
-                    _mouseMovePreventInterval = value;
-                }
-            }
-        }
-        private int _mouseMovePreventInterval;
-
-        private Thread _mouseMovePreventThread;
-
-        public MouseManager()
-        {
-            MouseMovePreventInterval = 2000;
-            // 기본값은 주 모니터를 제외한 첫 번째 스크린 인덱스
-            MouseMovePreventScreenIndex = ScreenUtility.GetFirstScreenIndexAndExceptPrimaryScreen();
+            get { return FunctionStrategy.WorkerThread; }
         }
 
-        public void StartMouseMovePrevent()
+        /// <summary>
+        /// 워커 스레드를 시작합니다.
+        /// </summary>
+        public void StartWorkerThread()
         {
-            if (MouseMovePreventScreenIndex == ScreenUtility.GetPrimaryScreenIndex())
-            {
-                Toolkit.TraceWriteLine("MouseMovePreventScreenIndex == ScreenUtility.GetPrimaryScreenIndex()");
-                return;
-            }
-
-            if (IsMouseMoveLastPreventPoint)
-            {
-                if (_mouseMovePoints == null)
-                {
-                    _mouseMovePoints = new Stack<Point>();
-                }
-                else
-                {
-                    _mouseMovePoints.Clear();
-                }
-            }
-
-            if (MouseMovePreventScreenIndex >= 0)
-            {
-                _mouseMovePreventThread = new Thread(StartMouseMovePreventWorker);
-                _mouseMovePreventThread.IsBackground = true;
-                _mouseMovePreventThread.Start();
-            }
+            FunctionStrategy.StartWorkerThread();
         }
 
-        public void StopMouseMovePrevent()
+        /// <summary>
+        /// 워커 스레드를 중지합니다.
+        /// </summary>
+        public void StopWorkerThread()
         {
-            StopMouseMovePreventWorker();
+            FunctionStrategy.StopWorkerThread();
         }
 
-        private void StartMouseMovePreventWorker()
+        #region Static
+        /// <summary>
+        /// 현재 마우스 좌표를 반환합니다.
+        /// </summary>
+        /// <returns></returns>
+        public static Point GetCursorPoint()
         {
-            _startmouseMovePrevent = true;
-
-            Screen primaryScreen = Screen.PrimaryScreen;
-            Screen preventScreen = Screen.AllScreens[MouseMovePreventScreenIndex];
-            Point pt = Point.Empty;
-
-            while (_startmouseMovePrevent)
-            {
-                Thread.Sleep(MouseMovePreventInterval);
-                MousePoint mousePoint = MouseEvent.GetCursorPosition();
-
-                if (!mousePoint.IsEmpty())
-                {
-                    pt.X = mousePoint.X;
-                    pt.Y = mousePoint.Y;
-
-                    int x = 0, y = 0;
-                    if (IsMouseMoveLastPreventPoint)
-                    {
-                        _mouseMovePoints.Push(pt);
-
-                        if (_mouseMovePoints.Count >= 50)
-                        {
-                            // 최근 좌표가 Top 위치에 있도록 
-                            Stack<Point> reversePoints = new Stack<Point>();
-
-                            int count = 0;
-                            foreach (Point item in _mouseMovePoints.Reverse())
-                            {
-                                if (count >= 20)
-                                {
-                                    break;
-                                }
-                                reversePoints.Push(item);
-                                count++;
-                            }
-
-                            _mouseMovePoints.Clear();
-                            _mouseMovePoints = reversePoints;
-                            Toolkit.TraceWriteLine("Clear Old Point 30 MouseMovePoints");
-                        }
-
-                        Point lastPreventPoint = Point.Empty;
-                        foreach (Point item in _mouseMovePoints)
-                        {
-                            if (!preventScreen.Bounds.Contains(item))
-                            {
-                                lastPreventPoint = item;
-                                break;
-                            }
-                        }
-
-                        x = lastPreventPoint.X;
-                        y = lastPreventPoint.Y;
-
-                        if (lastPreventPoint.IsEmpty)
-                        {
-                            Point centerPt = ScreenUtility.GetPrimaryScreenBoundsCenter();
-                            x = centerPt.X;
-                            y = centerPt.Y;
-                        }
-                    }
-                    else
-                    {
-                        Point centerPt = ScreenUtility.GetPrimaryScreenBoundsCenter();
-                        x = centerPt.X;
-                        y = centerPt.Y;
-                    }
-
-                    if (preventScreen.Bounds.Contains(pt))
-                    {
-                        MouseEvent mouseOperation = new MouseEvent();
-
-                        mouseOperation.SetCursorPosition(x + 1, y + 1);
-                        mouseOperation.SetMouseEvent(MouseEvent.MouseEventFlags.Move);
-
-                        mouseOperation.SetCursorPosition(x, y);
-                    }
-                }
-            }
+            MousePoint mousePoint = MouseNative.GetCursorPoint();
+            return new Point(mousePoint.X, mousePoint.Y);
         }
 
-        private void StopMouseMovePreventWorker()
+        /// <summary>
+        /// 마우스 좌표를 이동시킵니다.
+        /// </summary>
+        /// <param name="point"></param>
+        public static void MoveCursorPoint(Point point)
         {
-            _startmouseMovePrevent = false;
-
-            if (_mouseMovePreventThread != null)
-            {
-                _mouseMovePreventThread.Join();
-                _mouseMovePreventThread = null;
-            }
+            MouseNative mouseNative = new MouseNative();
+            mouseNative.SetCursorPoint(point.X, point.Y);
+            mouseNative.MouseEvent(MouseEventFlags.MOVE);
         }
+
+        #endregion
     }
 }

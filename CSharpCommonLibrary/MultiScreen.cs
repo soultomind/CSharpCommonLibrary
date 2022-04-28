@@ -84,17 +84,5 @@ namespace CommonLibrary
                 return screen;
             }
         }
-
-        public Screen GetContainsPointScreenBounds(Point point)
-        {
-            return ScreenUtility.ContainsScreenBoundsPoint(point);
-        }
-
-        public Point CalcScreenBoundsInCenterPoint(Screen screen, Size size)
-        {
-            int x = (screen.Bounds.Size.Width - size.Width) / 2;
-            int y = (screen.Bounds.Size.Height - size.Height) / 2;
-            return new Point(screen.Bounds.Location.X + x, screen.Bounds.Location.Y + y);
-        }
     }
 }

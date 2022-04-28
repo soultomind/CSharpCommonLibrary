@@ -15,13 +15,10 @@ namespace TestNet35
         [STAThread]
         static void Main()
         {
-            Toolkit.TraceWriteLine("Start");
-
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new TestForm());
 
-            Toolkit.TraceWriteLine("End");
             Console.ReadLine();
         }
     }

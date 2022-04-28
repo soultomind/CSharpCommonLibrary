@@ -9,9 +9,9 @@ using System.Text;
 namespace CommonLibrary
 {
     /// <summary>
-    /// 툴킷 클래스
+    /// 모듈에서 사용되는 툴킷 클래스
     /// </summary>
-    public static class Toolkit
+    internal static class Toolkit
     {
         /// <summary>
         /// DebugView Filter 이름
@@ -28,15 +28,17 @@ namespace CommonLibrary
                 }
             }
         }
-        public static string _sIncludeFilterName;
+        private static string _sIncludeFilterName;
 
         /// <summary>
-        /// <see cref="System.Diagnostics.Debug"/>.WriteLine 메서드 출력 여부
+        /// <see cref="Debug.WriteLine(object)"/>,<see cref="Debug.Write(object)"/>
+        /// <para>메서드 출력 여부</para>
         /// </summary>
         public static bool IsDebugEnabled;
 
         /// <summary>
-        /// <see cref="System.Diagnostics.Trace"/>.WriteLine 메서드 출력 여부
+        /// <see cref="Trace.WriteLine(object)"/>,<see cref="Trace.Write(object)"/>
+        /// <para>메서드 출력 여부</para>
         /// </summary>
         public static bool IsTraceEnabled;
 
@@ -51,7 +53,7 @@ namespace CommonLibrary
             _sIncludeFilterName = CreateNamespace();
             IsDebugEnabled = true;
 #else
-            _sIncludeFilterName = "CommonLibrary";
+            _sIncludeFilterName = "CLIPSOFT";
             IsDebugEnabled = false;
 #endif
             IsTraceEnabled = true;
@@ -69,63 +71,115 @@ namespace CommonLibrary
             return DateTime.Now.ToString(format);
         }
 
-        public static void DebugWriteLine(string message, bool writeLine = true)
+        private static string MakeMessage(string header, string message)
+        {
+#if DEBUG
+            message = String.Format("[{0}] [{1}] DEBUG - {2}", _sIncludeFilterName, header, message);
+#else
+            message = String.Format("[{0}] [{1}] TRACE - {2}", _sIncludeFilterName, header, message);
+#endif
+            return message;
+        }
+
+        /// <summary>
+        /// <see cref="System.Diagnostics.Debug.WriteLine(object)"/>을 활용하여 메시지를 출력합니다.
+        /// </summary>
+        /// <param name="message"></param>
+        internal static void DebugWriteLine(string message)
         {
             if (IsDebugEnabled)
             {
                 string className = new StackFrame(1).GetMethod().ReflectedType.Name;
                 string methodName = new StackFrame(1, true).GetMethod().Name;
-                if (UseNowToString)
-                {
-                    message = String.Format("[{0}] [{1}.{2}] {3} DEBUG - {4}",
-                        _sIncludeFilterName, className, methodName, NowToString(), message);
-                }
-                else
-                {
-                    message = String.Format("[{0}] [{1}.{2}] DEBUG - {3}",
-                        _sIncludeFilterName, className, methodName, message);
-                }
-
-                if (writeLine)
-                {
-                    Debug.WriteLine(message);
-                }
-                else
-                {
-                    Debug.Write(message);
-                }
+                string header = String.Format("{0} :: {1}", className, methodName);
+                message = MakeMessage(header, message);
+                Debug.WriteLine(message);
             }
         }
 
-        public static void TraceWriteLine(string message, bool writeLine = true)
+        /// <summary>
+        /// <see cref="System.Diagnostics.Debug.WriteLine(object)"/>을 활용하여 예외를 출력합니다.
+        /// </summary>
+        /// <param name="ex"></param>
+        internal static void DebugWriteLine(Exception ex)
+        {
+            string className = new StackFrame(1).GetMethod().ReflectedType.Name;
+            string methodName = new StackFrame(1, true).GetMethod().Name;
+            string header = String.Format("{0} :: {1}", className, methodName);
+
+            string message = MakeMessage(header, ex.Message);
+            DebugWriteLine(message);
+
+            message = MakeMessage(header, ex.StackTrace);
+            DebugWriteLine(message);
+        }
+
+        /// <summary>
+        /// <see cref="System.Diagnostics.Debug.Write(object)"/>을 활용하여 메시지를 출력합니다.
+        /// </summary>
+        /// <param name="message"></param>
+        internal static void DebugWrite(string message)
+        {
+            if (IsDebugEnabled)
+            {
+                string className = new StackFrame(1).GetMethod().ReflectedType.Name;
+                string methodName = new StackFrame(1, true).GetMethod().Name;
+                string header = String.Format("{0} :: {1}", className, methodName);
+                message = MakeMessage(header, message);
+                Debug.Write(message);
+            }
+        }
+
+        /// <summary>
+        /// <see cref="System.Diagnostics.Trace.WriteLine(object)"/>을 활용하여 메시지를 출력합니다.
+        /// </summary>
+        /// <param name="message"></param>
+        internal static void TraceWriteLine(string message)
         {
             if (IsTraceEnabled)
             {
                 string className = new StackFrame(1).GetMethod().ReflectedType.Name;
                 string methodName = new StackFrame(1, true).GetMethod().Name;
-                if (UseNowToString)
-                {
-                    message = String.Format("[{0}] [{1}.{2}] {3} TRACE - {4}",
-                        _sIncludeFilterName, className, methodName, NowToString(), message);
-                }
-                else
-                {
-                    message = String.Format("[{0}] [{1}.{2}] TRACE - {3}",
-                        _sIncludeFilterName, className, methodName, message);
-                }
-
-                if (writeLine)
-                {
-                    Trace.WriteLine(message);
-                }
-                else
-                {
-                    Trace.Write(message);
-                }
+                string header = String.Format("{0} :: {1}", className, methodName);
+                message = MakeMessage(header, message);
+                Trace.WriteLine(message);
             }
         }
 
-        internal static bool IsAdministrator()
+        /// <summary>
+        /// <see cref="System.Diagnostics.Trace.WriteLine(object)"/>을 활용하여 예외를 출력합니다.
+        /// </summary>
+        /// <param name="ex"></param>
+        internal static void TraceWriteLine(Exception ex)
+        {
+            string className = new StackFrame(1).GetMethod().ReflectedType.Name;
+            string methodName = new StackFrame(1, true).GetMethod().Name;
+            string header = String.Format("{0} :: {1}", className, methodName);
+
+            string message = MakeMessage(header, ex.Message);
+            TraceWriteLine(message);
+
+            message = MakeMessage(header, ex.StackTrace);
+            TraceWriteLine(message);
+        }
+
+        /// <summary>
+        /// <see cref="System.Diagnostics.Trace.Write(object)"/>을 활용하여 메시지를 출력합니다.
+        /// </summary>
+        /// <param name="message"></param>
+        internal static void TraceWrite(string message)
+        {
+            if (IsTraceEnabled)
+            {
+                string className = new StackFrame(1).GetMethod().ReflectedType.Name;
+                string methodName = new StackFrame(1, true).GetMethod().Name;
+                string header = String.Format("{0} :: {1}", className, methodName);
+                message = MakeMessage(header, message);
+                Trace.Write(message);
+            }
+        }
+
+        internal static bool IsCurrentProcessAdministrator()
         {
             bool flag;
 
@@ -136,11 +190,8 @@ namespace CommonLibrary
                 WindowsPrincipal principal = new WindowsPrincipal(identity);
                 flag = principal.IsInRole(WindowsBuiltInRole.Administrator);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                TraceWriteLine(ex.Message);
-                TraceWriteLine(ex.StackTrace);
-
                 flag = false;
             }
             finally

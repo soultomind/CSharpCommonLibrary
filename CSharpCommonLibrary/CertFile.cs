@@ -31,19 +31,66 @@ namespace CommonLibrary
         /// <summary>
         /// 인증서 파일을 추가합니다.
         /// </summary>
+        /// <param name="storeLocation"></param>
         /// <param name="storeName"></param>
         /// <param name="fileName"></param>
         /// <param name="password"></param>
         /// <param name="outException"></param>
         /// <returns></returns>
-        public static CertFileStore AddCrtFile(StoreName storeName, string fileName, string password, out Exception outException)
+        public static CertFileStore AddCertFile(StoreLocation storeLocation, StoreName storeName, string fileName, string password, out Exception outException)
         {
             // TODO: 브라우저 실행 중일 때 추가 안되는 현상 개선 필요
             CertFileStore fileStore = CertFileStore.None;
 
             try
             {
-                StoreLocation storeLocation = (Toolkit.IsAdministrator()) ? StoreLocation.LocalMachine : StoreLocation.CurrentUser;
+                X509Store store = new X509Store(storeName, storeLocation);
+                store.Open(OpenFlags.ReadWrite);
+
+                X509Certificate2 cert = new X509Certificate2(fileName, password);
+                bool contains = store.Certificates.Contains(cert);
+                if (!contains)
+                {
+                    store.Add(cert);
+                    fileStore = CertFileStore.AddCert;
+                }
+                else
+                {
+                    fileStore = CertFileStore.ExistsCert;
+                }
+
+                store.Close();
+
+                outException = null;
+                return fileStore;
+            }
+            catch (Exception ex)
+            {
+                outException = ex;
+                fileStore = CertFileStore.ErrorCert;
+                return fileStore;
+            }
+        }
+
+        /// <summary>
+        /// 인증서 파일을 추가합니다.
+        /// <para>관리자 권한 실행시 <see cref="System.Security.Cryptography.X509Certificates.StoreLocation.LocalMachine"/></para>
+        /// <para>일반 실행시 <see cref="System.Security.Cryptography.X509Certificates.StoreLocation.CurrentUser"/></para>
+        /// 로 처리됩니다.
+        /// </summary>
+        /// <param name="storeName"></param>
+        /// <param name="fileName"></param>
+        /// <param name="password"></param>
+        /// <param name="outException"></param>
+        /// <returns></returns>
+        public static CertFileStore AddCertFile(StoreName storeName, string fileName, string password, out Exception outException)
+        {
+            // TODO: 브라우저 실행 중일 때 추가 안되는 현상 개선 필요
+            CertFileStore fileStore = CertFileStore.None;
+
+            try
+            {
+                StoreLocation storeLocation = (Toolkit.IsCurrentProcessAdministrator()) ? StoreLocation.LocalMachine : StoreLocation.CurrentUser;
                 X509Store store = new X509Store(storeName, storeLocation);
                 store.Open(OpenFlags.ReadWrite);
 

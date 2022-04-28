@@ -41,8 +41,15 @@ namespace CommonLibrary
         public int TargetScreenIndex { get; set; }
         public Size TargetScreenBoundsSize { get; set; }
         public Screen TargetScreen { get; private set; }
-        public int Interval { get; set; }
-        public bool IsStart { get; private set; }
+
+        public bool IsStart
+        {
+            get { return _start; }
+            private set { _start = value; }
+        }
+        private bool _start;
+
+        private int _interval;
         private Timer _Timer;
         public ScreenImageCapture(int targetScreenIndex, int interval = 500)
         {
@@ -64,7 +71,7 @@ namespace CommonLibrary
             }
 
             TargetScreenBoundsSize = Size.Empty;
-            Interval = interval;
+            _interval = interval;
         }
 
         public ScreenImageCapture(Size targetScreenBoundsSize, int interval = 500)
@@ -87,7 +94,7 @@ namespace CommonLibrary
             }
 
             TargetScreenIndex = InvalidScreenIndex;
-            Interval = interval;
+            _interval = interval;
         }
         private void Timer_Tick(object sender, EventArgs e)
         {
@@ -126,11 +133,12 @@ namespace CommonLibrary
             if (_Timer == null)
             {
                 _Timer = new Timer();
-                _Timer.Interval = Interval;
+                _Timer.Interval = _interval;
                 _Timer.Tick += Timer_Tick;
             }
 
             _Timer.Start();
+            _start = true;
         }
 
         /// <summary>
@@ -142,6 +150,8 @@ namespace CommonLibrary
             {
                 _Timer.Stop();
             }
+
+            _start = false;
         }
     }
 }

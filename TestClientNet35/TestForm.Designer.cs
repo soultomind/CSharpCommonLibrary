@@ -36,6 +36,7 @@ namespace TestNet32
             this._ButtonHttpToolkitTest = new System.Windows.Forms.Button();
             this._RichTextBoxHttpToolkitTest = new System.Windows.Forms.RichTextBox();
             this._ButtonProcessWindowHandleFixedLocation = new System.Windows.Forms.Button();
+            this._ButtonMoveCursorPoint = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this._PictureBoxScreenCapture)).BeginInit();
             this.SuspendLayout();
             // 
@@ -105,11 +106,22 @@ namespace TestNet32
             this._ButtonProcessWindowHandleFixedLocation.UseVisualStyleBackColor = true;
             this._ButtonProcessWindowHandleFixedLocation.Click += new System.EventHandler(this.ButtonProcessWindowHandleFixedLocation_Click);
             // 
+            // _ButtonMoveCursorPoint
+            // 
+            this._ButtonMoveCursorPoint.Location = new System.Drawing.Point(158, 28);
+            this._ButtonMoveCursorPoint.Name = "_ButtonMoveCursorPoint";
+            this._ButtonMoveCursorPoint.Size = new System.Drawing.Size(144, 27);
+            this._ButtonMoveCursorPoint.TabIndex = 7;
+            this._ButtonMoveCursorPoint.Text = "마우스 특정위치로 이동";
+            this._ButtonMoveCursorPoint.UseVisualStyleBackColor = true;
+            this._ButtonMoveCursorPoint.Click += new System.EventHandler(this._ButtonMoveCursorPoint_Click);
+            // 
             // TestForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 525);
+            this.Controls.Add(this._ButtonMoveCursorPoint);
             this.Controls.Add(this._ButtonProcessWindowHandleFixedLocation);
             this.Controls.Add(this._RichTextBoxHttpToolkitTest);
             this.Controls.Add(this._ButtonHttpToolkitTest);
@@ -137,5 +149,6 @@ namespace TestNet32
         private System.Windows.Forms.Button _ButtonHttpToolkitTest;
         private System.Windows.Forms.RichTextBox _RichTextBoxHttpToolkitTest;
         private System.Windows.Forms.Button _ButtonProcessWindowHandleFixedLocation;
+        private System.Windows.Forms.Button _ButtonMoveCursorPoint;
     }
 }

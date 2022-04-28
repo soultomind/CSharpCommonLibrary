@@ -54,7 +54,13 @@
     <Compile Include="MultiScreen.cs" />
     <Compile Include="ScreenImageCapture.cs" />
     <Compile Include="Toolkit.cs" />
-    <Compile Include="UI\ScreenIndexDialog.cs" />
+    <Compile Include="Tools\IMouseFunctionStrategy.cs" />
+    <Compile Include="Tools\IWindowFunctionStrategy.cs" />
+    <Compile Include="Tools\MousePreventMoveScreenFunctionStrategy.cs" />
+    <Compile Include="Tools\ProcessesSetWindowPosFunctionStrategy.cs" />
+    <Compile Include="UI\ScreenIndexDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="UI\ScreenIndexDialog.Designer.cs">
       <DependentUpon>ScreenIndexDialog.cs</DependentUpon>
     </Compile>
@@ -71,19 +77,18 @@
     <Compile Include="Utilities\ScreenUtility.cs" />
     <Compile Include="Utilities\StringUtility.cs" />
     <Compile Include="Web\HttpToolkit.cs" />
-    <Compile Include="Win32\ButtonEvent.cs" />
+    <Compile Include="Win32\Button.cs" />
     <Compile Include="Win32\Gdi32.cs" />
-    <Compile Include="Win32\MouseEvent.cs" />
-    <Compile Include="Win32\MouseOperation.cs" />
+    <Compile Include="Win32\Mouse.cs" />
     <Compile Include="Tools\MouseManager.cs" />
-    <Compile Include="Win32\MousePoint.cs" />
     <Compile Include="Win32\POINT.cs" />
     <Compile Include="Win32\RECT.cs" />
     <Compile Include="Win32\SetWindowPos.cs" />
     <Compile Include="Win32\ShowWindowCommand.cs" />
     <Compile Include="Taskbar.cs" />
     <Compile Include="Win32\User32.cs" />
-    <Compile Include="Win32\WINDOWPLACEMENT.cs" />
+    <Compile Include="Win32\Window.cs" />
+    <Compile Include="Win32\WindowPlacement.cs" />
     <Compile Include="Win32\WinMessage.cs" />
     <Compile Include="Win32\WinStyle.cs" />
     <Compile Include="Tools\WindowManager.cs" />

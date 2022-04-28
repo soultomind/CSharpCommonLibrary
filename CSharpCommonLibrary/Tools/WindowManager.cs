@@ -12,194 +12,71 @@ using System.Drawing;
 
 namespace CommonLibrary.Tools
 {
-    public class ProcessAllWindowsHandleSetPosEventArgs : EventArgs
-    {
-        public Process Process { get; private set; }
-        public IntPtr Handle { get; private set; }
-        public WINDOWPLACEMENT WindowPlacement { get; private set; }
-        public string Title { get; private set; }
-        public ProcessAllWindowsHandleSetPosEventArgs(Process process, IntPtr handle, WINDOWPLACEMENT windowPlacement, string title)
-        {
-            Process = process;
-            Handle = handle;
-            WindowPlacement = windowPlacement;
-            Title = title;
-        }
-    }
-    public delegate bool ProcessAllWindowsHandleSetPosEventHandler(object sender, ProcessAllWindowsHandleSetPosEventArgs e);
     /// <summary>
-    /// 윈도우 매니저
+    /// 윈도우 매니저 클래스
+    /// <para>창 관련 기능 제공</para>
     /// </summary>
     public class WindowManager
     {
-        public event ProcessAllWindowsHandleSetPosEventHandler SetProcessAllWindowsHandlePos;
-
-        /// <summary>
-        /// 특정 프로세스에 관련된 핸들 창이 이동 방지될 스크린 인덱스
-        /// </summary>
-        public int ProcessWndHandlesPreventScreenIndex
+        private IWindowFunctionStrategy FunctionStrategy
         {
-            get { return _processWndHandlesPreventScreenIndex; }
+            get { return _functionStrategy; }
             set
             {
-                if (value >= 0 && value <= Screen.AllScreens.Length - 1)
+                if (value == null)
                 {
-                    _processWndHandlesPreventScreenIndex = value;
+                    throw new ArgumentNullException();
                 }
+
+                if (_functionStrategy != null && _functionStrategy.WorkerThread != null && !_functionStrategy.IsFinishedWorkThread)
+                {
+                    _functionStrategy.StopWorkerThread();
+                }
+
+                _functionStrategy = value;
             }
         }
-        private int _processWndHandlesPreventScreenIndex;
+        private IWindowFunctionStrategy _functionStrategy;
+
+        public WindowManager(IWindowFunctionStrategy functionStrategy)
+        {
+            if (functionStrategy == null)
+            {
+                throw new ArgumentNullException(nameof(functionStrategy));
+            }
+            FunctionStrategy = functionStrategy;
+        }
 
         /// <summary>
-        /// 특정 프로세스에 관련된 핸들 창이 이동 방지 워커 스레드 시작 여부
+        /// 워커 스레드 작업 완료 여부
         /// </summary>
-        public bool IsStartProcessWndHandlesFixedLocationWorker
+        public bool IsFinishedWorkThread
         {
-            get { return _startProcessWndHandlesFixedLocationWorker; }
-            private set { _startProcessWndHandlesFixedLocationWorker = value; }
+            get { return FunctionStrategy.IsFinishedWorkThread; }
         }
-        private volatile bool _startProcessWndHandlesFixedLocationWorker;
 
         /// <summary>
-        /// 창 제어에서 제외할 프로세스 목록
-        /// <para>explorer 프로세스는 목록에서 기본적으로 제외됩니다.</para>
+        /// 워커 스레드
         /// </summary>
-        public List<string> ExceptProcessNames
+        public Thread WorkerThread
         {
-            get { return _exceptProcessNames; }
+            get { return FunctionStrategy.WorkerThread; }
         }
-        private List<string> _exceptProcessNames = new List<string>();
 
         /// <summary>
-        /// 프로세스의 모든 윈도우 핸들을 창제어 처리할지에 대한 프로세스 목록
+        /// 워커 스레드를 시작합니다.
         /// </summary>
-        public List<string> AllProcessWndHandlesCheckProcessNames
+        public void StartWorkerThread()
         {
-            get { return _allProcessWndHandlesCheckProcessNames; }
-        }
-        private List<string> _allProcessWndHandlesCheckProcessNames = new List<string>();
-
-        private Thread _processWndHandlesFixedLocationWorker;
-
-
-        public WindowManager()
-        {
-            ProcessWndHandlesPreventScreenIndex = ScreenUtility.GetFirstScreenIndexAndExceptPrimaryScreen();
-
-            // explorer 프로세스에는 
-            // 윈도우탐색기, 작업표시줄 등 다수의 창이 존재하므로 해당 프로세스는 제외한다.
-            // ExceptProcessNames.Add(Explorer.ProcessName);
+            FunctionStrategy.StartWorkerThread();
         }
 
-        public void StartProcessHandleWindowMovePrevent()
+        /// <summary>
+        /// 워커 스레드를 중지합니다.
+        /// </summary>
+        public void StopWorkerThread()
         {
-            if (AllProcessWndHandlesCheckProcessNames.Count > 1)
-            {
-                if (SetProcessAllWindowsHandlePos == null)
-                {
-                    throw new ArgumentException("AllProcessWndHandlesCheckProcessNames.Count is Zero");
-                }
-            }
-            _processWndHandlesFixedLocationWorker = new Thread(StartProcessHandleWindowMovePreventWorker);
-            _processWndHandlesFixedLocationWorker.IsBackground = true;
-            _processWndHandlesFixedLocationWorker.Start();
-        }
-
-        private void StartProcessHandleWindowMovePreventWorker()
-        {
-            IsStartProcessWndHandlesFixedLocationWorker = true;
-
-            Screen preventScreen = Screen.AllScreens[ProcessWndHandlesPreventScreenIndex];
-            while (IsStartProcessWndHandlesFixedLocationWorker)
-            {
-                foreach (Process process in Process.GetProcesses())
-                {
-                    if (ExceptProcessNames.Contains(process.ProcessName))
-                    {
-                        continue;
-                    }
-
-                    // 프로세스의 모든 윈도우 핸들 찾아서 처리할지 여부
-                    if (AllProcessWndHandlesCheckProcessNames.Contains(process.ProcessName))
-                    {
-                        // TODO: 특정 프로세스의 모든 윈도우 핸들을 찾아서 처리할지 여부도 이벤트핸들러로 정의 필요
-                        foreach (IntPtr windowHandle in GetProcessWindowHandles(process.Id))
-                        {
-                            string title = GetTitle(windowHandle);
-                            WINDOWPLACEMENT wp = new WINDOWPLACEMENT();
-                            if (User32.GetWindowPlacement(windowHandle, ref wp))
-                            {
-                                RECT outRect = RECT.Empty;
-                                User32.GetWindowRect(windowHandle, out outRect);
-                                
-                                if (SetProcessAllWindowsHandlePos.Invoke(this, new ProcessAllWindowsHandleSetPosEventArgs(process, windowHandle, wp, title)))
-                                {
-                                    if (preventScreen.BoundsContains(outRect.ToPoints()))
-                                    {
-                                        ProcessSetWindowPos(windowHandle, outRect);
-
-                                        string text = String.Format("ProcessSetWindowPos ProcessName={0}, Handle={1}, ShowWindowCommand={2}, Title={3}",
-                                            process.ProcessName, windowHandle, wp.ShowCmd.ToString(), title);
-
-                                        Toolkit.TraceWriteLine(text);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    else
-                    {
-                        WINDOWPLACEMENT wp = new WINDOWPLACEMENT();
-                        if (User32.GetWindowPlacement(process.MainWindowHandle, ref wp))
-                        {
-                            RECT outRect;
-                            User32.GetWindowRect(process.MainWindowHandle, out outRect);
-                            if (preventScreen.BoundsContains(outRect.ToPoints()))
-                            {
-                                ProcessSetWindowPos(process.MainWindowHandle, outRect);
-
-                                string text = String.Format("ProcessSetWindowPos ProcessName={0}, Handle={1}, ShowWindowCommand={2}, Title={3}",
-                                            process.ProcessName, process.MainWindowHandle, wp.ShowCmd.ToString(), process.MainWindowTitle);
-
-                                Toolkit.TraceWriteLine(text);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        private void ProcessSetWindowPos(IntPtr handle, RECT outRect)
-        {
-            Rectangle primaryWorkingArea = Screen.PrimaryScreen.WorkingArea;
-            int x = (primaryWorkingArea.Width - outRect.Width) / 2;
-            int y = (primaryWorkingArea.Height - outRect.Height) / 2;
-
-            User32.SetWindowPos(
-                handle,
-                User32.HWND_NOTOPMOST,
-                x,
-                y,
-                outRect.Width,
-                outRect.Height,
-                SetWindowPos.SWP_NOZORDER | SetWindowPos.SWP_SHOWWINDOW
-            );
-        }
-
-        public void StopProcessHandleWindowMovePrevent()
-        {
-            StopProcessHandleWindowMovePreventWorker();
-        }
-
-        private void StopProcessHandleWindowMovePreventWorker()
-        {
-            IsStartProcessWndHandlesFixedLocationWorker = false;
-
-            if (_processWndHandlesFixedLocationWorker != null)
-            {
-                _processWndHandlesFixedLocationWorker.Join();
-                _processWndHandlesFixedLocationWorker = null;
-            }
+            FunctionStrategy.StopWorkerThread();
         }
 
         #region Static
@@ -234,11 +111,13 @@ namespace CommonLibrary.Tools
         /// </summary>
         /// <param name="hWnd"></param>
         /// <returns></returns>
-        public static string GetTitle(IntPtr hWnd)
+        public static string GetWindowText(IntPtr hWnd)
         {
             // Allocate correct string length first
             int length = User32.GetWindowTextLength(hWnd);
-            StringBuilder builder = new StringBuilder(length + 1);
+
+            // length * 4 한글일때
+            StringBuilder builder = new StringBuilder(length * 4);
             User32.GetWindowText(hWnd, builder, builder.Capacity);
             return builder.ToString();
         }

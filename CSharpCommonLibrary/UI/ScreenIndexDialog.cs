@@ -6,30 +6,6 @@ using System.Windows.Forms;
 namespace CommonLibrary.UI
 {
     /// <summary>
-    /// 스크린 컬러 정보
-    /// </summary>
-    public class DialogColor
-    {
-        /// <summary>
-        /// 메인 스크린(주모니터) 배경 색
-        /// </summary>
-        public Color MainBackColor { get; set; } = Color.Red;
-        /// <summary>
-        /// 메인 스크린(주모니터) 글자 색
-        /// </summary>
-        public Color MainForeColor { get; set; } = Color.White;
-
-        /// <summary>
-        /// 서브 스크린 배경 색
-        /// </summary>
-        public Color SubBackColor { get; set; } = Color.DarkGray;
-        /// <summary>
-        /// 서브 스크린 글자 색
-        /// </summary>
-        public Color SubForeColor { get; set; } = Color.White;
-    }
-
-    /// <summary>
     /// <see cref="System.Windows.Forms.Screen"/> 인덱스 출력 다이얼로그
     /// </summary>
     public partial class ScreenIndexDialog : Form
@@ -56,7 +32,7 @@ namespace CommonLibrary.UI
 
         private int _currentShowPositionSecond = 0;
 
-        public DialogColor ColorInfo { get; set; } = new DialogColor();
+        public ScreenIndexDialogColor DialogColor { get; set; } = new ScreenIndexDialogColor();
 
         /// <summary>
         /// 생성자 
@@ -80,7 +56,7 @@ namespace CommonLibrary.UI
             _LabelScreenIndex.Text = "" + index;
             _LabelBounds.Text = rectangle.ToString();
 
-            SetColorInfo(ColorInfo, index);
+            SetColorInfo(DialogColor, index);
 
             _TimerShowPosition.Start();
         }
@@ -95,7 +71,7 @@ namespace CommonLibrary.UI
         /// <exception cref="System.ArgumentException">
         /// <paramref name="index"/>값이 0보다 작거나 <see cref="System.Windows.Forms.Screen.AllScreens"/>.Length 값과 같거나 클때
         /// </exception>
-        public ScreenIndexDialog(int index, Rectangle rectangle, DialogColor colorInfo)
+        public ScreenIndexDialog(int index, Rectangle rectangle, ScreenIndexDialogColor colorInfo)
         {
             if (index < 0 || index > Screen.AllScreens.Length)
             {
@@ -114,22 +90,22 @@ namespace CommonLibrary.UI
             _TimerShowPosition.Start();
         }
 
-        private void SetColorInfo(DialogColor colorInfo, int index)
+        private void SetColorInfo(ScreenIndexDialogColor dialogColor, int index)
         {
-            ColorInfo = colorInfo;
+            DialogColor = dialogColor;
             if (IsMainScreen(index))
             {
-                _LabelBounds.BackColor = colorInfo.MainBackColor;
-                _LabelBounds.ForeColor = colorInfo.MainForeColor;
-                _LabelScreenIndex.BackColor = colorInfo.MainBackColor;
-                _LabelScreenIndex.ForeColor = colorInfo.MainForeColor;
+                _LabelBounds.BackColor = dialogColor.MainBackColor;
+                _LabelBounds.ForeColor = dialogColor.MainForeColor;
+                _LabelScreenIndex.BackColor = dialogColor.MainBackColor;
+                _LabelScreenIndex.ForeColor = dialogColor.MainForeColor;
             }
             else
             {
-                _LabelBounds.BackColor = colorInfo.SubBackColor;
-                _LabelBounds.ForeColor = colorInfo.SubForeColor;
-                _LabelScreenIndex.BackColor = colorInfo.SubBackColor;
-                _LabelScreenIndex.ForeColor = colorInfo.SubForeColor;
+                _LabelBounds.BackColor = dialogColor.SubBackColor;
+                _LabelBounds.ForeColor = dialogColor.SubForeColor;
+                _LabelScreenIndex.BackColor = dialogColor.SubBackColor;
+                _LabelScreenIndex.ForeColor = dialogColor.SubForeColor;
             }
         }
 
@@ -169,5 +145,29 @@ namespace CommonLibrary.UI
         {
             get { return _LabelBounds; }
         }
+    }
+
+    /// <summary>
+    /// 스크린 컬러 정보
+    /// </summary>
+    public class ScreenIndexDialogColor
+    {
+        /// <summary>
+        /// 메인 스크린(주모니터) 배경 색
+        /// </summary>
+        public Color MainBackColor { get; set; } = Color.Red;
+        /// <summary>
+        /// 메인 스크린(주모니터) 글자 색
+        /// </summary>
+        public Color MainForeColor { get; set; } = Color.White;
+
+        /// <summary>
+        /// 서브 스크린 배경 색
+        /// </summary>
+        public Color SubBackColor { get; set; } = Color.DarkGray;
+        /// <summary>
+        /// 서브 스크린 글자 색
+        /// </summary>
+        public Color SubForeColor { get; set; } = Color.White;
     }
 }

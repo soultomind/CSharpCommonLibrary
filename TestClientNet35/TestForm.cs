@@ -24,16 +24,17 @@ namespace TestNet32
         {
             InitializeComponent();
 
-            _mouseManager = new MouseManager() { MouseMovePreventInterval = 1000, IsMouseMoveLastPreventPoint = true };
-            _mouseManager.MouseMovePreventScreenIndex = ScreenUtility.GetFirstScreenIndexAndExceptPrimaryScreen();
+            int preventMoveScreenIndex = ScreenUtility.GetFirstScreenIndexAndExceptPrimaryScreenIndex();
+            IMouseFunctionStrategy functionStrategy = new MousePreventMoveScreenFunctionStrategy(preventMoveScreenIndex);
+            _mouseManager = new MouseManager(functionStrategy);
 
-            _screenImageCapture = new ScreenImageCapture(ScreenUtility.GetFirstScreenIndexAndExceptPrimaryScreen());
+            _screenImageCapture = new ScreenImageCapture(ScreenUtility.GetFirstScreenIndexAndExceptPrimaryScreenIndex());
             _screenImageCapture.CreateScreenImageCapture += ScreenImageCapture_CreateScreenImageCapture;
         }
 
         private void TestForm_FormClosed(object sender, FormClosedEventArgs e)
         {
-            _mouseManager.StopMouseMovePrevent();
+            _mouseManager.StopWorkerThread();
         }
 
         private void ButtonMouseMovePrevent_Click(object sender, EventArgs e)
@@ -41,12 +42,12 @@ namespace TestNet32
             _mouseMovePrevent = !_mouseMovePrevent;
             if (_mouseMovePrevent)
             {
-                _mouseManager.StartMouseMovePrevent();
+                _mouseManager.StartWorkerThread();
                 _ButtonMouseMovePrevent.Text = "마우스 이동 제어 정지";
             }
             else
             {
-                _mouseManager.StopMouseMovePrevent();
+                _mouseManager.StopWorkerThread();
                 _ButtonMouseMovePrevent.Text = "마우스 이동 제어 시작";
             }
         }
@@ -56,7 +57,7 @@ namespace TestNet32
             for (int index = 0; index < Screen.AllScreens.Length; index++)
             {
                 Screen screen = Screen.AllScreens[index];
-                ScreenIndexDialog dlg = new ScreenIndexDialog((index + 1), screen.Bounds, new DialogColor()
+                ScreenIndexDialog dlg = new ScreenIndexDialog((index + 1), screen.Bounds, new ScreenIndexDialogColor()
                 {
                     MainBackColor = Color.Green, MainForeColor = Color.White,
                     SubBackColor = Color.Black, SubForeColor = Color.White
@@ -70,27 +71,29 @@ namespace TestNet32
         {
             if (_windowManager == null)
             {
-                _windowManager = new WindowManager();
-                _windowManager.AllProcessWndHandlesCheckProcessNames.Add(Explorer.ProcessName);
-                _windowManager.SetProcessAllWindowsHandlePos += WindowManager_SetProcessAllWindowsHandlePos;
-                _windowManager.StartProcessHandleWindowMovePrevent();
+                ProcessesSetWindowPosFunctionStrategy strategy = new ProcessesSetWindowPosFunctionStrategy();
+                strategy.SetProcessAllWindowsHandlePos += ProcessWndHandlesAdjustLocationStrategy_SetProcessAllWindowsHandlePos;
+
+                _windowManager = new WindowManager(strategy);
+                _windowManager.StartWorkerThread();
+
                 _ButtonProcessWindowHandleFixedLocation.Text = "창 제어 정지";
             }
             else
             {
-                _windowManager.StopProcessHandleWindowMovePrevent();
+                _windowManager.StopWorkerThread();
                 _windowManager = null;
                 _ButtonProcessWindowHandleFixedLocation.Text = "창 제어 시작";
             }
         }
 
-        private bool WindowManager_SetProcessAllWindowsHandlePos(object sender, ProcessAllWindowsHandleSetPosEventArgs e)
+        private bool ProcessWndHandlesAdjustLocationStrategy_SetProcessAllWindowsHandlePos(object sender, ProcessAllSetWindowPosEventArgs e)
         {
             // 해당 이벤트핸들러에서 특정 프로세스의 모든창에 대하여 윈도우 창 제어를 할지 여부를 처리한다.
             if (e.Process.ProcessName.Equals(Explorer.ProcessName))
             {
                 // 특정 프로세스 일때 특정 타이틀값에 해당하는 부분 윈도우 핸들만 처리 가능하다.
-                if (e.Title.Equals("파일 탐색기"))
+                if (e.Text.Equals("파일 탐색기"))
                 {
                     return true;
                 }
@@ -148,6 +151,7 @@ namespace TestNet32
             parameter.Add("Test2", "Test2");
             parameter.Add("Hangeul", Uri.EscapeUriString("한글"));
             */
+
             HttpStatusCode statusCode = HttpStatusCode.OK;
             Exception exception = null;
 
@@ -167,12 +171,12 @@ namespace TestNet32
 
         private void HttpToolkit_CreateHttpWebRequest(object sender, CreateHttpWebRequestEventArgs e)
         {
-            Toolkit.TraceWriteLine("HttpToolkit_CreateHttpWebRequest");
+            
         }
 
         private void HttpToolkit_CreateHttpWebResponse(object sender, CreateHttpWebResponseEventArgs e)
         {
-            Toolkit.TraceWriteLine("HttpToolkit_CreateHttpWebResponse");
+            
         }
 
         private void TestForm_Load(object sender, EventArgs e)
@@ -183,6 +187,11 @@ namespace TestNet32
         private void TestForm_Shown(object sender, EventArgs e)
         {
 
+        }
+
+        private void _ButtonMoveCursorPoint_Click(object sender, EventArgs e)
+        {
+            MouseManager.MoveCursorPoint(new Point(10, 10));
         }
     }
 }
