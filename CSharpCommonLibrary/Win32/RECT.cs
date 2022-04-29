@@ -193,6 +193,14 @@ namespace CommonLibrary.Win32
             get { return new POINT(X + Width, Y + Height); }
         }
 
+        public void Deflate(int width, int height)
+        {
+            X += width;
+            Y += height;
+            Width -= Width;
+            Height -= height;
+        }
+
         public override string ToString()
         {
             return String.Format(CultureInfo.CurrentCulture, "X={0}, Y={1}, Width={2}, Height={3}", X, Y, Width, Height);

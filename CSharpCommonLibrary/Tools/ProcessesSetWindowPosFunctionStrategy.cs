@@ -162,6 +162,13 @@ namespace CommonLibrary.Tools
                                 RECT outRect = RECT.Empty;
                                 User32.GetWindowRect(windowHandle, out outRect);
 
+                                // TODO: WindowPlacement ShowCmd.Maximize, ShowCmd.ShowMaximized 크기 20정도 줄이기
+                                if (wp.ShowCmd == ShowWindowCommand.Maximize || wp.ShowCmd == ShowWindowCommand.ShowMaximized)
+                                {
+                                    // outRect 사이즈를 줄여야 함
+                                    outRect.Deflate(20, 20);
+                                }
+
                                 if (SetProcessAllWindowsHandlePos.Invoke(this, new ProcessAllSetWindowPosEventArgs(process, windowHandle, wp, windowText)))
                                 {
                                     if (preventScreen.BoundsContains(outRect.ToPoints()))
@@ -184,6 +191,14 @@ namespace CommonLibrary.Tools
                         {
                             RECT outRect;
                             User32.GetWindowRect(process.MainWindowHandle, out outRect);
+
+                            // TODO: WindowPlacement ShowCmd.Maximize, ShowCmd.ShowMaximized 크기 20정도 줄이기
+                            if (wp.ShowCmd == ShowWindowCommand.Maximize || wp.ShowCmd == ShowWindowCommand.ShowMaximized)
+                            {
+                                // outRect 사이즈를 줄여야 함
+                                outRect.Deflate(20, 20);
+                            }
+
                             if (preventScreen.BoundsContains(outRect.ToPoints()))
                             {
                                 ProcessSetWindowPos(process.MainWindowHandle, outRect);
