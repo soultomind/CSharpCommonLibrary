@@ -13,43 +13,65 @@ namespace TestNet32
 {
     public partial class TestForm : Form
     {
-        private bool _mouseMovePrevent;
+        private bool _isMultiScreen;
+
         private MouseManager _mouseManager;
-
-        private bool _screenImage;
-        private ScreenImageCapture _screenImageCapture;
-
         private WindowManager _windowManager;
+
+        private ScreenImageCapture _screenImageCapture;
         public TestForm()
         {
             InitializeComponent();
 
-            int preventMoveScreenIndex = ScreenUtility.GetFirstScreenIndexAndExceptPrimaryScreenIndex();
-            IMouseFunctionStrategy functionStrategy = new MousePreventMoveScreenFunctionStrategy(preventMoveScreenIndex);
-            _mouseManager = new MouseManager(functionStrategy);
+            _isMultiScreen = Screen.AllScreens.Length > 1;
+        }
 
-            _screenImageCapture = new ScreenImageCapture(ScreenUtility.GetFirstScreenIndexAndExceptPrimaryScreenIndex());
-            _screenImageCapture.CreateScreenImageCapture += ScreenImageCapture_CreateScreenImageCapture;
+
+        private void TestForm_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void TestForm_Shown(object sender, EventArgs e)
+        {
+
         }
 
         private void TestForm_FormClosed(object sender, FormClosedEventArgs e)
         {
-            _mouseManager.StopWorkerThread();
+            if (_isMultiScreen)
+            {
+                if (_mouseManager != null)
+                {
+                    _mouseManager.StopWorkerThread();
+                }
+            }
         }
 
         private void ButtonMouseMovePrevent_Click(object sender, EventArgs e)
         {
-            _mouseMovePrevent = !_mouseMovePrevent;
-            if (_mouseMovePrevent)
+            if (_isMultiScreen)
             {
-                _mouseManager.StartWorkerThread();
-                _ButtonMouseMovePrevent.Text = "마우스 이동 제어 정지";
+                if (_mouseManager == null)
+                {
+                    int preventMoveScreenIndex = ScreenUtility.GetFirstScreenIndexAndExceptPrimaryScreenIndex();
+                    IMouseFunctionStrategy functionStrategy = new MousePreventMoveScreenFunctionStrategy(preventMoveScreenIndex);
+                    _mouseManager = new MouseManager(functionStrategy);
+                    _mouseManager.StartWorkerThread();
+                    _ButtonMouseMovePrevent.Text = "마우스 이동 제어 정지";
+                }
+                else
+                {
+                    _mouseManager.StopWorkerThread();
+                    _mouseManager = null;
+                    _ButtonMouseMovePrevent.Text = "마우스 이동 제어 시작";
+                }
             }
-            else
-            {
-                _mouseManager.StopWorkerThread();
-                _ButtonMouseMovePrevent.Text = "마우스 이동 제어 시작";
-            }
+        }
+
+        private void ButtonMoveCursorPoint_Click(object sender, EventArgs e)
+        {
+            MouseManager.MoveCursorPoint(new Point(10, 10));
         }
 
         private void ButtonShowScreenIndex_Click(object sender, EventArgs e)
@@ -57,7 +79,7 @@ namespace TestNet32
             for (int index = 0; index < Screen.AllScreens.Length; index++)
             {
                 Screen screen = Screen.AllScreens[index];
-                ScreenIndexDialog dlg = new ScreenIndexDialog((index + 1), screen.Bounds, new ScreenIndexDialogColor()
+                ScreenIndexDialog dlg = new ScreenIndexDialog(index, screen.Bounds, new ScreenIndexDialogColor()
                 {
                     MainBackColor = Color.Green, MainForeColor = Color.White,
                     SubBackColor = Color.Black, SubForeColor = Color.White
@@ -69,21 +91,24 @@ namespace TestNet32
 
         private void ButtonProcessWindowHandleFixedLocation_Click(object sender, EventArgs e)
         {
-            if (_windowManager == null)
+            if (_isMultiScreen)
             {
-                ProcessesSetWindowPosFunctionStrategy strategy = new ProcessesSetWindowPosFunctionStrategy();
-                strategy.SetProcessAllWindowsHandlePos += ProcessWndHandlesAdjustLocationStrategy_SetProcessAllWindowsHandlePos;
+                if (_windowManager == null)
+                {
+                    ProcessesSetWindowPosFunctionStrategy strategy = new ProcessesSetWindowPosFunctionStrategy();
+                    strategy.SetProcessAllWindowsHandlePos += ProcessWndHandlesAdjustLocationStrategy_SetProcessAllWindowsHandlePos;
 
-                _windowManager = new WindowManager(strategy);
-                _windowManager.StartWorkerThread();
+                    _windowManager = new WindowManager(strategy);
+                    _windowManager.StartWorkerThread();
 
-                _ButtonProcessWindowHandleFixedLocation.Text = "창 제어 정지";
-            }
-            else
-            {
-                _windowManager.StopWorkerThread();
-                _windowManager = null;
-                _ButtonProcessWindowHandleFixedLocation.Text = "창 제어 시작";
+                    _ButtonProcessWindowHandleFixedLocation.Text = "창 제어 정지";
+                }
+                else
+                {
+                    _windowManager.StopWorkerThread();
+                    _windowManager = null;
+                    _ButtonProcessWindowHandleFixedLocation.Text = "창 제어 시작";
+                }
             }
         }
 
@@ -110,18 +135,68 @@ namespace TestNet32
             }
         }
 
+        private void _ButtonHttpToolkitTest_Click(object sender, EventArgs e)
+        {
+            Dictionary<string, string[]> parameter = new Dictionary<string, string[]>();
+            parameter.Add("Test", new string[] { "Test1", "Test2" });
+            parameter.Add("Hangeul", new string[] { Uri.EscapeUriString("한글") });
+
+            /*
+            Dictionary<string, string> parameter = new Dictionary<string, string>();
+            parameter.Add("Test1", "Test1");
+            parameter.Add("Test2", "Test2");
+            parameter.Add("Hangeul", Uri.EscapeUriString("한글"));
+            */
+
+            HttpStatusCode statusCode = HttpStatusCode.OK;
+            Exception exception = null;
+
+            HttpToolkit httpToolkit = new HttpToolkit();
+            httpToolkit.CreateHttpWebRequest += HttpToolkit_CreateHttpWebRequest;
+            httpToolkit.CreateHttpWebResponse += HttpToolkit_CreateHttpWebResponse;
+            string responseText = httpToolkit.GetResponseByPost(
+                "http://localhost:8080/CSharpCommonLibrary/index.jsp",
+                parameter,
+                "UTF-8",
+                "UTF-8",
+                10000,
+                out statusCode,
+                out exception
+            );
+
+            _RichTextBoxHttpToolkitTest.Text = responseText;
+        }
+
+        private void HttpToolkit_CreateHttpWebRequest(object sender, CreateHttpWebRequestEventArgs e)
+        {
+
+        }
+
+        private void HttpToolkit_CreateHttpWebResponse(object sender, CreateHttpWebResponseEventArgs e)
+        {
+
+        }
+
         private void ButtonStartAndStopScreenCapture_Click(object sender, EventArgs e)
         {
-            _screenImage = !_screenImage;
-            if (_screenImage)
+            if (_isMultiScreen)
             {
-                _screenImageCapture.Start();
-                _ButtonStartAndStopScreenCapture.Text = "스크린 캡쳐 정지";
-            }
-            else
-            {
-                _screenImageCapture.Stop();
-                _ButtonStartAndStopScreenCapture.Text = "스크린 캡쳐 시작";
+                if (_screenImageCapture == null)
+                {
+                    _screenImageCapture = new ScreenImageCapture(ScreenUtility.GetFirstScreenIndexAndExceptPrimaryScreenIndex());
+                    _screenImageCapture.CreateScreenImageCapture += ScreenImageCapture_CreateScreenImageCapture;
+                    _screenImageCapture.Start();
+
+                    _ButtonStartAndStopScreenCapture.Text = "스크린 캡쳐 정지";
+                }
+                else
+                {
+                    _screenImageCapture.Stop();
+                    _screenImageCapture.CreateScreenImageCapture -= ScreenImageCapture_CreateScreenImageCapture;
+                    _screenImageCapture = null;
+
+                    _ButtonStartAndStopScreenCapture.Text = "스크린 캡쳐 시작";
+                }
             }
         }
 
@@ -137,61 +212,6 @@ namespace TestNet32
                 _PictureBoxScreenCapture.SizeMode = PictureBoxSizeMode.StretchImage;
                 _PictureBoxScreenCapture.Image = e.Bitmap;
             }
-        }
-
-        private void _ButtonHttpToolkitTest_Click(object sender, EventArgs e)
-        {
-            Dictionary<string, string[]> parameter = new Dictionary<string, string[]>();
-            parameter.Add("Test", new string[] { "Test1", "Test2" });
-            parameter.Add("Hangeul", new string[] { Uri.EscapeUriString("한글") });
-            
-            /*
-            Dictionary<string, string> parameter = new Dictionary<string, string>();
-            parameter.Add("Test1", "Test1");
-            parameter.Add("Test2", "Test2");
-            parameter.Add("Hangeul", Uri.EscapeUriString("한글"));
-            */
-
-            HttpStatusCode statusCode = HttpStatusCode.OK;
-            Exception exception = null;
-
-            HttpToolkit httpToolkit = new HttpToolkit();
-            httpToolkit.CreateHttpWebRequest += HttpToolkit_CreateHttpWebRequest;
-            httpToolkit.CreateHttpWebResponse += HttpToolkit_CreateHttpWebResponse;
-            string response = httpToolkit.GetResponseByPost(
-                "http://localhost:8080/CSharpCommonLibrary/index.jsp", 
-                parameter, 
-                "UTF-8", 
-                "UTF-8", 
-                10000, 
-                out statusCode,
-                out exception
-            );
-        }
-
-        private void HttpToolkit_CreateHttpWebRequest(object sender, CreateHttpWebRequestEventArgs e)
-        {
-            
-        }
-
-        private void HttpToolkit_CreateHttpWebResponse(object sender, CreateHttpWebResponseEventArgs e)
-        {
-            
-        }
-
-        private void TestForm_Load(object sender, EventArgs e)
-        {
-
-        }
-
-        private void TestForm_Shown(object sender, EventArgs e)
-        {
-
-        }
-
-        private void _ButtonMoveCursorPoint_Click(object sender, EventArgs e)
-        {
-            MouseManager.MoveCursorPoint(new Point(10, 10));
         }
     }
 }

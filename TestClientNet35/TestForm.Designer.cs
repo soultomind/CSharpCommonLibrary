@@ -114,7 +114,7 @@ namespace TestNet32
             this._ButtonMoveCursorPoint.TabIndex = 7;
             this._ButtonMoveCursorPoint.Text = "마우스 특정위치로 이동";
             this._ButtonMoveCursorPoint.UseVisualStyleBackColor = true;
-            this._ButtonMoveCursorPoint.Click += new System.EventHandler(this._ButtonMoveCursorPoint_Click);
+            this._ButtonMoveCursorPoint.Click += new System.EventHandler(this.ButtonMoveCursorPoint_Click);
             // 
             // TestForm
             // 
