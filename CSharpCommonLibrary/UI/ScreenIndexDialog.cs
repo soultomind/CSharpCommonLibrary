@@ -10,6 +10,13 @@ namespace CommonLibrary.UI
     /// </summary>
     public partial class ScreenIndexDialog : Form
     {
+        public int ScreenIndex
+        {
+            get { return _screenIndex; }
+            private set { _screenIndex = value; }
+        }
+        private int _screenIndex;
+
         /// <summary>
         /// 다이얼로그가 보여지는 시간(초)
         /// </summary>
@@ -53,6 +60,8 @@ namespace CommonLibrary.UI
 
             Location = rectangle.Location;
 
+            ScreenIndex = index;
+
             _LabelScreenIndex.Text = "" + index;
             _LabelBounds.Text = rectangle.ToString();
 
@@ -82,7 +91,9 @@ namespace CommonLibrary.UI
 
             Location = rectangle.Location;
 
-            _LabelScreenIndex.Text = "" + index;
+            ScreenIndex = index;
+
+            _LabelScreenIndex.Text = (index + 1).ToString();
             _LabelBounds.Text = rectangle.ToString();
 
             SetColorInfo(colorInfo, index);

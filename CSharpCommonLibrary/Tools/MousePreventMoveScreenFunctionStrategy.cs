@@ -218,7 +218,7 @@ namespace CommonLibrary.Tools
                         if (preventScreen.Bounds.Contains(useCurrentPt))
                         {
                             MouseNative mouseNative = new MouseNative();
-                            mouseNative.SetCursorPoint(x + 1, y + 1);
+                            mouseNative.SetCursorPoint(x, y);
 
                             mouseNative.MouseEvent(MouseEventFlags.MOVE);
 
