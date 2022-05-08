@@ -73,11 +73,22 @@ namespace CommonLibrary
 
         private static string MakeMessage(string header, string message)
         {
+            if (UseNowToString)
+            {
 #if DEBUG
-            message = String.Format("[{0}] [{1}] DEBUG - {2}", _sIncludeFilterName, header, message);
+                message = String.Format("[{0}] {1} [{2}] DEBUG - {3}", _sIncludeFilterName, NowToString(), header, message);
 #else
-            message = String.Format("[{0}] [{1}] TRACE - {2}", _sIncludeFilterName, header, message);
+                message = String.Format("[{0}] {1} [{2}] TRACE - {3}", _sIncludeFilterName, NowToString(), header, message);
 #endif
+            }
+            else
+            {
+#if DEBUG
+                message = String.Format("[{0}] [{1}] DEBUG - {2}", _sIncludeFilterName, header, message);
+#else
+                message = String.Format("[{0}] [{1}] TRACE - {2}", _sIncludeFilterName, header, message);
+#endif
+            }
             return message;
         }
 
@@ -179,7 +190,11 @@ namespace CommonLibrary
             }
         }
 
-        internal static bool IsCurrentProcessAdministrator()
+        /// <summary>
+        /// 현재 프로세스가 관리자권한 실행인지 여부를 반환합니다.
+        /// </summary>
+        /// <returns></returns>
+        internal static bool IsCurrentProcessExecuteAdministrator()
         {
             bool flag;
 
@@ -190,8 +205,9 @@ namespace CommonLibrary
                 WindowsPrincipal principal = new WindowsPrincipal(identity);
                 flag = principal.IsInRole(WindowsBuiltInRole.Administrator);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                TraceWriteLine(ex);
                 flag = false;
             }
             finally

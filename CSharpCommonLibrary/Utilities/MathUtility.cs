@@ -155,18 +155,10 @@ namespace CommonLibrary.Utilities
                 throw new ArgumentException("");
             }
 
-            int max = Max<int>(size.Width, size.Height), 
-                min = Min<int>(size.Width, size.Height);
+            int min = Min<int>(size.Width, size.Height), 
+                max = Max<int>(size.Width, size.Height);
 
-            int temp = 0;
-            while ((max % min) != 0)
-            {
-                temp = max % min;
-                max = min;
-                min = temp;
-            }
-
-            int gcd = min;
+            int gcd = Gcd(min, max);
             int widthRatio = size.Width / gcd;
             int heightRatio = size.Height / gcd;
             return new RectangleRatio(widthRatio, heightRatio);
@@ -177,9 +169,9 @@ namespace CommonLibrary.Utilities
         /// </summary>
         /// <param name="rectangle"></param>
         /// <returns></returns>
-        public static RectangleRatio ToRatio(Rectangle rectangle)
+        public static RectangleRatio ToRatio(int width, int height)
         {
-            return ToRatio(rectangle.Size);
+            return ToRatio(new Size(width, height));
         }
     }
 }

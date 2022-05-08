@@ -44,6 +44,19 @@ namespace TestNet32
                 if (_mouseManager != null)
                 {
                     _mouseManager.StopWorkerThread();
+                    _mouseManager = null;
+                }
+
+                if (_windowManager != null)
+                {
+                    _windowManager.StopWorkerThread();
+                    _windowManager = null;
+                }
+
+                if (_screenImageCapture != null)
+                {
+                    _screenImageCapture.Stop();
+                    _screenImageCapture = null;
                 }
             }
         }

@@ -3,7 +3,10 @@ using System.Security.Cryptography.X509Certificates;
 
 namespace CommonLibrary
 {
-    public enum CertFileStore
+    /// <summary>
+    /// 인증서 저장 상태
+    /// </summary>
+    public enum CertFileStoreStatus
     {
         None,
 
@@ -37,10 +40,10 @@ namespace CommonLibrary
         /// <param name="password"></param>
         /// <param name="outException"></param>
         /// <returns></returns>
-        public static CertFileStore AddCertFile(StoreLocation storeLocation, StoreName storeName, string fileName, string password, out Exception outException)
+        public static CertFileStoreStatus AddCertFile(StoreLocation storeLocation, StoreName storeName, string fileName, string password, out Exception outException)
         {
             // TODO: 브라우저 실행 중일 때 추가 안되는 현상 개선 필요
-            CertFileStore fileStore = CertFileStore.None;
+            CertFileStoreStatus status = CertFileStoreStatus.None;
 
             try
             {
@@ -52,23 +55,23 @@ namespace CommonLibrary
                 if (!contains)
                 {
                     store.Add(cert);
-                    fileStore = CertFileStore.AddCert;
+                    status = CertFileStoreStatus.AddCert;
                 }
                 else
                 {
-                    fileStore = CertFileStore.ExistsCert;
+                    status = CertFileStoreStatus.ExistsCert;
                 }
 
                 store.Close();
 
                 outException = null;
-                return fileStore;
+                return status;
             }
             catch (Exception ex)
             {
                 outException = ex;
-                fileStore = CertFileStore.ErrorCert;
-                return fileStore;
+                status = CertFileStoreStatus.ErrorCert;
+                return status;
             }
         }
 
@@ -83,14 +86,14 @@ namespace CommonLibrary
         /// <param name="password"></param>
         /// <param name="outException"></param>
         /// <returns></returns>
-        public static CertFileStore AddCertFile(StoreName storeName, string fileName, string password, out Exception outException)
+        public static CertFileStoreStatus AddCertFile(StoreName storeName, string fileName, string password, out Exception outException)
         {
             // TODO: 브라우저 실행 중일 때 추가 안되는 현상 개선 필요
-            CertFileStore fileStore = CertFileStore.None;
+            CertFileStoreStatus status = CertFileStoreStatus.None;
 
             try
             {
-                StoreLocation storeLocation = (Toolkit.IsCurrentProcessAdministrator()) ? StoreLocation.LocalMachine : StoreLocation.CurrentUser;
+                StoreLocation storeLocation = (Toolkit.IsCurrentProcessExecuteAdministrator()) ? StoreLocation.LocalMachine : StoreLocation.CurrentUser;
                 X509Store store = new X509Store(storeName, storeLocation);
                 store.Open(OpenFlags.ReadWrite);
 
@@ -99,23 +102,23 @@ namespace CommonLibrary
                 if (!contains)
                 {
                     store.Add(cert);
-                    fileStore = CertFileStore.AddCert;
+                    status = CertFileStoreStatus.AddCert;
                 }
                 else
                 {
-                    fileStore = CertFileStore.ExistsCert;
+                    status = CertFileStoreStatus.ExistsCert;
                 }
 
                 store.Close();
 
                 outException = null;
-                return fileStore;
+                return status;
             }
             catch (Exception ex)
             {
                 outException = ex;
-                fileStore = CertFileStore.ErrorCert;
-                return fileStore;
+                status = CertFileStoreStatus.ErrorCert;
+                return status;
             }
         }
     }

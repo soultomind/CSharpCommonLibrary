@@ -96,22 +96,7 @@ namespace CommonLibrary.Tools
         /// <returns></returns>
         public static IntPtr[] GetProcessWindowHandles(int processId)
         {
-            IntPtr[] windowHandles = (new IntPtr[256]);
-            int count = 0;
-            IntPtr nextWindowHandle = IntPtr.Zero;
-            do
-            {
-                nextWindowHandle = User32.FindWindowEx(IntPtr.Zero, nextWindowHandle, null, null);
-                int outProcessId;
-                User32.GetWindowThreadProcessId(nextWindowHandle, out outProcessId);
-                if (outProcessId == processId)
-                {
-                    windowHandles[count++] = nextWindowHandle;
-                }
-            } while (nextWindowHandle != IntPtr.Zero);
-
-            System.Array.Resize(ref windowHandles, count);
-            return windowHandles;
+            return WindowNative.GetProcessWindowHandles(processId);
         }
 
         /// <summary>
@@ -121,13 +106,7 @@ namespace CommonLibrary.Tools
         /// <returns></returns>
         public static string GetWindowText(IntPtr hWnd)
         {
-            // Allocate correct string length first
-            int length = User32.GetWindowTextLength(hWnd);
-
-            // length * 4 한글일때
-            StringBuilder builder = new StringBuilder(length * 4);
-            User32.GetWindowText(hWnd, builder, builder.Capacity);
-            return builder.ToString();
+            return WindowNative.GetWindowText(hWnd);
         }
 
         #endregion
