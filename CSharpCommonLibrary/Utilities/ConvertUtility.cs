@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 
@@ -18,6 +20,26 @@ namespace CommonLibrary.Utilities
         private static byte[] FromBase64String(string text)
         {
             return Convert.FromBase64String(text);
+        }
+
+        /// <summary>
+        /// 이미지 파일을 Base64 문자열로 반환합니다.
+        /// </summary>
+        /// <param name="filename"></param>
+        /// <returns></returns>
+        public static string ToBase64StringFromImageFile(string filename)
+        {
+            byte[] data = null;
+            using (Image image = Image.FromFile(filename))
+            {
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    image.Save(ms, image.RawFormat);
+                    data = ms.ToArray();
+                }
+            }
+
+            return ToBase64String(data);
         }
 
         /// <summary>
