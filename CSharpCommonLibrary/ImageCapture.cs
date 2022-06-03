@@ -1,4 +1,5 @@
 ﻿using CommonLibrary.Utilities;
+using CommonLibrary.Win32;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -8,39 +9,55 @@ using System.Windows.Forms;
 
 namespace CommonLibrary
 {
-    public delegate void CreateScreenImageCaptureEventHandler(object sender, ScreenImageCaptureEventArgs e);
-    public class ScreenImageCaptureEventArgs : EventArgs
+    #region Event
+
+    public class ImageCaptureEventArgs : EventArgs
     {
         public Exception Exception { get; private set; }
         public Bitmap Bitmap { get; private set; }
 
-        public ScreenImageCaptureEventArgs(Bitmap bitmap)
+        public ImageCaptureEventArgs(Bitmap bitmap)
         {
             Bitmap = bitmap;
         }
 
-        public ScreenImageCaptureEventArgs(Exception exception)
+        public ImageCaptureEventArgs(Exception exception)
         {
             Exception = exception;
         }
     }
+
+    public delegate void CreateImageCaptureEventHandler(object sender, ImageCaptureEventArgs e);
+
+    #endregion
+
     /// <summary>
     /// <see cref="System.Windows.Forms.Screen"/> 이미지 캡쳐 클래스
     /// </summary>
-    public class ScreenImageCapture
+    public class ImageCapture
     {
+        /// <summary>
+        /// 생성된 이미지가 전달되는 이벤트 핸들러
+        /// </summary>
+        public event CreateImageCaptureEventHandler CreateImageCapture;
+
+        #region Screen 방식
         /// <summary>
         /// 유효하지 않는 스크린 인덱스
         /// </summary>
         public const int InvalidScreenIndex = -1;
-
-        public event CreateScreenImageCaptureEventHandler CreateScreenImageCapture;
+        
         /// <summary>
         /// <see cref="System.Windows.Forms.Screen"/> 인덱스
         /// </summary>
-        public int TargetScreenIndex { get; set; }
-        public Size TargetScreenBoundsSize { get; set; }
+        public int TargetScreenIndex { get; private set; }
+        public Size TargetScreenBoundsSize { get; private set; }
         public Screen TargetScreen { get; private set; }
+        #endregion
+
+        #region Handle 방식
+        public IntPtr TargetHandle { get; set; }
+        #endregion
 
         public bool IsStart
         {
@@ -51,7 +68,7 @@ namespace CommonLibrary
 
         private int _interval;
         private Timer _Timer;
-        public ScreenImageCapture(int targetScreenIndex, int interval = 500)
+        public ImageCapture(int targetScreenIndex, int interval = 500)
         {
             if (!ScreenUtility.IsValidIndex(targetScreenIndex))
             {
@@ -74,7 +91,7 @@ namespace CommonLibrary
             _interval = interval;
         }
 
-        public ScreenImageCapture(Size targetScreenBoundsSize, int interval = 500)
+        public ImageCapture(Size targetScreenBoundsSize, int interval = 500)
         {
             if (!ScreenUtility.EqualsScreenBoundsSize(targetScreenBoundsSize))
             {
@@ -96,28 +113,73 @@ namespace CommonLibrary
             TargetScreenIndex = InvalidScreenIndex;
             _interval = interval;
         }
+
+        public ImageCapture(IntPtr targetHandle, int interval = 500)
+        {
+            TargetHandle = targetHandle;
+            _interval = interval;
+        }
+
+        private Image CaptureWindow(IntPtr handle)
+        {
+            // get te hDC of the target window
+            IntPtr hdcSrc = User32.GetWindowDC(handle);
+            // get the size
+            RECT windowRect = new RECT();
+            User32.GetWindowRect(handle, out windowRect);
+            int width = windowRect.Right - windowRect.Left;
+            int height = windowRect.Bottom - windowRect.Top;
+            // create a device context we can copy to
+            IntPtr hdcDest = Gdi32.CreateCompatibleDC(hdcSrc);
+            // create a bitmap we can copy it to,
+            // using GetDeviceCaps to get the width/height
+            IntPtr hBitmap = Gdi32.CreateCompatibleBitmap(hdcSrc, width, height);
+            // select the bitmap object
+            IntPtr hOld = Gdi32.SelectObject(hdcDest, hBitmap);
+            // bitblt over
+            Gdi32.BitBlt(hdcDest, 0, 0, width, height, hdcSrc, 0, 0, Gdi32.SRCCOPY);
+            // restore selection
+            Gdi32.SelectObject(hdcDest, hOld);
+            // clean up 
+            Gdi32.DeleteDC(hdcDest);
+            User32.ReleaseDC(handle, hdcSrc);
+            // get a .NET image object for it
+            Image img = Image.FromHbitmap(hBitmap);
+            // free up the Bitmap object
+            Gdi32.DeleteObject(hBitmap);
+            return img;
+        }
+
         private void Timer_Tick(object sender, EventArgs e)
         {
             try
             {
-                Rectangle bounds = TargetScreen.Bounds;
-                Bitmap bitmap = new Bitmap(bounds.Width, bounds.Height);
-                using (Graphics g = Graphics.FromImage(bitmap))
+                Bitmap bitmap = null;
+                if (TargetHandle != IntPtr.Zero)
                 {
-                    g.CopyFromScreen(bounds.X, bounds.Y, 0, 0, bounds.Size);
+                    bitmap = (Bitmap)CaptureWindow(TargetHandle);
+                }
+                else
+                {
+                    Rectangle bounds = TargetScreen.Bounds;
+                    bitmap = new Bitmap(bounds.Width, bounds.Height);
+                    using (Graphics g = Graphics.FromImage(bitmap))
+                    {
+                        g.CopyFromScreen(bounds.X, bounds.Y, 0, 0, bounds.Size);
+                    }
                 }
 
-                CreateScreenImageCapture?.Invoke(this, new ScreenImageCaptureEventArgs(bitmap));
+                CreateImageCapture?.Invoke(this, new ImageCaptureEventArgs(bitmap));
             }
             catch (Exception ex)
             {
-                CreateScreenImageCapture?.Invoke(this, new ScreenImageCaptureEventArgs(ex));
+                CreateImageCapture?.Invoke(this, new ImageCaptureEventArgs(ex));
             }
         }
 
         /// <summary>
         /// 리소스를 닫습니다.
-        /// <para>타이머를 다시 시작하려면 <see cref="CommonLibrary.ScreenImageCapture.Start"/> 메서드를 호출합니다.</para>
+        /// <para>타이머를 다시 시작하려면 <see cref="CommonLibrary.ImageCapture.Start"/> 메서드를 호출합니다.</para>
         /// </summary>
         public void Close()
         {

@@ -18,7 +18,7 @@ namespace TestNet32
         private MouseManager _mouseManager;
         private WindowManager _windowManager;
 
-        private ScreenImageCapture _screenImageCapture;
+        private ImageCapture _screenImageCapture;
         public TestForm()
         {
             InitializeComponent();
@@ -196,8 +196,8 @@ namespace TestNet32
             {
                 if (_screenImageCapture == null)
                 {
-                    _screenImageCapture = new ScreenImageCapture(ScreenUtility.GetFirstScreenIndexAndExceptPrimaryScreenIndex());
-                    _screenImageCapture.CreateScreenImageCapture += ScreenImageCapture_CreateScreenImageCapture;
+                    _screenImageCapture = new ImageCapture(ScreenUtility.GetFirstScreenIndexAndExceptPrimaryScreenIndex());
+                    _screenImageCapture.CreateImageCapture += ScreenImageCapture_CreateScreenImageCapture;
                     _screenImageCapture.Start();
 
                     _ButtonStartAndStopScreenCapture.Text = "스크린 캡쳐 정지";
@@ -205,7 +205,7 @@ namespace TestNet32
                 else
                 {
                     _screenImageCapture.Stop();
-                    _screenImageCapture.CreateScreenImageCapture -= ScreenImageCapture_CreateScreenImageCapture;
+                    _screenImageCapture.CreateImageCapture -= ScreenImageCapture_CreateScreenImageCapture;
                     _screenImageCapture = null;
 
                     _ButtonStartAndStopScreenCapture.Text = "스크린 캡쳐 시작";
@@ -213,7 +213,7 @@ namespace TestNet32
             }
         }
 
-        private void ScreenImageCapture_CreateScreenImageCapture(object sender, ScreenImageCaptureEventArgs e)
+        private void ScreenImageCapture_CreateScreenImageCapture(object sender, ImageCaptureEventArgs e)
         {
             if (e.Exception == null)
             {

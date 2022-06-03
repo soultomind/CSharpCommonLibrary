@@ -67,5 +67,27 @@ namespace CommonLibrary.Win32
 
         [DllImport(DllName)]
         public static extern int IsWindowVisible(IntPtr hWnd);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        [DllImport(DllName)]
+        public static extern IntPtr GetDesktopWindow();
+
+        [DllImport(DllName)]
+        public static extern IntPtr GetWindowDC(IntPtr hWnd);
+
+        [DllImport(DllName)]
+        public static extern IntPtr ReleaseDC(IntPtr hWnd, IntPtr hDC);
     }
 }
