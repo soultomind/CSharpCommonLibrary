@@ -67,7 +67,7 @@ namespace CommonLibrary.Tools
         /// <summary>
         /// 프로세스 모든 창 제어 이벤트 핸들러
         /// </summary>
-        public event ProcessAllWindowsHandleSetPosEventHandler SetProcessAllWindowsHandlePos;
+        public event ProcessAllWindowsHandleSetPosEventHandler ProcessAllWindowsHandleSetPos;
 
         /// <summary>
         /// 특정 프로세스에 관련된 핸들 창이 이동 방지될 스크린 인덱스
@@ -133,6 +133,25 @@ namespace CommonLibrary.Tools
             ExceptProcessNames.Add(Explorer.ProcessName);
         }
 
+        /// <summary>
+        /// <paramref name="rect"/> 값의 시작 X 좌표값 또는 X 좌표값 + Width 값이 Screen 시작위치 또는 끝에 가깝게 위치했는지 여부
+        /// </summary>
+        /// <param name="rect"></param>
+        /// <returns></returns>
+        private bool IsNearPreventScreenStartPositionOrEndPosition(Screen preventScreen, ref RECT rect)
+        {
+            // 디스플레이 상단에 가깝게 위치하면 Y좌표가 0보다 작게 나오므로 0으로 설정
+            if (rect.Y < 0)
+            {
+                rect.Y = 0;
+            }
+
+            // X 좌표 기준으로 판별한다.
+            
+
+            return true;
+        }
+
         private void StartInternalWork()
         {
             Toolkit.TraceWriteLine("특정 스크린 프로세스 창 이동 방지를 시작합니다.");
@@ -159,21 +178,26 @@ namespace CommonLibrary.Tools
                             WindowPlacement wp = new WindowPlacement();
                             if (User32.GetWindowPlacement(windowHandle, ref wp))
                             {
-                                RECT outRect = RECT.Empty;
-                                User32.GetWindowRect(windowHandle, out outRect);
+                                RECT rect = RECT.Empty;
+                                User32.GetWindowRect(windowHandle, out rect);
 
                                 // TODO: WindowPlacement ShowCmd.Maximize, ShowCmd.ShowMaximized 크기 20정도 줄이기
                                 if (wp.ShowCmd == ShowWindowCommand.Maximize || wp.ShowCmd == ShowWindowCommand.ShowMaximized)
                                 {
                                     // outRect 사이즈를 줄여야 함
-                                    outRect.Deflate(20, 20);
+                                    rect.Deflate(20, 20);
                                 }
 
-                                if (SetProcessAllWindowsHandlePos.Invoke(this, new ProcessAllSetWindowPosEventArgs(process, windowHandle, wp, windowText)))
+                                if (IsNearPreventScreenStartPositionOrEndPosition(preventScreen, ref rect))
                                 {
-                                    if (preventScreen.BoundsContains(outRect.ToPoints()))
+                                    
+                                }
+
+                                if (ProcessAllWindowsHandleSetPos.Invoke(this, new ProcessAllSetWindowPosEventArgs(process, windowHandle, wp, windowText)))
+                                {
+                                    if (preventScreen.BoundsContains(rect.ToPoints()))
                                     {
-                                        ProcessSetWindowPos(windowHandle, outRect);
+                                        ProcessSetWindowPos(windowHandle, rect);
 
                                         string text = String.Format("ProcessSetWindowPos ProcessName={0}, Handle={1}, ShowWindowCommand={2}, Text={3}",
                                             process.ProcessName, windowHandle, wp.ShowCmd.ToString(), windowText);
@@ -189,19 +213,24 @@ namespace CommonLibrary.Tools
                         WindowPlacement wp = new WindowPlacement();
                         if (User32.GetWindowPlacement(process.MainWindowHandle, ref wp))
                         {
-                            RECT outRect;
-                            User32.GetWindowRect(process.MainWindowHandle, out outRect);
+                            RECT rect;
+                            User32.GetWindowRect(process.MainWindowHandle, out rect);
 
                             // TODO: WindowPlacement ShowCmd.Maximize, ShowCmd.ShowMaximized 크기 20정도 줄이기
                             if (wp.ShowCmd == ShowWindowCommand.Maximize || wp.ShowCmd == ShowWindowCommand.ShowMaximized)
                             {
                                 // outRect 사이즈를 줄여야 함
-                                outRect.Deflate(20, 20);
+                                rect.Deflate(20, 20);
                             }
 
-                            if (preventScreen.BoundsContains(outRect.ToPoints()))
+                            if (IsNearPreventScreenStartPositionOrEndPosition(preventScreen, ref rect))
                             {
-                                ProcessSetWindowPos(process.MainWindowHandle, outRect);
+
+                            }
+
+                            if (preventScreen.BoundsContains(rect.ToPoints()))
+                            {
+                                ProcessSetWindowPos(process.MainWindowHandle, rect);
 
                                 string text = String.Format("ProcessSetWindowPos ProcessName={0}, Handle={1}, ShowWindowCommand={2}, Title={3}",
                                             process.ProcessName, process.MainWindowHandle, wp.ShowCmd.ToString(), process.MainWindowTitle);
@@ -224,11 +253,11 @@ namespace CommonLibrary.Tools
             }
             _workerThread = null;
 
-            foreach (Delegate item in SetProcessAllWindowsHandlePos.GetInvocationList())
+            foreach (Delegate item in ProcessAllWindowsHandleSetPos.GetInvocationList())
             {
-                SetProcessAllWindowsHandlePos -= (ProcessAllWindowsHandleSetPosEventHandler)item;
+                ProcessAllWindowsHandleSetPos -= (ProcessAllWindowsHandleSetPosEventHandler)item;
             }
-            SetProcessAllWindowsHandlePos = null;
+            ProcessAllWindowsHandleSetPos = null;
 
             Toolkit.TraceWriteLine("특정 스크린 프로세스 창 이동 방지를 종료합니다.");
         }

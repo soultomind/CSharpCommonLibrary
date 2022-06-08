@@ -18,7 +18,7 @@ namespace TestNet32
         private MouseManager _mouseManager;
         private WindowManager _windowManager;
 
-        private ImageCapture _screenImageCapture;
+        private ImageCapture _imageCapture;
         public TestForm()
         {
             InitializeComponent();
@@ -53,10 +53,10 @@ namespace TestNet32
                     _windowManager = null;
                 }
 
-                if (_screenImageCapture != null)
+                if (_imageCapture != null)
                 {
-                    _screenImageCapture.Stop();
-                    _screenImageCapture = null;
+                    _imageCapture.Stop();
+                    _imageCapture = null;
                 }
             }
         }
@@ -109,7 +109,7 @@ namespace TestNet32
                 if (_windowManager == null)
                 {
                     ProcessesSetWindowPosFunctionStrategy strategy = new ProcessesSetWindowPosFunctionStrategy();
-                    strategy.SetProcessAllWindowsHandlePos += ProcessWndHandlesAdjustLocationStrategy_SetProcessAllWindowsHandlePos;
+                    strategy.ProcessAllWindowsHandleSetPos += Strategy_ProcessAllWindowsHandleSetPos;
 
                     _windowManager = new WindowManager(strategy);
                     _windowManager.StartWorkerThread();
@@ -125,7 +125,7 @@ namespace TestNet32
             }
         }
 
-        private bool ProcessWndHandlesAdjustLocationStrategy_SetProcessAllWindowsHandlePos(object sender, ProcessAllSetWindowPosEventArgs e)
+        private bool Strategy_ProcessAllWindowsHandleSetPos(object sender, ProcessAllSetWindowPosEventArgs e)
         {
             // 해당 이벤트핸들러에서 특정 프로세스의 모든창에 대하여 윈도우 창 제어를 할지 여부를 처리한다.
             if (e.Process.ProcessName.Equals(Explorer.ProcessName))
@@ -194,19 +194,19 @@ namespace TestNet32
         {
             if (_isMultiScreen)
             {
-                if (_screenImageCapture == null)
+                if (_imageCapture == null)
                 {
-                    _screenImageCapture = new ImageCapture(ScreenUtility.GetFirstScreenIndexAndExceptPrimaryScreenIndex());
-                    _screenImageCapture.CreateImageCapture += ScreenImageCapture_CreateScreenImageCapture;
-                    _screenImageCapture.Start();
+                    _imageCapture = new ImageCapture(ScreenUtility.GetFirstScreenIndexAndExceptPrimaryScreenIndex());
+                    _imageCapture.CreateImageCapture += ScreenImageCapture_CreateScreenImageCapture;
+                    _imageCapture.Start();
 
                     _ButtonStartAndStopScreenCapture.Text = "스크린 캡쳐 정지";
                 }
                 else
                 {
-                    _screenImageCapture.Stop();
-                    _screenImageCapture.CreateImageCapture -= ScreenImageCapture_CreateScreenImageCapture;
-                    _screenImageCapture = null;
+                    _imageCapture.Stop();
+                    _imageCapture.CreateImageCapture -= ScreenImageCapture_CreateScreenImageCapture;
+                    _imageCapture = null;
 
                     _ButtonStartAndStopScreenCapture.Text = "스크린 캡쳐 시작";
                 }
@@ -217,13 +217,13 @@ namespace TestNet32
         {
             if (e.Exception == null)
             {
-                if (_PictureBoxScreenCapture.Image != null)
+                if (_PictureBoxImageCapture.Image != null)
                 {
-                    _PictureBoxScreenCapture.Image.Dispose();
+                    _PictureBoxImageCapture.Image.Dispose();
 
                 }
-                _PictureBoxScreenCapture.SizeMode = PictureBoxSizeMode.StretchImage;
-                _PictureBoxScreenCapture.Image = e.Bitmap;
+                _PictureBoxImageCapture.SizeMode = PictureBoxSizeMode.StretchImage;
+                _PictureBoxImageCapture.Image = e.Bitmap;
             }
         }
     }

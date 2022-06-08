@@ -31,13 +31,13 @@ namespace TestNet32
         {
             this._ButtonMouseMovePrevent = new System.Windows.Forms.Button();
             this._ButtonShowScreenIndex = new System.Windows.Forms.Button();
-            this._PictureBoxScreenCapture = new System.Windows.Forms.PictureBox();
+            this._PictureBoxImageCapture = new System.Windows.Forms.PictureBox();
             this._ButtonStartAndStopScreenCapture = new System.Windows.Forms.Button();
             this._ButtonHttpToolkitTest = new System.Windows.Forms.Button();
             this._RichTextBoxHttpToolkitTest = new System.Windows.Forms.RichTextBox();
             this._ButtonProcessWindowHandleFixedLocation = new System.Windows.Forms.Button();
             this._ButtonMoveCursorPoint = new System.Windows.Forms.Button();
-            ((System.ComponentModel.ISupportInitialize)(this._PictureBoxScreenCapture)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this._PictureBoxImageCapture)).BeginInit();
             this.SuspendLayout();
             // 
             // _ButtonMouseMovePrevent
@@ -62,11 +62,11 @@ namespace TestNet32
             // 
             // _PictureBoxScreenCapture
             // 
-            this._PictureBoxScreenCapture.Location = new System.Drawing.Point(415, 282);
-            this._PictureBoxScreenCapture.Name = "_PictureBoxScreenCapture";
-            this._PictureBoxScreenCapture.Size = new System.Drawing.Size(373, 231);
-            this._PictureBoxScreenCapture.TabIndex = 2;
-            this._PictureBoxScreenCapture.TabStop = false;
+            this._PictureBoxImageCapture.Location = new System.Drawing.Point(415, 282);
+            this._PictureBoxImageCapture.Name = "_PictureBoxScreenCapture";
+            this._PictureBoxImageCapture.Size = new System.Drawing.Size(373, 231);
+            this._PictureBoxImageCapture.TabIndex = 2;
+            this._PictureBoxImageCapture.TabStop = false;
             // 
             // _ButtonStartAndStopScreenCapture
             // 
@@ -126,7 +126,7 @@ namespace TestNet32
             this.Controls.Add(this._RichTextBoxHttpToolkitTest);
             this.Controls.Add(this._ButtonHttpToolkitTest);
             this.Controls.Add(this._ButtonStartAndStopScreenCapture);
-            this.Controls.Add(this._PictureBoxScreenCapture);
+            this.Controls.Add(this._PictureBoxImageCapture);
             this.Controls.Add(this._ButtonShowScreenIndex);
             this.Controls.Add(this._ButtonMouseMovePrevent);
             this.Font = new System.Drawing.Font("나눔고딕", 8.999999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
@@ -135,7 +135,7 @@ namespace TestNet32
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.TestForm_FormClosed);
             this.Load += new System.EventHandler(this.TestForm_Load);
             this.Shown += new System.EventHandler(this.TestForm_Shown);
-            ((System.ComponentModel.ISupportInitialize)(this._PictureBoxScreenCapture)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this._PictureBoxImageCapture)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -144,7 +144,7 @@ namespace TestNet32
 
         private System.Windows.Forms.Button _ButtonMouseMovePrevent;
         private System.Windows.Forms.Button _ButtonShowScreenIndex;
-        private System.Windows.Forms.PictureBox _PictureBoxScreenCapture;
+        private System.Windows.Forms.PictureBox _PictureBoxImageCapture;
         private System.Windows.Forms.Button _ButtonStartAndStopScreenCapture;
         private System.Windows.Forms.Button _ButtonHttpToolkitTest;
         private System.Windows.Forms.RichTextBox _RichTextBoxHttpToolkitTest;

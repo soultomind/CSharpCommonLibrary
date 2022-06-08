@@ -72,17 +72,11 @@ namespace CommonLibrary.Web
 
         public static string DefaultContentType = "application/x-www-form-urlencoded; charset=";
 
-        public string DefaultUserAgent { get; set; }
-        public bool DefaultIsSetCachePolicy { get; set; }
-        public HttpRequestCacheLevel DefaultCacheLevel { get; set; }
-        public bool DefaultIsExpect100Continue { get; set; }
+        public HttpDefaultProperties DefaultProperties { get; private set; }
 
         public HttpToolkit()
         {
-            DefaultUserAgent = "Mozilla/4.0";
-            DefaultIsSetCachePolicy = false;
-            DefaultCacheLevel = HttpRequestCacheLevel.Revalidate;
-            DefaultIsExpect100Continue = false;
+            DefaultProperties = new HttpDefaultProperties();
         }
 
         /// <summary>
@@ -118,7 +112,7 @@ namespace CommonLibrary.Web
 
         protected void SetRequestDefaultProperties(HttpWebRequest request, int requestTimeout)
         {
-            request.UserAgent = DefaultUserAgent;
+            request.UserAgent = DefaultProperties.DefaultUserAgent;
 
             //
             //TimeOut 설정
@@ -129,16 +123,16 @@ namespace CommonLibrary.Web
             }
 
 
-            if (DefaultIsSetCachePolicy)
+            if (DefaultProperties.DefaultIsSetCachePolicy)
             {
-                HttpRequestCachePolicy httpRequestCachePolicy = new HttpRequestCachePolicy(DefaultCacheLevel);
+                HttpRequestCachePolicy httpRequestCachePolicy = new HttpRequestCachePolicy(DefaultProperties.DefaultCacheLevel);
                 request.CachePolicy = httpRequestCachePolicy;
             }
 
             ///
             /// Expect100Continue 무시
             ///
-            request.ServicePoint.Expect100Continue = DefaultIsExpect100Continue;
+            request.ServicePoint.Expect100Continue = DefaultProperties.DefaultIsExpect100Continue;
 
             request.ContentType = DefaultContentType;
         }
@@ -413,6 +407,22 @@ namespace CommonLibrary.Web
 
             outHttpStatusCode = httpStatusCode;
             return responseData;
+        }
+    }
+
+    public class HttpDefaultProperties
+    {
+        public string DefaultUserAgent { get; private set; }
+        public bool DefaultIsSetCachePolicy { get; private set; }
+        public HttpRequestCacheLevel DefaultCacheLevel { get; private set; }
+        public bool DefaultIsExpect100Continue { get; private set; }
+
+        public HttpDefaultProperties()
+        {
+            DefaultUserAgent = "Mozilla/4.0";
+            DefaultIsSetCachePolicy = false;
+            DefaultCacheLevel = HttpRequestCacheLevel.Revalidate;
+            DefaultIsExpect100Continue = false;
         }
     }
 }
