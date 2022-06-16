@@ -13,6 +13,58 @@ namespace CommonLibrary.Utilities
     public class StringUtility
     {
         /// <summary>
+        /// <see cref="String.Format(string, object[])"/>에 사용되는 <paramref name="format"/> 에 {0} ... {9} 문자열이 포함되는지 여부를 반환합니다.
+        /// </summary>
+        /// <param name="format"></param>
+        /// <param name="min"></param>
+        /// <param name="max"></param>
+        /// <returns></returns>
+        public static bool IsValidStringFormat(string format, int min = 1, int max = 9)
+        {
+            if (String.IsNullOrEmpty(format))
+            {
+                return false;
+            }
+
+            if (min > max)
+            {
+                throw new ArgumentException(nameof(min));
+            }
+
+            string condition = "{[0-9]}";
+            string patternRange = String.Format("{0},{1}", min, max);
+            string pattern = condition + "{" + patternRange + "}";
+
+            if (Regex.IsMatch(format, pattern))
+            {
+                MatchCollection matchCollection = Regex.Matches(format, pattern);
+                int Count = matchCollection.Count;
+
+                HashSet<int> numberSet = new HashSet<int>();
+                foreach (Match match in matchCollection)
+                {
+                    int index = match.Index;
+                    string value = match.Value;
+
+                    int number = int.Parse(value.Substring(1, 1));
+                    if (!numberSet.Add(number))
+                    {
+                        throw new ArgumentException(nameof(format) + " is !numberSet.Add(number)");
+                    }
+
+                    if (number > Count)
+                    {
+                        throw new ArgumentException(nameof(format) + " is number > Count");
+                    }
+                }
+                return true;
+            }
+
+            return false;
+        }
+    
+
+        /// <summary>
         /// 현재 날짜시간을 포멧형태로 반환합니다.
         /// <para>[기본 yyyy/MM/dd HH:mm:ss]</para>
         /// </summary>
