@@ -1,10 +1,18 @@
 ﻿# CommonLibrary .NET Framework 3.5
 
+## Extension
+- EnumExtension : Enum 확장 클래스
+  + Enum 에 선언된 다수의 Attribute 중 특정 Attribute 정보 가져오는 기능
+- ScreenExtension : System.Windows.Forms.Screen 확장 클래스
+  + 특정 프로그램 창이(4개의 좌표) 특정 Screen 에 포함되어 있는지 확인하는 기능 (Bounds,WorkingArea)
+
 ## Net
-- SecurityProtocolExtension : .NET35 전용 SecurityProtocol 확장 클래스 
+- SecurityProtocolExtension : .NET35 전용 SecurityProtocol 확장 클래스   
+- 
 ## Tools    
 - MouseManager : 마우스 관련 기능 제공
-- WindowManager : 창에 관련 기능 제공
+- WindowManager : 창에 관련 기능 제공   
+- 
 ## UI 
 - TablessControl : 탭이 없는 TabControl
 - ScreenIndexDialog : 스크린 인덱스 출력

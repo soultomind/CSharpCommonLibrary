@@ -47,12 +47,14 @@
   <ItemGroup>
     <Compile Include="CertFile.cs" />
     <Compile Include="Explorer.cs" />
+    <Compile Include="Extensions\EnumExtension.cs" />
     <Compile Include="Extensions\ScreenExtension.cs" />
     <Compile Include="Net\SecurityProtocolExtension.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RectangleRatio.cs" />
     <Compile Include="MultiScreen.cs" />
     <Compile Include="ImageCapture.cs" />
+    <Compile Include="StringResourceAttribute.cs" />
     <Compile Include="Toolkit.cs" />
     <Compile Include="Tools\IMouseFunctionStrategy.cs" />
     <Compile Include="Tools\IWindowFunctionStrategy.cs" />
