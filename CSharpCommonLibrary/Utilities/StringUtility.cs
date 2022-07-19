@@ -12,6 +12,11 @@ namespace CommonLibrary.Utilities
     /// </summary>
     public class StringUtility
     {
+        public static string Capitalize(string text)
+        {
+            return Char.ToUpper(text.ToCharArray()[0]) + text.Substring(1);
+        }
+
         /// <summary>
         /// <see cref="String.Format(string, object[])"/>에 사용되는 <paramref name="format"/> 에 {0} ... {9} 문자열이 포함되는지 여부를 반환합니다.
         /// </summary>
@@ -93,6 +98,15 @@ namespace CommonLibrary.Utilities
             return newGuid;
         }
 
+        #region HTML 관련 유틸
+
+        public static bool IsNumberSignRgbColor(string text)
+        {
+            return Regex.IsMatch(text, "#[0-9A-Fa-f]{6}");
+        }
+
+        #endregion
+
         /// <summary>
         /// <paramref name="input"/> 문자열 값이 알파벳인지 여부
         /// </summary>
@@ -100,7 +114,9 @@ namespace CommonLibrary.Utilities
         /// <returns></returns>
         public static bool IsAlphabet(string input)
         {
-            return Regex.IsMatch(input, "[A-Z]", RegexOptions.IgnoreCase);
+            string condition = "[A-Za-z]";
+            string pattern = condition + "{" + input.Length + "}";
+            return Regex.IsMatch(input, pattern);
         }
 
         /// <summary>

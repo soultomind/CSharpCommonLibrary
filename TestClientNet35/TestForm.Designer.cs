@@ -37,6 +37,8 @@ namespace TestNet32
             this._RichTextBoxHttpToolkitTest = new System.Windows.Forms.RichTextBox();
             this._ButtonProcessWindowHandleFixedLocation = new System.Windows.Forms.Button();
             this._ButtonMoveCursorPoint = new System.Windows.Forms.Button();
+            this._ButtonTest = new System.Windows.Forms.Button();
+            this._TextBoxTest = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this._PictureBoxImageCapture)).BeginInit();
             this.SuspendLayout();
             // 
@@ -60,10 +62,10 @@ namespace TestNet32
             this._ButtonShowScreenIndex.UseVisualStyleBackColor = true;
             this._ButtonShowScreenIndex.Click += new System.EventHandler(this.ButtonShowScreenIndex_Click);
             // 
-            // _PictureBoxScreenCapture
+            // _PictureBoxImageCapture
             // 
             this._PictureBoxImageCapture.Location = new System.Drawing.Point(415, 282);
-            this._PictureBoxImageCapture.Name = "_PictureBoxScreenCapture";
+            this._PictureBoxImageCapture.Name = "_PictureBoxImageCapture";
             this._PictureBoxImageCapture.Size = new System.Drawing.Size(373, 231);
             this._PictureBoxImageCapture.TabIndex = 2;
             this._PictureBoxImageCapture.TabStop = false;
@@ -116,11 +118,30 @@ namespace TestNet32
             this._ButtonMoveCursorPoint.UseVisualStyleBackColor = true;
             this._ButtonMoveCursorPoint.Click += new System.EventHandler(this.ButtonMoveCursorPoint_Click);
             // 
+            // _ButtonTest
+            // 
+            this._ButtonTest.Location = new System.Drawing.Point(24, 249);
+            this._ButtonTest.Name = "_ButtonTest";
+            this._ButtonTest.Size = new System.Drawing.Size(75, 23);
+            this._ButtonTest.TabIndex = 8;
+            this._ButtonTest.Text = "테스트";
+            this._ButtonTest.UseVisualStyleBackColor = true;
+            this._ButtonTest.Click += new System.EventHandler(this._ButtonTest_Click);
+            // 
+            // _TextBoxTest
+            // 
+            this._TextBoxTest.Location = new System.Drawing.Point(105, 249);
+            this._TextBoxTest.Name = "_TextBoxTest";
+            this._TextBoxTest.Size = new System.Drawing.Size(197, 21);
+            this._TextBoxTest.TabIndex = 9;
+            // 
             // TestForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 525);
+            this.Controls.Add(this._TextBoxTest);
+            this.Controls.Add(this._ButtonTest);
             this.Controls.Add(this._ButtonMoveCursorPoint);
             this.Controls.Add(this._ButtonProcessWindowHandleFixedLocation);
             this.Controls.Add(this._RichTextBoxHttpToolkitTest);
@@ -137,6 +158,7 @@ namespace TestNet32
             this.Shown += new System.EventHandler(this.TestForm_Shown);
             ((System.ComponentModel.ISupportInitialize)(this._PictureBoxImageCapture)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -150,5 +172,7 @@ namespace TestNet32
         private System.Windows.Forms.RichTextBox _RichTextBoxHttpToolkitTest;
         private System.Windows.Forms.Button _ButtonProcessWindowHandleFixedLocation;
         private System.Windows.Forms.Button _ButtonMoveCursorPoint;
+        private System.Windows.Forms.Button _ButtonTest;
+        private System.Windows.Forms.TextBox _TextBoxTest;
     }
 }

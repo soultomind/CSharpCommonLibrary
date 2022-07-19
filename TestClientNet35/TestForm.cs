@@ -226,5 +226,12 @@ namespace TestNet32
                 _PictureBoxImageCapture.Image = e.Bitmap;
             }
         }
+
+        private void _ButtonTest_Click(object sender, EventArgs e)
+        {
+            string text = _TextBoxTest.Text;
+            bool result = StringUtility.IsAlphabet(text);
+            MessageBox.Show("결과=" + result);
+        }
     }
 }
