@@ -12,9 +12,23 @@ namespace CommonLibrary.Utilities
     /// </summary>
     public class StringUtility
     {
-        public static string Capitalize(string text)
+        private static void CheckedInput(string input)
         {
-            return Char.ToUpper(text.ToCharArray()[0]) + text.Substring(1);
+            if (input == null)
+            {
+                throw new ArgumentNullException(nameof(input));
+            }
+
+            if (String.IsNullOrEmpty(input))
+            {
+                throw new ArgumentException(nameof(input));
+            }
+        }
+
+        public static string Capitalize(string input)
+        {
+            CheckedInput(input);
+            return Char.ToUpper(input.ToCharArray()[0]) + input.Substring(1);
         }
 
         /// <summary>
@@ -33,7 +47,7 @@ namespace CommonLibrary.Utilities
 
             if (min > max)
             {
-                throw new ArgumentException(nameof(min));
+                throw new ArgumentException("min > max");
             }
 
             string condition = "{[0-9]}";
@@ -98,14 +112,31 @@ namespace CommonLibrary.Utilities
             return newGuid;
         }
 
-        #region HTML 관련 유틸
-
-        public static bool IsNumberSignRgbColor(string text)
+        public static bool IsNumberSignRgbColor(string input)
         {
-            return Regex.IsMatch(text, "#[0-9A-Fa-f]{6}");
+            return IsNumberSignColor(false, input);
         }
 
-        #endregion
+        public static bool IsNumberSignARgbColor(string input)
+        {
+            return IsNumberSignColor(true, input);
+        }
+
+        private static bool IsNumberSignColor(bool isArgbColor, string input)
+        {
+            CheckedInput(input);
+
+            string pattern = String.Empty;
+            if (isArgbColor)
+            {
+                pattern = "#[0-9A-Fa-f]{8}(\\s|$)";
+            }
+            else
+            {
+                pattern = "#[0-9A-Fa-f]{6}(\\s|$)";
+            }
+            return Regex.IsMatch(input, pattern);
+        }
 
         /// <summary>
         /// <paramref name="input"/> 문자열 값이 알파벳인지 여부
@@ -114,8 +145,10 @@ namespace CommonLibrary.Utilities
         /// <returns></returns>
         public static bool IsAlphabet(string input)
         {
+            CheckedInput(input);
+
             string condition = "[A-Za-z]";
-            string pattern = condition + "{" + input.Length + "}";
+            string pattern = condition + "{" + input.Length + "}(\\s|$)";
             return Regex.IsMatch(input, pattern);
         }
 
