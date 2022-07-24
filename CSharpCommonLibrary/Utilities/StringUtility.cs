@@ -25,6 +25,11 @@ namespace CommonLibrary.Utilities
             }
         }
 
+        /// <summary>
+        /// <paramref name="input"/>값의 첫번째 문자를 대문자로 변환하여 반환합니다.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
         public static string Capitalize(string input)
         {
             CheckedInput(input);
@@ -32,7 +37,7 @@ namespace CommonLibrary.Utilities
         }
 
         /// <summary>
-        /// <see cref="String.Format(string, object[])"/>에 사용되는 <paramref name="format"/> 에 {0} ... {9} 문자열이 포함되는지 여부를 반환합니다.
+        /// <see cref="String.Format(string, object[])"/>에 사용되는 <paramref name="format"/> 에 {0} ... {9} 문자열이 유효한지 여부를 반환합니다.
         /// </summary>
         /// <param name="format"></param>
         /// <param name="min"></param>
@@ -81,20 +86,18 @@ namespace CommonLibrary.Utilities
 
             return false;
         }
-    
+
 
         /// <summary>
         /// 현재 날짜시간을 포멧형태로 반환합니다.
         /// <para>[기본 yyyy/MM/dd HH:mm:ss]</para>
+        /// <para>시간을 나타내는 문자열이 hh=[0-11], HH=[0-23] </para>
         /// </summary>
         /// <param name="format"></param>
         /// <returns></returns>
-        /// <remarks>
-        /// <para>시간을 나타내는 문자열이 hh=[0-11], HH=[0-23] </para>
-        /// </remarks>
         public static string NowToString(string format = "yyyy/MM/dd HH:mm:ss")
         {
-            return DateTime.Now.ToString(format, CultureInfo.InvariantCulture);
+            return DateTime.Now.ToString(format);
         }
 
         /// <summary>
@@ -112,28 +115,45 @@ namespace CommonLibrary.Utilities
             return newGuid;
         }
 
+        /// <summary>
+        /// <paramref name="input"/> 값이 #FF(R)FF(G)FF(B) 형태의 컬러값인지 여부를 반환합니다.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
         public static bool IsNumberSignRgbColor(string input)
         {
             return IsNumberSignColor(false, input);
         }
 
+        /// <summary>
+        /// <paramref name="input"/> 값이 #FF(A)FF(R)FF(G)FF(B) 형태의 컬러값인지 여부를 반환합니다.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
         public static bool IsNumberSignARgbColor(string input)
         {
             return IsNumberSignColor(true, input);
         }
 
-        private static bool IsNumberSignColor(bool isArgbColor, string input)
+        /// <summary>
+        /// #FF(R)FF(G)FF(B),#FF(A)FF(R)FF(G)FF(B) 형태의 컬러값인지 여부를 반환합니다.
+        /// </summary>
+        /// <param name="isArgbColor">Argb 형태의 #FF(A)FF(R)FF(G)FF(B) 값인지 여부</param>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public static bool IsNumberSignColor(bool isArgbColor, string input)
         {
             CheckedInput(input);
 
             string pattern = String.Empty;
+            // (\\s|%) = 스페이스나 문자열 끝
             if (isArgbColor)
             {
-                pattern = "#[0-9A-Fa-f]{8}(\\s|$)";
+                pattern = "#[0-9A-Fa-f]{8}($)";
             }
             else
             {
-                pattern = "#[0-9A-Fa-f]{6}(\\s|$)";
+                pattern = "#[0-9A-Fa-f]{6}($)";
             }
             return Regex.IsMatch(input, pattern);
         }
@@ -148,7 +168,7 @@ namespace CommonLibrary.Utilities
             CheckedInput(input);
 
             string condition = "[A-Za-z]";
-            string pattern = condition + "{" + input.Length + "}(\\s|$)";
+            string pattern = condition + "{" + input.Length + "}($)";
             return Regex.IsMatch(input, pattern);
         }
 
