@@ -230,7 +230,16 @@ namespace TestNet32
         private void _ButtonTest_Click(object sender, EventArgs e)
         {
             string text = _TextBoxTest.Text;
-            bool result = StringUtility.IsAlphabet(text);
+
+            bool result = false;
+            if (_CheckBoxChecked.Checked)
+            {
+                result = StringUtility.IsNumberSignARgbColor(text);
+            }
+            else
+            {
+                result = StringUtility.IsNumberSignRgbColor(text);
+            }
             MessageBox.Show("결과=" + result);
         }
     }

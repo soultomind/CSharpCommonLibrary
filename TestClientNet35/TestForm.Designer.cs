@@ -39,6 +39,7 @@ namespace TestNet32
             this._ButtonMoveCursorPoint = new System.Windows.Forms.Button();
             this._ButtonTest = new System.Windows.Forms.Button();
             this._TextBoxTest = new System.Windows.Forms.TextBox();
+            this._CheckBoxChecked = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this._PictureBoxImageCapture)).BeginInit();
             this.SuspendLayout();
             // 
@@ -135,11 +136,22 @@ namespace TestNet32
             this._TextBoxTest.Size = new System.Drawing.Size(197, 21);
             this._TextBoxTest.TabIndex = 9;
             // 
+            // _CheckBoxChecked
+            // 
+            this._CheckBoxChecked.AutoSize = true;
+            this._CheckBoxChecked.Location = new System.Drawing.Point(105, 225);
+            this._CheckBoxChecked.Name = "_CheckBoxChecked";
+            this._CheckBoxChecked.Size = new System.Drawing.Size(74, 18);
+            this._CheckBoxChecked.TabIndex = 10;
+            this._CheckBoxChecked.Text = "Checked";
+            this._CheckBoxChecked.UseVisualStyleBackColor = true;
+            // 
             // TestForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 525);
+            this.Controls.Add(this._CheckBoxChecked);
             this.Controls.Add(this._TextBoxTest);
             this.Controls.Add(this._ButtonTest);
             this.Controls.Add(this._ButtonMoveCursorPoint);
@@ -174,5 +186,6 @@ namespace TestNet32
         private System.Windows.Forms.Button _ButtonMoveCursorPoint;
         private System.Windows.Forms.Button _ButtonTest;
         private System.Windows.Forms.TextBox _TextBoxTest;
+        private System.Windows.Forms.CheckBox _CheckBoxChecked;
     }
 }
