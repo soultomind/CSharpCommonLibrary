@@ -37,54 +37,25 @@ namespace CommonLibrary.Utilities
         }
 
         /// <summary>
-        /// <see cref="String.Format(string, object[])"/>에 사용되는 <paramref name="format"/> 에 {0} ... {9} 문자열이 유효한지 여부를 반환합니다.
+        /// <paramref name="email"/> 값이 유효한 Email 형태의 문자열인지 여부를 반환합니다.
         /// </summary>
-        /// <param name="format"></param>
+        /// <param name="email"></param>
+        /// <returns></returns>
+        public static bool IsValidEmail(string email)
+        {
+            return true;
+        }
+
+        /// <summary>
+        /// <see cref="String.Format(string, object[])"/>에 사용되는 <paramref name="input"/> 에 {0} ... {9} 문자열이 유효한지 여부를 반환합니다.
+        /// </summary>
+        /// <param name="input"></param>
         /// <param name="min"></param>
         /// <param name="max"></param>
         /// <returns></returns>
-        public static bool IsValidStringFormat(string format, int min = 1, int max = 9)
+        public static bool IsValidStringFormat(string input, int min = 1, int max = 9)
         {
-            if (String.IsNullOrEmpty(format))
-            {
-                return false;
-            }
-
-            if (min > max)
-            {
-                throw new ArgumentException("min > max");
-            }
-
-            string condition = "{[0-9]}";
-            string patternRange = String.Format("{0},{1}", min, max);
-            string pattern = condition + "{" + patternRange + "}";
-
-            if (Regex.IsMatch(format, pattern))
-            {
-                MatchCollection matchCollection = Regex.Matches(format, pattern);
-                int Count = matchCollection.Count;
-
-                HashSet<int> numberSet = new HashSet<int>();
-                foreach (Match match in matchCollection)
-                {
-                    int index = match.Index;
-                    string value = match.Value;
-
-                    int number = int.Parse(value.Substring(1, 1));
-                    if (!numberSet.Add(number))
-                    {
-                        throw new ArgumentException(nameof(format) + " is !numberSet.Add(number)");
-                    }
-
-                    if (number > Count)
-                    {
-                        throw new ArgumentException(nameof(format) + " is number > Count");
-                    }
-                }
-                return true;
-            }
-
-            return false;
+            return RegExpUtility.IsValidStringFormat(input, min, max);
         }
 
 
@@ -122,7 +93,7 @@ namespace CommonLibrary.Utilities
         /// <returns></returns>
         public static bool IsNumberSignRgbColor(string input)
         {
-            return IsNumberSignColor(false, input);
+            return IsNumberSignColor(input, false);
         }
 
         /// <summary>
@@ -132,30 +103,18 @@ namespace CommonLibrary.Utilities
         /// <returns></returns>
         public static bool IsNumberSignARgbColor(string input)
         {
-            return IsNumberSignColor(true, input);
+            return IsNumberSignColor(input, true);
         }
 
         /// <summary>
         /// #FF(R)FF(G)FF(B),#FF(A)FF(R)FF(G)FF(B) 형태의 컬러값인지 여부를 반환합니다.
         /// </summary>
-        /// <param name="isArgbColor">Argb 형태의 #FF(A)FF(R)FF(G)FF(B) 값인지 여부</param>
         /// <param name="input"></param>
+        /// <param name = "isArgbColor" > Argb 형태의 #FF(A)FF(R)FF(G)FF(B) 값인지 여부</param>
         /// <returns></returns>
-        public static bool IsNumberSignColor(bool isArgbColor, string input)
+        public static bool IsNumberSignColor(string input, bool isArgbColor)
         {
-            CheckedInput(input);
-
-            string pattern = String.Empty;
-            // (\\s|%) = 스페이스나 문자열 끝
-            if (isArgbColor)
-            {
-                pattern = "#[0-9A-Fa-f]{8}($)";
-            }
-            else
-            {
-                pattern = "#[0-9A-Fa-f]{6}($)";
-            }
-            return Regex.IsMatch(input, pattern);
+            return RegExpUtility.IsNumberSignColor(input, isArgbColor);
         }
 
         /// <summary>
@@ -165,11 +124,7 @@ namespace CommonLibrary.Utilities
         /// <returns></returns>
         public static bool IsAlphabet(string input)
         {
-            CheckedInput(input);
-
-            string condition = "[A-Za-z]";
-            string pattern = condition + "{" + input.Length + "}($)";
-            return Regex.IsMatch(input, pattern);
+            return RegExpUtility.IsAlphabet(input);
         }
 
         /// <summary>

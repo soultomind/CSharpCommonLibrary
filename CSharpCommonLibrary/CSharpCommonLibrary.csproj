@@ -76,6 +76,7 @@
     <Compile Include="Utilities\IOUtility.cs" />
     <Compile Include="Utilities\MathUtility.cs" />
     <Compile Include="Utilities\ProcessUtility.cs" />
+    <Compile Include="Utilities\RegExpUtility.cs" />
     <Compile Include="Utilities\ScreenUtility.cs" />
     <Compile Include="Utilities\StringUtility.cs" />
     <Compile Include="Web\HttpToolkit.cs" />

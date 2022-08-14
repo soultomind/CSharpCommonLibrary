@@ -40,6 +40,7 @@ namespace TestNet32
             this._ButtonTest = new System.Windows.Forms.Button();
             this._TextBoxTest = new System.Windows.Forms.TextBox();
             this._CheckBoxChecked = new System.Windows.Forms.CheckBox();
+            this._LabelResult = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this._PictureBoxImageCapture)).BeginInit();
             this.SuspendLayout();
             // 
@@ -146,11 +147,21 @@ namespace TestNet32
             this._CheckBoxChecked.Text = "Checked";
             this._CheckBoxChecked.UseVisualStyleBackColor = true;
             // 
+            // _LabelResult
+            // 
+            this._LabelResult.AutoSize = true;
+            this._LabelResult.Location = new System.Drawing.Point(32, 275);
+            this._LabelResult.Name = "_LabelResult";
+            this._LabelResult.Size = new System.Drawing.Size(39, 14);
+            this._LabelResult.TabIndex = 11;
+            this._LabelResult.Text = "결과 : ";
+            // 
             // TestForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 525);
+            this.Controls.Add(this._LabelResult);
             this.Controls.Add(this._CheckBoxChecked);
             this.Controls.Add(this._TextBoxTest);
             this.Controls.Add(this._ButtonTest);
@@ -187,5 +198,6 @@ namespace TestNet32
         private System.Windows.Forms.Button _ButtonTest;
         private System.Windows.Forms.TextBox _TextBoxTest;
         private System.Windows.Forms.CheckBox _CheckBoxChecked;
+        private System.Windows.Forms.Label _LabelResult;
     }
 }

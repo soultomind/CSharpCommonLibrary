@@ -89,5 +89,9 @@ namespace CommonLibrary.Win32
 
         [DllImport(DllName)]
         public static extern IntPtr ReleaseDC(IntPtr hWnd, IntPtr hDC);
+
+
+
+        
     }
 }

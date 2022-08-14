@@ -88,6 +88,11 @@ namespace CommonLibrary.Utilities
             return targetScreenIndex;
         }
 
+        public static bool EqualsScreenSize(Rectangle screenRectangle, Size size)
+        {
+            return screenRectangle.Width == size.Width && screenRectangle.Height == size.Height;
+        }
+
         /// <summary>
         /// 사이즈와 같은 작업표시줄 제외한 스크린 사이즈가 있는지 여부
         /// </summary>
@@ -97,8 +102,7 @@ namespace CommonLibrary.Utilities
         {
             foreach (Screen screen in Screen.AllScreens)
             {
-                if (screen.WorkingArea.Width == size.Width &&
-                    screen.WorkingArea.Height == size.Height)
+                if (EqualsScreenSize(screen.WorkingArea, size))
                 {
                     return true;
                 }
@@ -115,8 +119,7 @@ namespace CommonLibrary.Utilities
         {
             foreach (Screen screen in Screen.AllScreens)
             {
-                if (screen.Bounds.Width == size.Width &&
-                    screen.Bounds.Height == size.Height)
+                if (EqualsScreenSize(screen.Bounds, size))
                 {
                     return true;
                 }
@@ -135,6 +138,24 @@ namespace CommonLibrary.Utilities
             foreach (Screen screen in Screen.AllScreens)
             {
                 if (screen.Bounds.Contains(point))
+                {
+                    return screen;
+                }
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// <paramref name="point"/>가 위치해 있는 스크린(디스플레이) 값을 반환합니다.
+        /// <para>못 찾을 경우 Null을 반환합니다.</para>
+        /// </summary>
+        /// <param name="point"></param>
+        /// <returns></returns>
+        public static Screen ContainsScreenWorkingAreaPoint(Point point)
+        {
+            foreach (Screen screen in Screen.AllScreens)
+            {
+                if (screen.WorkingArea.Contains(point))
                 {
                     return screen;
                 }

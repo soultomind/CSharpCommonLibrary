@@ -3,10 +3,13 @@ using CommonLibrary.Tools;
 using CommonLibrary.UI;
 using CommonLibrary.Utilities;
 using CommonLibrary.Web;
+using CommonLibrary.Win32;
+using CommonLibrary.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Net;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 namespace TestNet32
@@ -229,18 +232,10 @@ namespace TestNet32
 
         private void _ButtonTest_Click(object sender, EventArgs e)
         {
-            string text = _TextBoxTest.Text;
-
             bool result = false;
-            if (_CheckBoxChecked.Checked)
-            {
-                result = StringUtility.IsNumberSignARgbColor(text);
-            }
-            else
-            {
-                result = StringUtility.IsNumberSignRgbColor(text);
-            }
-            MessageBox.Show("결과=" + result);
+            result = StringUtility.IsValidStringFormat(_TextBoxTest.Text);
+
+            _LabelResult.Text = "결과 : " + result;
         }
     }
 }
