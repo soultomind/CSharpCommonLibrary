@@ -13,7 +13,7 @@ namespace CommonLibrary
     {
         /// <summary>
         /// 포맷
-        /// <para>{0} ... {10} 형태의 인자를 필요로 하는 포맷 문자열이 있을경우 포맷으로 간주</para>
+        /// <para>{0} ... {9} 형태의 인자를 필요로 하는 포맷 문자열이 있을경우 포맷으로 간주</para>
         /// </summary>
         public string Format { get; set; } = String.Empty;
 

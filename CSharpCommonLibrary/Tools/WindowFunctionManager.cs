@@ -16,7 +16,7 @@ namespace CommonLibrary.Tools
     /// 윈도우 매니저 클래스
     /// <para>창 관련 기능 제공</para>
     /// </summary>
-    public class WindowManager
+    public class WindowFunctionManager
     {
         /// <summary>
         /// 윈도우 기능 전략 인터페이스입니다.
@@ -46,7 +46,7 @@ namespace CommonLibrary.Tools
         /// 생성자
         /// </summary>
         /// <param name="functionStrategy"></param>
-        public WindowManager(IWindowFunctionStrategy functionStrategy)
+        public WindowFunctionManager(IWindowFunctionStrategy functionStrategy)
         {
             if (functionStrategy == null)
             {

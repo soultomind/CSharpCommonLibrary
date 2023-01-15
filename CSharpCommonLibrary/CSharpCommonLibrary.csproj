@@ -47,6 +47,7 @@
   <ItemGroup>
     <Compile Include="CertFile.cs" />
     <Compile Include="Explorer.cs" />
+    <Compile Include="Extensions\AttributeExtension.cs" />
     <Compile Include="Extensions\EnumExtension.cs" />
     <Compile Include="Extensions\ScreenExtension.cs" />
     <Compile Include="Net\SecurityProtocolExtension.cs" />
@@ -83,7 +84,7 @@
     <Compile Include="Win32\Button.cs" />
     <Compile Include="Win32\Gdi32.cs" />
     <Compile Include="Win32\Mouse.cs" />
-    <Compile Include="Tools\MouseManager.cs" />
+    <Compile Include="Tools\MouseFunctionManager.cs" />
     <Compile Include="Win32\POINT.cs" />
     <Compile Include="Win32\RECT.cs" />
     <Compile Include="Win32\SetWindowPos.cs" />
@@ -94,7 +95,7 @@
     <Compile Include="Win32\WindowPlacement.cs" />
     <Compile Include="Win32\WinMessage.cs" />
     <Compile Include="Win32\WinStyle.cs" />
-    <Compile Include="Tools\WindowManager.cs" />
+    <Compile Include="Tools\WindowFunctionManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="UI\ScreenIndexDialog.resx">

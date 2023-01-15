@@ -15,7 +15,7 @@ namespace CommonLibrary.Tools
     /// 마우스 관리자 클래스
     /// <para>마우스 관련 기능 제공</para>
     /// </summary>
-    public class MouseManager
+    public class MouseFunctionManager
     {
         /// <summary>
         /// 마우스 기능 전략 인터페이스입니다.
@@ -45,7 +45,7 @@ namespace CommonLibrary.Tools
         /// 생성자
         /// </summary>
         /// <param name="functionStrategy"></param>
-        public MouseManager(IMouseFunctionStrategy functionStrategy)
+        public MouseFunctionManager(IMouseFunctionStrategy functionStrategy)
         {
             if (functionStrategy == null)
             {

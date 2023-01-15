@@ -18,8 +18,8 @@ namespace TestNet32
     {
         private bool _isMultiScreen;
 
-        private MouseManager _mouseManager;
-        private WindowManager _windowManager;
+        private MouseFunctionManager _mouseFunctionManager;
+        private WindowFunctionManager _windowFunctionManager;
 
         private ImageCapture _imageCapture;
         public TestForm()
@@ -44,16 +44,16 @@ namespace TestNet32
         {
             if (_isMultiScreen)
             {
-                if (_mouseManager != null)
+                if (_mouseFunctionManager != null)
                 {
-                    _mouseManager.StopWorkerThread();
-                    _mouseManager = null;
+                    _mouseFunctionManager.StopWorkerThread();
+                    _mouseFunctionManager = null;
                 }
 
-                if (_windowManager != null)
+                if (_windowFunctionManager != null)
                 {
-                    _windowManager.StopWorkerThread();
-                    _windowManager = null;
+                    _windowFunctionManager.StopWorkerThread();
+                    _windowFunctionManager = null;
                 }
 
                 if (_imageCapture != null)
@@ -68,18 +68,18 @@ namespace TestNet32
         {
             if (_isMultiScreen)
             {
-                if (_mouseManager == null)
+                if (_mouseFunctionManager == null)
                 {
                     int preventMoveScreenIndex = ScreenUtility.GetFirstScreenIndexAndExceptPrimaryScreenIndex();
                     IMouseFunctionStrategy functionStrategy = new MousePreventMoveScreenFunctionStrategy(preventMoveScreenIndex);
-                    _mouseManager = new MouseManager(functionStrategy);
-                    _mouseManager.StartWorkerThread();
+                    _mouseFunctionManager = new MouseFunctionManager(functionStrategy);
+                    _mouseFunctionManager.StartWorkerThread();
                     _ButtonMouseMovePrevent.Text = "마우스 이동 제어 정지";
                 }
                 else
                 {
-                    _mouseManager.StopWorkerThread();
-                    _mouseManager = null;
+                    _mouseFunctionManager.StopWorkerThread();
+                    _mouseFunctionManager = null;
                     _ButtonMouseMovePrevent.Text = "마우스 이동 제어 시작";
                 }
             }
@@ -87,7 +87,7 @@ namespace TestNet32
 
         private void ButtonMoveCursorPoint_Click(object sender, EventArgs e)
         {
-            MouseManager.MoveCursorPoint(new Point(10, 10));
+            MouseFunctionManager.MoveCursorPoint(new Point(10, 10));
         }
 
         private void ButtonShowScreenIndex_Click(object sender, EventArgs e)
@@ -109,20 +109,20 @@ namespace TestNet32
         {
             if (_isMultiScreen)
             {
-                if (_windowManager == null)
+                if (_windowFunctionManager == null)
                 {
                     ProcessesSetWindowPosFunctionStrategy strategy = new ProcessesSetWindowPosFunctionStrategy();
                     strategy.ProcessAllWindowsHandleSetPos += Strategy_ProcessAllWindowsHandleSetPos;
 
-                    _windowManager = new WindowManager(strategy);
-                    _windowManager.StartWorkerThread();
+                    _windowFunctionManager = new WindowFunctionManager(strategy);
+                    _windowFunctionManager.StartWorkerThread();
 
                     _ButtonProcessWindowHandleFixedLocation.Text = "창 제어 정지";
                 }
                 else
                 {
-                    _windowManager.StopWorkerThread();
-                    _windowManager = null;
+                    _windowFunctionManager.StopWorkerThread();
+                    _windowFunctionManager = null;
                     _ButtonProcessWindowHandleFixedLocation.Text = "창 제어 시작";
                 }
             }
