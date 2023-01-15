@@ -10,8 +10,8 @@
 - SecurityProtocolExtension : .NET35 전용 SecurityProtocol 확장 클래스   
 - 
 ## Tools    
-- MouseManager : 마우스 관련 기능 제공
-- WindowManager : 창에 관련 기능 제공   
+- MouseFunctionManager : 마우스 관련 기능 제공
+- WindowFunctionManager : 창에 관련 기능 제공   
 - 
 ## UI 
 - TablessControl : 탭이 없는 TabControl
@@ -25,6 +25,7 @@
 - MathUtility : 수학 관련 유틸
 - IOUtility : Sytem.IO 사용되는 클래스 관련 유틸
 - ProcessUtility : Process 관련 유틸
+- RegExpUtility : 정규식 관련 유틸
 - ScreenUtility : 스크린(모니터 디스플레이) 유틸   
 - StringUtility : 문자열 관련 유틸
 
