@@ -184,6 +184,8 @@ namespace CommonLibrary
         public void Close()
         {
             Stop();
+
+            _Timer.Dispose();
             _Timer = null;
         }
 

@@ -148,7 +148,7 @@ namespace CommonLibrary.Utilities
         /// </summary>
         /// <param name="size"></param>
         /// <returns></returns>
-        public static RectangleRatio ToRatio(Size size)
+        public static RectangleRatio ToRectangleRatio(Size size)
         {
             if (!(size.Width >= 0 && size.Height >= 0))
             {
@@ -169,9 +169,18 @@ namespace CommonLibrary.Utilities
         /// </summary>
         /// <param name="rectangle"></param>
         /// <returns></returns>
-        public static RectangleRatio ToRatio(int width, int height)
+        public static RectangleRatio ToRectangleRatio(int width, int height)
         {
-            return ToRatio(new Size(width, height));
+            return ToRectangleRatio(new Size(width, height));
+        }
+
+        
+        public static Point CalcDestinationPoint(Point srcPoint, Rectangle srcRectangle, Rectangle destRectangle)
+        {
+            Point destPoint = Point.Empty;
+            destPoint.X = (int)Math.Ceiling((double)(srcPoint.X * destRectangle.Width) / srcRectangle.Width);
+            destPoint.Y = (int)Math.Ceiling((double)(srcPoint.Y * destRectangle.Height) / srcRectangle.Height);
+            return destPoint;
         }
     }
 }

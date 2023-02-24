@@ -171,9 +171,9 @@ namespace CommonLibrary.Tools
                     // 프로세스의 모든 윈도우 핸들 찾아서 처리할지 여부
                     if (_processAllWindowsHandleSetPosProcessNames.Contains(process.ProcessName))
                     {
-                        // TODO: 특정 프로세스의 모든 윈도우 핸들을 찾아서 처리할지 여부도 이벤트핸들러로 정의 필요
                         foreach (IntPtr windowHandle in WindowFunctionManager.GetProcessWindowHandles(process.Id))
                         {
+                            // TOOD: 윈도우 창이 (WinForm 예로 None) 일경우 테스트 및 처리 필요
                             string windowText = WindowFunctionManager.GetWindowText(windowHandle);
                             WindowPlacement wp = new WindowPlacement();
                             if (User32.GetWindowPlacement(windowHandle, ref wp))
@@ -213,6 +213,8 @@ namespace CommonLibrary.Tools
                         WindowPlacement wp = new WindowPlacement();
                         if (User32.GetWindowPlacement(process.MainWindowHandle, ref wp))
                         {
+                            // TOOD: 윈도우 창이 (WinForm 예로 None) 일경우 테스트 및 처리 필요
+
                             RECT rect;
                             User32.GetWindowRect(process.MainWindowHandle, out rect);
 

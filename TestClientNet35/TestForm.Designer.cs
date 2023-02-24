@@ -128,7 +128,7 @@ namespace TestNet32
             this._ButtonTest.TabIndex = 8;
             this._ButtonTest.Text = "테스트";
             this._ButtonTest.UseVisualStyleBackColor = true;
-            this._ButtonTest.Click += new System.EventHandler(this._ButtonTest_Click);
+            this._ButtonTest.Click += new System.EventHandler(this.ButtonTest_Click);
             // 
             // _TextBoxTest
             // 

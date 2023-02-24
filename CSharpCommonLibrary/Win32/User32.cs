@@ -90,8 +90,26 @@ namespace CommonLibrary.Win32
         [DllImport(DllName)]
         public static extern IntPtr ReleaseDC(IntPtr hWnd, IntPtr hDC);
 
+        [DllImport(DllName)]
+        public static extern int GetWindowLong(IntPtr hWnd, int nIndex);
 
+        public static IntPtr SetWindowLongPtr(HandleRef hWnd, int nIndex, IntPtr dwNewLong)
+        {
+            if (IntPtr.Size == 8)
+            {
+                return SetWindowLongPtr64(hWnd, nIndex, dwNewLong);
+            }
+            else
+            {
+                return new IntPtr(SetWindowLong32(hWnd, nIndex, dwNewLong.ToInt32()));
+            }
+        }
 
-        
+        [DllImport(DllName, EntryPoint = "SetWindowLong")]
+        private static extern int SetWindowLong32(HandleRef hWnd, int nIndex, int dwNewLong);
+
+        [DllImport(DllName, EntryPoint = "SetWindowLongPtr")]
+        private static extern IntPtr SetWindowLongPtr64(HandleRef hWnd, int nIndex, IntPtr dwNewLong);
+
     }
 }

@@ -11,6 +11,7 @@ using System.Drawing;
 using System.Net;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
+using System.Diagnostics;
 
 namespace TestNet32
 {
@@ -113,6 +114,7 @@ namespace TestNet32
                 {
                     ProcessesSetWindowPosFunctionStrategy strategy = new ProcessesSetWindowPosFunctionStrategy();
                     strategy.ProcessAllWindowsHandleSetPos += Strategy_ProcessAllWindowsHandleSetPos;
+                    strategy.ProcessAllWindowsHandleSetPosProcessNames.Add("msedge");
 
                     _windowFunctionManager = new WindowFunctionManager(strategy);
                     _windowFunctionManager.StartWorkerThread();
@@ -140,13 +142,12 @@ namespace TestNet32
                 }
                 return false;
             }
+            else if (e.Process.ProcessName.Equals("msedge"))
+            {
+                return true;
+            }
             else
             {
-                // 일반적으로는 메인 윈도우 핸들만 창 제어를 처리한다.
-                if (e.Process.MainWindowHandle == e.Handle)
-                {
-                    return true;
-                }
                 return false;
             }
         }
@@ -230,12 +231,17 @@ namespace TestNet32
             }
         }
 
-        private void _ButtonTest_Click(object sender, EventArgs e)
+        private void ButtonTest_Click(object sender, EventArgs e)
         {
             bool result = false;
             result = StringUtility.IsValidStringFormat(_TextBoxTest.Text);
 
             _LabelResult.Text = "결과 : " + result;
+
+            foreach (Process p in Process.GetProcesses())
+            {
+                Trace.WriteLine("ProcessName=" + p.ProcessName);
+            }
         }
     }
 }
