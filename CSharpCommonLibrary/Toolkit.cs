@@ -17,18 +17,7 @@ namespace CommonLibrary
         /// DebugView Filter 이름
         /// <para>Filter/Hightlight 메뉴 Include 항목에 사용될 값</para>
         /// </summary>
-        public static string IncludeFilterName
-        {
-            get { return _sIncludeFilterName; }
-            set
-            {
-                if (!String.IsNullOrEmpty(value) && value.Length > 1)
-                {
-                    _sIncludeFilterName = value;
-                }
-            }
-        }
-        private static string _sIncludeFilterName;
+        public static string IncludeFilterName;
 
         /// <summary>
         /// <see cref="Debug.WriteLine(object)"/>,<see cref="Debug.Write(object)"/>
@@ -50,10 +39,10 @@ namespace CommonLibrary
         {
 
 #if DEBUG
-            _sIncludeFilterName = CreateNamespace();
+            IncludeFilterName = CreateNamespace();
             IsDebugEnabled = true;
 #else
-            _sIncludeFilterName = "CLIPSOFT";
+            IncludeFilterName = "SoulToMind.CSharpCommonLibrary";
             IsDebugEnabled = false;
 #endif
             IsTraceEnabled = true;
@@ -76,17 +65,17 @@ namespace CommonLibrary
             if (UseNowToString)
             {
 #if DEBUG
-                message = String.Format("[{0}] {1} [{2}] DEBUG - {3}", _sIncludeFilterName, NowToString(), header, message);
+                message = String.Format("[{0}] {1} [{2}] DEBUG - {3}", IncludeFilterName, NowToString(), header, message);
 #else
-                message = String.Format("[{0}] {1} [{2}] TRACE - {3}", _sIncludeFilterName, NowToString(), header, message);
+                message = String.Format("[{0}] {1} [{2}] TRACE - {3}", IncludeFilterName, NowToString(), header, message);
 #endif
             }
             else
             {
 #if DEBUG
-                message = String.Format("[{0}] [{1}] DEBUG - {2}", _sIncludeFilterName, header, message);
+                message = String.Format("[{0}] [{1}] DEBUG - {2}", IncludeFilterName, header, message);
 #else
-                message = String.Format("[{0}] [{1}] TRACE - {2}", _sIncludeFilterName, header, message);
+                message = String.Format("[{0}] [{1}] TRACE - {2}", IncludeFilterName, header, message);
 #endif
             }
             return message;

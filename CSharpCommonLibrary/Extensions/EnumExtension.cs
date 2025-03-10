@@ -29,18 +29,5 @@ namespace CommonLibrary.Extensions
                 return null;
             }
         }
-
-        public static bool HasFlag(this Enum thisEnum, Enum value)
-        {
-            if (thisEnum.GetType() != value.GetType())
-            {
-                throw new ArgumentException(nameof(value));
-            }
-
-            int thisEnumFlag = Convert.ToInt32(thisEnum);
-            int valueEnumFlag = Convert.ToInt32(value);
-
-            return (thisEnumFlag & valueEnumFlag) == valueEnumFlag;
-        }
     }
 }

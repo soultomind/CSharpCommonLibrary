@@ -1,7 +1,7 @@
 ﻿using System.Net;
 using System.Security.Authentication;
 
-namespace CommonLibrary.Net
+namespace CommonLibrary.Net35.Net
 {
     /// <summary>
     /// <para>.NET Framework 3.5 Supported </para>
@@ -38,12 +38,12 @@ namespace CommonLibrary.Net
         /// </exception>
         public static void SetTls12()
         {
-            SecurityProtocolType type =
+            SecurityProtocolType securityProtocol =
                 ServicePointManager.SecurityProtocol |
                 SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls |
                 Tls11 | Tls12;
 
-            ServicePointManager.SecurityProtocol = type;
+            ServicePointManager.SecurityProtocol = securityProtocol;
         }
     }
 }

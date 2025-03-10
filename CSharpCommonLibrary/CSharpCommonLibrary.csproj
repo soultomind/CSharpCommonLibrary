@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>CommonLibrary</RootNamespace>
     <AssemblyName>CSharpCommonLibrary</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -21,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -29,6 +30,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject />
@@ -50,23 +52,12 @@
     <Compile Include="Extensions\AttributeExtension.cs" />
     <Compile Include="Extensions\EnumExtension.cs" />
     <Compile Include="Extensions\ScreenExtension.cs" />
-    <Compile Include="Net\SecurityProtocolExtension.cs" />
+    <Compile Include="Net35\Extension\EnumExtension.cs" />
+    <Compile Include="Net35\Net\SecurityProtocolExtension.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RectangleRatio.cs" />
-    <Compile Include="MultiScreen.cs" />
-    <Compile Include="ImageCapture.cs" />
+    <Compile Include="AspectRatio.cs" />
     <Compile Include="StringResourceAttribute.cs" />
     <Compile Include="Toolkit.cs" />
-    <Compile Include="Tools\IMouseFunctionStrategy.cs" />
-    <Compile Include="Tools\IWindowFunctionStrategy.cs" />
-    <Compile Include="Tools\MousePreventMoveScreenFunctionStrategy.cs" />
-    <Compile Include="Tools\ProcessesSetWindowPosFunctionStrategy.cs" />
-    <Compile Include="UI\ScreenIndexDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="UI\ScreenIndexDialog.Designer.cs">
-      <DependentUpon>ScreenIndexDialog.cs</DependentUpon>
-    </Compile>
     <Compile Include="UI\TablessControl.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -80,29 +71,13 @@
     <Compile Include="Utilities\RegExpUtility.cs" />
     <Compile Include="Utilities\ScreenUtility.cs" />
     <Compile Include="Utilities\StringUtility.cs" />
-    <Compile Include="Web\HttpToolkit.cs" />
-    <Compile Include="Win32\Button.cs" />
-    <Compile Include="Win32\Gdi32.cs" />
-    <Compile Include="Win32\Mouse.cs" />
-    <Compile Include="Tools\MouseFunctionManager.cs" />
-    <Compile Include="Win32\POINT.cs" />
-    <Compile Include="Win32\RECT.cs" />
-    <Compile Include="Win32\SetWindowPos.cs" />
-    <Compile Include="Win32\ShowWindowCommand.cs" />
-    <Compile Include="Taskbar.cs" />
-    <Compile Include="Win32\User32.cs" />
-    <Compile Include="Win32\Window.cs" />
-    <Compile Include="Win32\WindowPlacement.cs" />
-    <Compile Include="Win32\WinMessage.cs" />
-    <Compile Include="Win32\WinStyle.cs" />
-    <Compile Include="Tools\WindowFunctionManager.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="UI\ScreenIndexDialog.resx">
-      <DependentUpon>ScreenIndexDialog.cs</DependentUpon>
-    </EmbeddedResource>
+    <Folder Include="Net\" />
+    <Folder Include="Tools\" />
+    <Folder Include="Web\" />
+    <Folder Include="Win32\" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
