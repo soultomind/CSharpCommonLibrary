@@ -15,14 +15,14 @@ namespace CommonLibrary.Extensions
         /// <summary>
         /// <see cref="System.Windows.Forms.Screen.Bounds"/> 영역안에 <paramref name="points"/> 좌표들중에 포함되어있는게 있는지 여부를 반환합니다.
         /// </summary>
-        /// <param name="screen"></param>
+        /// <param name="this"></param>
         /// <param name="points"></param>
         /// <returns></returns>
-        public static bool BoundsContains(this Screen screen, Point[] points)
+        public static bool BoundsContains(this Screen @this, Point[] points)
         {
             foreach (Point point in points)
             {
-                if (screen.Bounds.Contains(point))
+                if (@this.Bounds.Contains(point))
                 {
                     return true;
                 }
@@ -33,14 +33,14 @@ namespace CommonLibrary.Extensions
         /// <summary>
         /// <see cref="System.Windows.Forms.Screen.WorkingArea"/> 영역안에 <paramref name="points"/> 좌표들중에 포함되어있는게 있는지 여부를 반환합니다.
         /// </summary>
-        /// <param name="screen"></param>
+        /// <param name="this"></param>
         /// <param name="points"></param>
         /// <returns></returns>
-        public static bool WorkingAreaContains(this Screen screen, Point[] points)
+        public static bool WorkingAreaContains(this Screen @this, Point[] points)
         {
             foreach (Point point in points)
             {
-                if (screen.WorkingArea.Contains(point))
+                if (@this.WorkingArea.Contains(point))
                 {
                     return true;
                 }

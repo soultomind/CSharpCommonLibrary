@@ -4,12 +4,10 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace CommonLibrary
 {
-    /// <summary>
-    /// 사각형 비율
-    /// </summary>
     public class AspectRatio
     {
         public int Width { get; internal set; }
@@ -21,9 +19,9 @@ namespace CommonLibrary
             Height = height;
         }
 
-        public static AspectRatio ToAspectRatio(Size size)
+        public static AspectRatioF ToAspectRatio(Size size)
         {
-            AspectRatio aspectRatio = MathUtility.ToAspectRatio(size);
+            AspectRatioF aspectRatio = MathUtility.ToAspectRatio(size);
             return aspectRatio;
         }
     }

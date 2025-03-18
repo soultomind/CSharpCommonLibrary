@@ -8,7 +8,7 @@ namespace CommonLibrary.Utilities
     /// <summary>
     /// 환경 유틸리티 클래스
     /// </summary>
-    public class EnvironmentUtility
+    public static class EnvironmentUtility
     {
         /// <summary>
         /// 루트 드라이브(Windows 설치)를 반환
