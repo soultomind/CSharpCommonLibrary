@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 
@@ -11,53 +12,84 @@ namespace CommonLibrary.Utilities
     public static class EnvironmentUtility
     {
         /// <summary>
-        /// 루트 드라이브(Windows 설치)를 반환
+        /// 윈도우가 설치된 시스템 드라이브를 반환합니다.
         /// </summary>
         /// <returns></returns>
-        public static string GetRootDrive()
+        public static string GetSystemDrive()
         {
-            string rootDrive = System.IO.Path.GetPathRoot(Environment.SystemDirectory);
-            return rootDrive;
+            string systemDrive = Path.GetPathRoot(Environment.SystemDirectory);
+            return systemDrive;
         }
 
         /// <summary>
-        /// User Downloads 경로를 반환
+        /// 현재 로컬 환경에 맞는 System32 디렉토리를 반환합니다.
         /// </summary>
         /// <returns></returns>
-        public static string GetUserProfileDownloadsDirectory()
+        public static string GetSystem32Directory()
         {
-            string directory = System.Environment.GetEnvironmentVariable("HOMEPATH") + @"\" + "Downloads";
-            return directory;
+            string systemDrive = GetSystemDrive();
+            if (Environment.Is64BitOperatingSystem)
+            {
+                if (Environment.Is64BitProcess)
+                {
+                    return systemDrive + "\\Windows\\System32";
+                }
+                else
+                {
+                    return systemDrive + "\\Windows\\SysWOW64";
+                }
+
+            }
+            else
+            {
+                return systemDrive + "\\Windows\\System32";
+            }
         }
 
         /// <summary>
-        /// ProgramData 경로를 반환
+        /// 현재 로컬 환경에 맞는 System32 에서 <paramref name="path"/> 값을 결합하여 경로를 반환합니다.
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        public static string CombineSystem32Path(string path)
+        {
+            return GetSystem32Directory() + Path.DirectorySeparatorChar + path;
+        }
+
+        /// <summary>
+        /// ProgramData 경로를 반환합니다.
         /// </summary>
         /// <returns></returns>
-        public static string GetCommonApplicationProgramData()
+        public static string GetCommonApplicationProgramDataDirectory()
         {
-            string directory = System.Environment.GetFolderPath(System.Environment.SpecialFolder.CommonApplicationData);
-            return directory;
+            return Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
         }
 
         /// <summary>
         /// AppData/Roaming 경로를 반환합니다.
         /// </summary>
         /// <returns></returns>
-        public static string GetApplicationData()
+        public static string GetApplicationDataDirectory()
         {
-            string directory = System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData);
-            return directory;
+            return Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
         }
 
         /// <summary>
         /// AppData/Local 경로를 반환합니다.
         /// </summary>
         /// <returns></returns>
-        public static string GetLocalApplicationData()
+        public static string GetLocalApplicationDataDirectory()
         {
-            string directory = System.Environment.GetFolderPath(System.Environment.SpecialFolder.LocalApplicationData);
-            return directory;
+            return Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public static string GetMyDocumentsDirectory()
+        {
+            return Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
         }
     }
 }

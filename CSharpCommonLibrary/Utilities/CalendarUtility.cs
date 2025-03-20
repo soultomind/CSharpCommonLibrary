@@ -17,7 +17,7 @@ namespace CommonLibrary.Utilities
         /// <param name="month">월</param>
         /// <param name="day">일</param>
         /// <returns></returns>
-        public static string CalcDayMonthKorean(int year, int month, int day)
+        public static string DayOfWeekKorean(int year, int month, int day)
         {
             DayOfWeek dayOfWeek = DayOfWeek(year, month, day);
             return MonthKorean[(int)dayOfWeek];

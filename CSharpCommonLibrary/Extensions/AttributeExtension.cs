@@ -36,14 +36,14 @@ namespace CommonLibrary.Extensions
                 throw new ArgumentException(nameof(propertyName) + " String.IsNullOrEmpty");
             }
 
-            object[] attr = sourceType.GetProperty(propertyName).GetCustomAttributes(false);
+            object[] attributes = sourceType.GetProperty(propertyName).GetCustomAttributes(false);
 
             Attribute attribute = null;
-            if (attr != null && attr.Length > 0)
+            if (attributes != null && attributes.Length > 0)
             {
-                if (attr.Length > index && -1 < index)
+                if (attributes.Length > index && -1 < index)
                 {
-                    return (Attribute)attr[index];
+                    return (Attribute)attributes[index];
                 }
             }
             return attribute;
@@ -83,20 +83,20 @@ namespace CommonLibrary.Extensions
 
             object[] attributes = sourceType.GetProperty(propertyName).GetCustomAttributes(false);
 
-            Attribute attribute = null;
+            Attribute targetAttribute = null;
             if (attributes != null && attributes.Length > 0)
             {
-                foreach (Attribute itemAttribute in attributes)
+                foreach (Attribute attribute in attributes)
                 {
-                    if (Object.ReferenceEquals(itemAttribute.GetType(), findAttributeType))
+                    if (Object.ReferenceEquals(attribute.GetType(), findAttributeType))
                     {
-                        attribute = itemAttribute;
+                        targetAttribute = attribute;
                         break;
                     }
                 }
             }
 
-            return attribute;
+            return targetAttribute;
         }
     }
 }

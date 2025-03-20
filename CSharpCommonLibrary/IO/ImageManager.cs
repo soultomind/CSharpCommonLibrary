@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,7 +23,7 @@ namespace CommonLibrary.IO
             Image image = null;
             foreach (string imageFile in imageFiles)
             {
-                if (imageFileCreateInfo.FileCreateInfo.IsFileLock)
+                if (imageFileCreateInfo.FileCreateInfo.FileLock)
                 {
                     image = Bitmap.FromFile(imageFile);
                 }
