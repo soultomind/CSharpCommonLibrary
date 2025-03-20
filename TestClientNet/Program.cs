@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Windows.Forms;
-using TestNet32;
 
-namespace TestNet35
+namespace TestClientNet
 {
     static class Program
     {

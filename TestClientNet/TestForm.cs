@@ -5,8 +5,10 @@ using System.Net;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using System.Diagnostics;
+using CommonLibrary.Reflection;
+using System.Reflection;
 
-namespace TestNet32
+namespace TestClientNet
 {
     public partial class TestForm : Form
     {
@@ -19,7 +21,12 @@ namespace TestNet32
 
         private void TestForm_Load(object sender, EventArgs e)
         {
-
+            DateTime outDateTime = DateTime.MinValue;
+            Assembly assembly = Assembly.GetEntryAssembly();
+            if (AssemblyBuildInfo.TryGetBuildDate(assembly, out outDateTime))
+            {
+                Text = String.Format("{0} {1}", Text, outDateTime);
+            }
         }
 
         private void TestForm_Shown(object sender, EventArgs e)

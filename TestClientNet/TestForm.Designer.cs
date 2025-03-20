@@ -1,5 +1,5 @@
 ﻿
-namespace TestNet32
+namespace TestClientNet
 {
     partial class TestForm
     {
