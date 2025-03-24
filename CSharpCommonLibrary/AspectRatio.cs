@@ -19,7 +19,7 @@ namespace CommonLibrary
             Height = height;
         }
 
-        public static AspectRatioF ToAspectRatio(Size size)
+        public static AspectRatio ToAspectRatio(Size size)
         {
             AspectRatioF aspectRatio = MathUtility.ToAspectRatio(size);
             return aspectRatio;

@@ -50,14 +50,18 @@
   <ItemGroup>
     <Compile Include="AspectRatio.cs" />
     <Compile Include="CertFile.cs" />
+    <Compile Include="EdgeWebView2Runtime.cs" />
     <Compile Include="Explorer.cs" />
     <Compile Include="Extensions\AttributeExtension.cs" />
     <Compile Include="Extensions\EnumExtension.cs" />
     <Compile Include="Extensions\ScreenExtension.cs" />
+    <Compile Include="Extensions\UI\RichTextBoxExtension.cs" />
+    <Compile Include="ExternalLoggingEventArgs.cs" />
     <Compile Include="FirefoxPreference.cs" />
     <Compile Include="IO\FileCreateInfo.cs" />
     <Compile Include="IO\ImageFileCreateInfo.cs" />
     <Compile Include="IO\ImageManager.cs" />
+    <Compile Include="LogLevel.cs" />
     <Compile Include="Net35\Extension\EnumExtension.cs" />
     <Compile Include="Net35\Net\SecurityProtocolExtension.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -77,6 +81,7 @@
     <Compile Include="Utilities\MathUtility.cs" />
     <Compile Include="Utilities\RegexUtility.cs" />
     <Compile Include="Utilities\RegistryUtility.cs" />
+    <Compile Include="Utilities\StringUtility.cs" />
     <Compile Include="Win32\WmiEnvironment.cs" />
   </ItemGroup>
   <ItemGroup>
