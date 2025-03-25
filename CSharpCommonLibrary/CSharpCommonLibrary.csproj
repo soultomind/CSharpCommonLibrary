@@ -50,6 +50,7 @@
   <ItemGroup>
     <Compile Include="AspectRatio.cs" />
     <Compile Include="CertFile.cs" />
+    <Compile Include="Compare.cs" />
     <Compile Include="EdgeWebView2Runtime.cs" />
     <Compile Include="Explorer.cs" />
     <Compile Include="Extensions\AttributeExtension.cs" />
@@ -68,8 +69,17 @@
     <Compile Include="AspectRatioF.cs" />
     <Compile Include="Reflection\AssemblyBuildDateAttribute.cs" />
     <Compile Include="Reflection\AssemblyBuildInfo.cs" />
+    <Compile Include="ScreenManager.cs" />
+    <Compile Include="ShowScreenIndex.cs" />
     <Compile Include="StringResourceAttribute.cs" />
     <Compile Include="Toolkit.cs" />
+    <Compile Include="UI\ScreenIndexDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\ScreenIndexDialog.Designer.cs">
+      <DependentUpon>ScreenIndexDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\ScreenIndexDialogColor.cs" />
     <Compile Include="UI\TablessControl.cs">
       <SubType>Component</SubType>
     </Compile>
