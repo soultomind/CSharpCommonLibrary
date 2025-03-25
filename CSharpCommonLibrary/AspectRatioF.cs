@@ -21,10 +21,15 @@ namespace CommonLibrary
             Height = height;
         }
 
-        public static AspectRatioF ToAspectRatio(Size size)
+        public static AspectRatioF ToAspectRatioF(SizeF size)
         {
             AspectRatioF aspectRatio = MathUtility.ToAspectRatioF(size);
             return aspectRatio;
+        }
+
+        public override string ToString()
+        {
+            return String.Format("{0}:{1}", Width, Height);
         }
     }
 }

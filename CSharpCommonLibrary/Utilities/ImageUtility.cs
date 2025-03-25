@@ -12,27 +12,15 @@ namespace CommonLibrary.Utilities
     public static class ImageUtility
     {
         /// <summary>
-        /// <paramref name="srcImage"/> 이미지를 <paramref name="resizeImageResolution"/> 값 으로 리사이즈 합니다.
-        /// </summary>
-        /// <param name="srcImage">원본 이미지</param>
-        /// <param name="srcImageResolution">원본 이미지 해상도(가로 세로 값 동일)</param>
-        /// <param name="resizeImageResolution">리 사이즈 할 이미지 해상도(가로 세로 값 동일)</param>
-        /// <returns></returns>
-        public static Image ResizeImage(Image srcImage, int srcImageResolution, int resizeImageResolution)
-        {
-            return ResizeImage(srcImage, srcImageResolution, srcImageResolution, resizeImageResolution, resizeImageResolution);
-        }
-
-        /// <summary>
         /// 
         /// </summary>
         /// <param name="srcImage">원본 이미지</param>
         /// <param name="resizeHorizontalResolution">리 사이즈 할 이미지 가로 해상도</param>
         /// <param name="resizeVerticalResolution">리 사이즈 할 이미지 세로 해상도</param>
         /// <returns></returns>
-        public static Image ResizeImage(Image srcImage, float resizeHorizontalResolution, float resizeVerticalResolution)
+        public static Image ConvertImage(Image srcImage, float resizeHorizontalResolution, float resizeVerticalResolution)
         {
-            return ResizeImage(srcImage, srcImage.HorizontalResolution, srcImage.VerticalResolution, resizeHorizontalResolution, resizeVerticalResolution);
+            return ConvertImage(srcImage, srcImage.HorizontalResolution, srcImage.VerticalResolution, resizeHorizontalResolution, resizeVerticalResolution);
         }
 
         /// <summary>
@@ -44,7 +32,7 @@ namespace CommonLibrary.Utilities
         /// <param name="resizeHorizontalResolution">리 사이즈 할 이미지 가로 해상도</param>
         /// <param name="resizeVerticalResolution">리 사이즈 할 이미지 세로 해상도</param>
         /// <returns></returns>
-        public static Image ResizeImage(Image srcImage, float srcHorizontalResolution, float srcVerticalResolution, float resizeHorizontalResolution, float resizeVerticalResolution)
+        public static Image ConvertImage(Image srcImage, float srcHorizontalResolution, float srcVerticalResolution, float resizeHorizontalResolution, float resizeVerticalResolution)
         {
             float resizeWidth = (srcImage.Width * resizeHorizontalResolution) / srcHorizontalResolution;
             float resizeHeight = (srcImage.Height * resizeVerticalResolution) / srcVerticalResolution;

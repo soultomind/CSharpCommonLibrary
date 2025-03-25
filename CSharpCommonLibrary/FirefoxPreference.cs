@@ -48,7 +48,7 @@ namespace CommonLibrary
         {
             get
             {
-                return EnvironmentUtility.GetApplicationData() + "\\Mozilla\\Firefox\\Profiles";
+                return EnvironmentUtility.GetApplicationDataDirectory() + "\\Mozilla\\Firefox\\Profiles";
             }
         }
 

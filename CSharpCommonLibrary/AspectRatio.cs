@@ -21,8 +21,13 @@ namespace CommonLibrary
 
         public static AspectRatio ToAspectRatio(Size size)
         {
-            AspectRatioF aspectRatio = MathUtility.ToAspectRatio(size);
+            AspectRatio aspectRatio = MathUtility.ToAspectRatio(size);
             return aspectRatio;
+        }
+
+        public override string ToString()
+        {
+            return String.Format("{0}:{1}", Width, Height);
         }
     }
 }

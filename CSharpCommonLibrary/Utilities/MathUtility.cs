@@ -136,20 +136,20 @@ namespace CommonLibrary.Utilities
 
         #region Internal
 
-        internal static AspectRatioF ToAspectRatio(Size size)
+        internal static AspectRatio ToAspectRatio(Size size)
         {
             if (!(size.Width >= 0 && size.Height >= 0))
             {
                 throw new ArgumentException("");
             }
 
-            float min = Min<int>(size.Width, size.Height),
-                  max = Max<int>(size.Width, size.Height);
+            int min = Min<int>(size.Width, size.Height),
+                max = Max<int>(size.Width, size.Height);
 
-            float gcd = GcdF(min, max);
-            float width = size.Width / gcd;
-            float height = size.Height / gcd;
-            return new AspectRatioF(width, height);
+            int gcd = Gcd(min, max);
+            int width = size.Width / gcd;
+            int height = size.Height / gcd;
+            return new AspectRatio(width, height);
         }
 
         internal static AspectRatioF ToAspectRatioF(SizeF size)
@@ -168,7 +168,7 @@ namespace CommonLibrary.Utilities
             return new AspectRatioF(width, height);
         }
 
-        
+
 
         #endregion
     }

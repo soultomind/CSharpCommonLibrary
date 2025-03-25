@@ -17,7 +17,7 @@ namespace CommonLibrary.Extensions
         /// </summary>
         /// <param name="this"></param>
         /// <returns></returns>
-        public static AspectRatio GetAspectRatio(this Screen @this)
+        public static AspectRatio ToAspectRatio(this Screen @this)
         {
             return AspectRatio.ToAspectRatio(@this.Bounds.Size);
         }
