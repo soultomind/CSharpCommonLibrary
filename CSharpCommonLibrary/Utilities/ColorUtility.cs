@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,14 +19,6 @@ namespace CommonLibrary.Utilities
             return Color.FromArgb(alpha, red, green, blue);
         }
 
-        public static Color ToColorRgb(int rgb)
-        {
-            int red = (rgb >> 16) & 0xFF;
-            int green = (rgb >> 8) & 0xFF;
-            int blue = rgb & 0xFF;
-            return Color.FromArgb(red, green, blue);
-        }
-
         public static int ToIntArgb(Color color)
         {
             int alpha = color.A;
@@ -35,12 +28,17 @@ namespace CommonLibrary.Utilities
             return blue + (green << 8) + (red << 16) + (alpha << 24);
         }
 
-        public static int ToIntRgb(Color color)
+        public static Color ToColorFromHexString(string intValue)
         {
-            int red = color.R;
-            int green = color.G;
-            int blue = color.B;
-            return blue + (green << 8) + (red << 16);
+            if (!RegexUtility.IsHexStringColor(intValue))
+            {
+                throw new ArgumentException(nameof(intValue));
+            }
+
+            string input = intValue;
+            input = input.TrimStart('#');
+            int argb = int.Parse(input, NumberStyles.HexNumber);
+            return ColorUtility.ToColorArgb(argb);
         }
     }
 }

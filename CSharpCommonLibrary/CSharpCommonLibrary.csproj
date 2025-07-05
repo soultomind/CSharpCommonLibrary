@@ -50,6 +50,7 @@
   <ItemGroup>
     <Compile Include="AspectRatio.cs" />
     <Compile Include="CertFile.cs" />
+    <Compile Include="ColorData.cs" />
     <Compile Include="Compare.cs" />
     <Compile Include="EdgeWebView2Runtime.cs" />
     <Compile Include="Explorer.cs" />

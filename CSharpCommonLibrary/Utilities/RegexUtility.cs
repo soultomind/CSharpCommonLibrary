@@ -33,36 +33,23 @@ namespace CommonLibrary.Utilities
         /// <param name="input">#시작하는 컬러 문자열값</param>
         /// <param name="bArgbColor">알파값(투명도) 포함 여부</param>
         /// <returns></returns>
-        public static bool IsNumberSignColor(string input, bool bArgbColor)
+        public static bool IsHexStringColor(string input)
         {
             CheckedInput(input);
 
             string pattern = String.Empty;
 
-            if (bArgbColor)
+            if (input.Length == 9)
             {
                 pattern = START_CHAR + "#[0-9A-Fa-f]{8}" + END_CHAR;
             }
-            else
+            else if (input.Length == 7)
             {
                 pattern = START_CHAR + "#[0-9A-Fa-f]{6}" + END_CHAR;
             }
-
-            return Regex.IsMatch(input, pattern);
-        }
-
-        public static bool IsBraceCssStyleColor(string input, bool bArgbColor)
-        {
-            CheckedInput(input);
-
-            string pattern = String.Empty;
-            if (bArgbColor)
-            {
-
-            }
             else
             {
-
+                throw new ArgumentException(nameof(input) + " is not valid length. (7 or 9)");
             }
 
             return Regex.IsMatch(input, pattern);

@@ -37,7 +37,6 @@ namespace CommonLibrary
         public static bool UseNowToString;
         static Toolkit()
         {
-
 #if DEBUG
             IncludeFilterName = CreateNamespace();
             IsDebugEnabled = true;

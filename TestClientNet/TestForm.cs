@@ -13,6 +13,7 @@ namespace TestClientNet
 {
     public partial class TestForm : Form
     {
+        
 
         public TestForm()
         {
@@ -48,6 +49,24 @@ namespace TestClientNet
         private void ButtonShowAsscendingScreensDlg_Click(object sender, EventArgs e)
         {
             ScreenManager.ShowAsscendingScreensDlg(5);
+        }
+
+        private void ButtonCheckColor_Click(object sender, EventArgs e)
+        {
+            string hex = textBoxHexColor.Text.Trim();
+            try
+            {
+                ColorData colorData = ColorData.ToColorFromHexString(hex);
+                labelColorInfo.Text = $"Hex: {colorData.ToHexString()} | ARGB: {colorData.ToArgbString()} | Int: 0x{colorData.ValueInt:X8} | UseAlpha: {colorData.UseAlpha}";
+                labelColorInfo.BackColor = colorData.ValueColor;
+                labelColorInfo.ForeColor = (colorData.ValueColor.GetBrightness() < 0.5f) ? Color.White : Color.Black;
+            }
+            catch (Exception ex)
+            {
+                labelColorInfo.Text = $"오류: {ex.Message}";
+                labelColorInfo.BackColor = SystemColors.Control;
+                labelColorInfo.ForeColor = Color.Black;
+            }
         }
     }
 }
