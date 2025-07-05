@@ -10,6 +10,13 @@ namespace CommonLibrary.Utilities
 {
     public static class ColorUtility
     {
+        public static Color ToColorRgb(int rgb)
+        {
+            int red = (rgb >> 16) & 0xFF;
+            int green = (rgb >> 8) & 0xFF;
+            int blue = rgb & 0xFF;
+            return Color.FromArgb(red, green, blue);
+        }
         public static Color ToColorArgb(int argb)
         {
             int alpha = (argb >> 24) & 0xFF;
@@ -37,8 +44,26 @@ namespace CommonLibrary.Utilities
 
             string input = intValue;
             input = input.TrimStart('#');
-            int argb = int.Parse(input, NumberStyles.HexNumber);
-            return ColorUtility.ToColorArgb(argb);
+
+            if (input.Length != 6 && input.Length != 8)
+            {
+                throw new ArgumentException(nameof(intValue) + " is not valid length. (6 or 8)");
+            }
+
+            int argb = 0;
+            Color color = Color.Empty;
+            if (input.Length == 6)
+            {
+                argb = int.Parse(input, NumberStyles.HexNumber);
+                color = ToColorRgb(argb);
+            }
+            else if (input.Length == 8)
+            {
+                argb = int.Parse(input, NumberStyles.HexNumber);
+                color = ToColorArgb(argb);
+            }
+
+            return color;
         }
     }
 }
