@@ -21,9 +21,12 @@ namespace CommonLibrary
         {
             get
             {
-                return valueColor.A != 255;
+                return bUseAlpha;
             }
+            private set { bUseAlpha = value; }
         }
+        private bool bUseAlpha;
+
         /// <summary>
         /// Color 구조체 값 (설정 시 int ARGB 값도 동기화)
         /// </summary>
@@ -37,6 +40,7 @@ namespace CommonLibrary
             {
                 valueColor = value;
                 valueInt = ColorUtility.ToIntArgb(valueColor);
+                bUseAlpha = (valueColor.A != 255);
             }
         }
         private Color valueColor;
@@ -54,6 +58,7 @@ namespace CommonLibrary
             {
                 valueInt = value;
                 valueColor = ColorUtility.ToColorArgb(valueInt);
+                bUseAlpha = (valueColor.A != 255);
             }
         }
         private int valueInt;

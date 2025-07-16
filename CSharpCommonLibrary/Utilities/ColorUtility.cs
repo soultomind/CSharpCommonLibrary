@@ -35,6 +35,14 @@ namespace CommonLibrary.Utilities
             return blue + (green << 8) + (red << 16) + (alpha << 24);
         }
 
+        public static int ToIntRgb(Color color)
+        {
+            int red = color.R;
+            int green = color.G;
+            int blue = color.B;
+            return blue + (green << 8) + (red << 16);
+        }
+
         public static Color ToColorFromHexString(string intValue)
         {
             if (!RegexUtility.IsHexStringColor(intValue))
