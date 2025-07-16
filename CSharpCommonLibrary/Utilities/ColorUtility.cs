@@ -12,18 +12,26 @@ namespace CommonLibrary.Utilities
     {
         public static Color ToColorRgb(int rgb)
         {
-            int red = (rgb >> 16) & 0xFF;
-            int green = (rgb >> 8) & 0xFF;
-            int blue = rgb & 0xFF;
-            return Color.FromArgb(red, green, blue);
+            return ToColorArgb(rgb);
         }
         public static Color ToColorArgb(int argb)
         {
-            int alpha = (argb >> 24) & 0xFF;
-            int red = (argb >> 16) & 0xFF;
-            int green = (argb >> 8) & 0xFF;
-            int blue = argb & 0xFF;
-            return Color.FromArgb(alpha, red, green, blue);
+            // argb가 0xRRGGBB (6자리)라면 A=255로 해석
+            if ((argb >> 24) == 0)
+            {
+                int red = (argb >> 16) & 0xFF;
+                int green = (argb >> 8) & 0xFF;
+                int blue = argb & 0xFF;
+                return Color.FromArgb(255, red, green, blue);
+            }
+            else // 8자리라면 A도 사용
+            {
+                int alpha = (argb >> 24) & 0xFF;
+                int red = (argb >> 16) & 0xFF;
+                int green = (argb >> 8) & 0xFF;
+                int blue = argb & 0xFF;
+                return Color.FromArgb(alpha, red, green, blue);
+            }
         }
 
         public static int ToIntArgb(Color color)
@@ -33,14 +41,6 @@ namespace CommonLibrary.Utilities
             int green = color.G;
             int blue = color.B;
             return blue + (green << 8) + (red << 16) + (alpha << 24);
-        }
-
-        public static int ToIntRgb(Color color)
-        {
-            int red = color.R;
-            int green = color.G;
-            int blue = color.B;
-            return blue + (green << 8) + (red << 16);
         }
 
         public static Color ToColorFromHexString(string intValue)
