@@ -132,5 +132,18 @@ namespace CommonLibrary.Utilities
             Regex regex = new Regex(pattern);
             return regex.IsMatch(email);
         }
+
+        /// <summary>
+        /// <paramref name="input"/> 문자열 값이 한글(완성형, 자모 포함)인지 여부를 반환합니다.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public static bool IsKorean(string input)
+        {
+            CheckedInput(input);
+            // 한글 완성형(가-힣), 자모(ㄱ-ㅎ, ㅏ-ㅣ) 모두 포함
+            string pattern = START_CHAR + "[가-힣ㄱ-ㅎㅏ-ㅣ]+" + END_CHAR;
+            return Regex.IsMatch(input, pattern);
+        }
     }
 }
